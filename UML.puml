@@ -1,0 +1,71 @@
+@startuml
+
+' RMS stands for Recycling Management System
+' package onion.lifeproducts.rms {
+
+	class Product {
+		- String name
+		- ProductCategory category
+		- LocalDateTime lifespan
+		- Material[] materials
+
+		' + getName(): String
+		' + getCategory(): String
+		' + getLifespan(): LocalDateTime
+		' + getMaterials(): Material[]
+		' + setName(String name): void
+		' + setCategory(String category): void
+		' + setLifespan(LocalDateTime lifespan): void
+		' + setMaterials(Material[] materials): void
+
+	}
+
+	class Material {
+		- String name
+		- float environmentalImpact
+		- RecyclingGuidance recyclingInstruction
+
+		' + getName(): String
+		' + getEnvironmentalImpact(): float
+		' + getRecyclingInstruction(): String
+		' + setName(String name): void
+		' + setEnvironmentalImpact(float environmentalImpact): void
+		' + setRecyclingInstruction(String recyclingInstruction): void
+
+	}
+
+	class ProductCategory {
+		- String type
+	}
+
+	class RecyclingGuidance {
+		- String guide
+	}
+
+	class RecyclingService {
+
+	}
+
+	class ImpactReport {
+
+	}
+
+	class ImpactCalculationStrategy {
+
+	}
+
+
+' }
+
+Product "0..*" *-- "1..*" Material : uses
+
+Product "1..1" o-- "0..1" ImpactCalculationStrategy : uses
+
+Product "1..1" *-- "1..1" ProductCategory : has
+Product "1..1" --> "0..*" ImpactReport : generates
+
+Material "1..1" *-- "1..1" RecyclingGuidance : has
+
+RecyclingGuidance "1..1" *-- "1..1" RecyclingService : has
+
+@enduml
