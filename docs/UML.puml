@@ -46,26 +46,45 @@
 
 	}
 
-	class ImpactReport {
+	class RecyclingCategory {
+		- String type
 
+	}
+
+	class ImpactReport {
+		- LocalDateTime generatedAt
 	}
 
 	class ImpactCalculationStrategy {
 
 	}
 
+	class ConsoleUI {
+
+	}
+
+	class StoragePool {
+
+	}
+
 
 ' }
 
-Product "0..*" *-- "1..*" Material : uses
-
-Product "1..1" o-- "0..1" ImpactCalculationStrategy : uses
-
-Product "1..1" *-- "1..1" ProductCategory : has
+Product "0..*" *-- "1..*" Material : references
+Product "1..1" o-- "0..1" ImpactCalculationStrategy
+Product "1..1" *-- "1..1" ProductCategory
 Product "1..1" --> "0..*" ImpactReport : generates
 
-Material "1..1" *-- "1..1" RecyclingGuidance : has
+Material "1..1" *-- "1..1" RecyclingGuidance
+Material "1..1" *-- "1..1" RecyclingCategory
 
-RecyclingGuidance "1..1" *-- "1..1" RecyclingService : has
+RecyclingGuidance "1..1" *-- "1..1" RecyclingService
+
+StoragePool "1..*" o-  "0..*" Product
+StoragePool "1..*" o- "0..*" ProductCategory
+StoragePool "1..*" o-- "0..*" Material
+StoragePool "1..*" o-  "0..*" RecyclingCategory
+
+ConsoleUI "1..1" --> "0..*" StoragePool : uses
 
 @enduml
