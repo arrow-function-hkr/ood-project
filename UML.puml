@@ -4,33 +4,48 @@
 ' package onion.lifeproducts.rms {
 
 	class Product {
+		- Integer id
 		- String name
 		- ProductCategory category
-		- LocalDateTime lifespan
 		- Material[] materials
-
+		- LocalDateTime manufactureDate
+		- LocalDateTime endDate
+		
+		' + getId(): Integer
 		' + getName(): String
 		' + getCategory(): String
-		' + getLifespan(): LocalDateTime
+		' + getManufactureDate(): LocalDateTime
+		' + getEndDate(): LocalDateTime
 		' + getMaterials(): Material[]
+		' + setId(Integer id): void
 		' + setName(String name): void
 		' + setCategory(String category): void
-		' + setLifespan(LocalDateTime lifespan): void
+		' + setManufactureDate(LocalDateTime manufactureDate): void
+		' + setEndDate(LocalDateTime endDate): void
 		' + setMaterials(Material[] materials): void
 
 	}
 
 	class Material {
 		- String name
-		- float environmentalImpact
+		- float burnAtmosphereImpact
+		- float decayAtmosphereImpact
+		- float decayGroundImpact
+		- LocalDateTime decayTime
 		- RecyclingGuidance recyclingInstruction
 
 		' + getName(): String
-		' + getEnvironmentalImpact(): float
+		' + getBurnAtmosphereImpact(): float
+		' + getDecayAtmosphereImpact(): float
+		' + getDecayGroundImpact(): float
+		' + getDecayTime(): LocalDateTime
 		' + getRecyclingInstruction(): String
 		' + setName(String name): void
-		' + setEnvironmentalImpact(float environmentalImpact): void
-		' + setRecyclingInstruction(String recyclingInstruction): void
+		' + setBurnAtmosphereImpact(float burnAtmosphereImpact): void
+		' + setDecayAtmosphereImpact(float decayAtmosphereImpact): void
+		' + setDecayGroundImpact(float decayGroundImpact): void
+		' + setDecayTime(LocalDateTime decayTime): void
+		' + setRecyclingInstruction(RecyclingGuidance recyclingInstruction): void
 
 	}
 
