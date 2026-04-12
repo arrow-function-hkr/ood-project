@@ -5,32 +5,48 @@
 
 	class Product {
 		- String name
+		- float weight
 		- ProductCategory category
-		- LocalDateTime lifespan
+		- LocalDateTime manufactureDate
+		- LocalDateTime endDate
 		- Material[] materials
 
 		' + getName(): String
+		' + getWeight(): float
 		' + getCategory(): String
-		' + getLifespan(): LocalDateTime
+		' + getManufactureDate(): LocalDateTime
 		' + getMaterials(): Material[]
 		' + setName(String name): void
+		' + setWeight(float weight): void
 		' + setCategory(String category): void
-		' + setLifespan(LocalDateTime lifespan): void
+		' + setManufactureDate(LocalDateTime manufactureDate): void
 		' + setMaterials(Material[] materials): void
 
 	}
 
 	class Material {
 		- String name
-		- float environmentalImpact
+		- float recycleRate
+		- float burnEnvironmentImpact
+		- float decayEnvironmentImpact
+		- LocalTime burnTime
+		- LocalTime decayTime
 		- RecyclingGuidance recyclingInstruction
 
 		' + getName(): String
-		' + getEnvironmentalImpact(): float
+		' + getRecycleRate(): float
+		' + getBurnEnvironmentImpact(): float
+		' + getDecayEnvironmentImpact(): float
+		' + getBurnTime(): LocalTime
+		' + getDecayTime(): LocalTime
 		' + getRecyclingInstruction(): String
 		' + setName(String name): void
-		' + setEnvironmentalImpact(float environmentalImpact): void
-		' + setRecyclingInstruction(String recyclingInstruction): void
+		' + setRecycleRate(float recycleRate): void
+		' + setBurnEnvironmentImpact(float burnEnvironmentImpact): void
+		' + setDecayEnvironmentImpact(float decayEnvironmentImpact): void
+		' + setBurnTime(LocalTime burnTime): void
+		' + setDecayTime(LocalTime decayTime): void
+		' + setRecyclingInstruction(RecyclingGuidance recyclingInstruction): void
 
 	}
 
