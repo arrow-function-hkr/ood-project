@@ -23,28 +23,40 @@
 		' + setManufactureDate(LocalDateTime manufactureDate): void
 		' + setEndDate(LocalDateTime endDate): void
 		' + setMaterials(Material[] materials): void
-
 	}
 
 	class Material {
 		- String name
+    - float recycleRate
 		- float burnAtmosphereImpact
 		- float decayAtmosphereImpact
 		- float decayGroundImpact
+		- float burnEnvironmentImpact
+		- float decayEnvironmentImpact
+		- LocalDateTime burnTime
 		- LocalDateTime decayTime
+    - LocalDateTime decayTime
 		- RecyclingGuidance recyclingInstruction
 
 		' + getName(): String
+		' + getRecycleRate(): float
+		' + getBurnEnvironmentImpact(): float
+		' + getDecayEnvironmentImpact(): float
 		' + getBurnAtmosphereImpact(): float
 		' + getDecayAtmosphereImpact(): float
 		' + getDecayGroundImpact(): float
+		' + getBurnTime(): LocalTime
 		' + getDecayTime(): LocalDateTime
 		' + getRecyclingInstruction(): String
 		' + setName(String name): void
+		' + setRecycleRate(float recycleRate): void
 		' + setBurnAtmosphereImpact(float burnAtmosphereImpact): void
 		' + setDecayAtmosphereImpact(float decayAtmosphereImpact): void
 		' + setDecayGroundImpact(float decayGroundImpact): void
-		' + setDecayTime(LocalDateTime decayTime): void
+		' + setBurnEnvironmentImpact(float burnEnvironmentImpact): void
+		' + setDecayEnvironmentImpact(float decayEnvironmentImpact): void
+		' + setBurnTime(LocalTime burnTime): void
+		' + setDecayTime(LocalTime decayTime): void
 		' + setRecyclingInstruction(RecyclingGuidance recyclingInstruction): void
 
 	}
@@ -61,11 +73,25 @@
 
 	}
 
-	class ImpactReport {
+
+	class RecyclingCategory {
+		- String type
 
 	}
 
+	class ImpactReport {
+		- LocalDateTime generatedAt
+	}
+
 	class ImpactCalculationStrategy {
+
+	}
+
+	class ConsoleUI {
+
+	}
+
+	class StoragePool {
 
 	}
 
@@ -73,14 +99,21 @@
 ' }
 
 Product "0..*" *-- "1..*" Material : uses
-
 Product "1..1" o-- "0..1" ImpactCalculationStrategy : uses
-
 Product "1..1" *-- "1..1" ProductCategory : has
 Product "1..1" --> "0..*" ImpactReport : generates
 
 Material "1..1" *-- "1..1" RecyclingGuidance : has
+Material "1..1" *-- "1..1" RecyclingCategory
 
-RecyclingGuidance "1..1" *-- "1..1" RecyclingService : has
+RecyclingGuidance "1..1" *-- "1..1" RecyclingService
+
+StoragePool "1..*" o-  "0..*" Product
+StoragePool "1..*" o- "0..*" ProductCategory
+StoragePool "1..*" o-- "0..*" Material
+StoragePool "1..*" o-  "0..*" RecyclingCategory
+
+ConsoleUI "1..1" --> "0..*" StoragePool : uses
+
 
 @enduml
