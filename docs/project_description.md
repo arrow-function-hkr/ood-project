@@ -19,7 +19,6 @@
 - The system should be able to replace strategy without modifying the Product class (Strategy pattern required).
 - The system should reuse materials across multiple products.
 - The system should be easy to use (usability).
-- The system should respond to queries within 2 seconds (performance).
 - The system should ensure data accuracy for impact calculations (reliability).
 - The system should be scalable to support many users (scalability).
 
@@ -60,6 +59,8 @@
     - Represents a service that provides with an implementation on how to calculate the total environmental impact of one product. It must know the list of materials.
 - StoragePool &mdash; `Entity`
     - Represents a single unit of the storage for core components of the system and provides a safe access to the presentation layer. Holds all products and material with ability to manage them.
+- ApplicationService &mdash; `Service`
+    - Represents a service that is designed to be a middleware between presentation layer and application layer (being in itself in application layer).
 - ConsoleUI &mdash; `Entity`
     - Represents a single unit in the system that is used as a presentation layer for the project that handles all I/O. Uses storage pool(s) to manage the state of the application via a pre-defined interface.
 
@@ -273,7 +274,16 @@ NOTE:
         <td><a href="#entity-StoragePool">StoragePool</a> (provides data to show)</td>
     </tr>
     <tr>
-        <td>Manage core and dependant components of the system through a defined interface</td>
-        <td><a href="#entity-StoragePool">StoragePool</a> (provides interface)</td>
+        <td>Communicate through a defined interface with the main application to send and retrieve results</td>
+        <td><a href="#service-ApplicationService">ApplicationService</a> (uses)</td>
+    </tr>
+</table>
+
+<table>
+    <tr><td colspan="2" id="service-ApplicationService">Service: ApplicationService</td></tr>
+    <tr><td>Responsibilities</td><td>Collaborators</td></tr>
+    <tr>
+        <td>Handle requests from presentation API</td>
+        <td><a href="#entity-ConsoleUI">ConsoleUI</a> (used by)</td>
     </tr>
 </table>
