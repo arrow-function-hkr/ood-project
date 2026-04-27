@@ -10,3 +10,5 @@
 *.tar.gz
 *.rar
 .env*
+.build/
+build/

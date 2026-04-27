@@ -2,12 +2,6 @@ package onion.lifeproducts.rms.presentation;
 
 
 import java.util.HashMap;
-import java.util.Scanner;
-
-import onion.lifeproducts.rms.domain.Material;
-import onion.lifeproducts.rms.domain.Product;
-import onion.lifeproducts.rms.domain.ProductCategory;
-import onion.lifeproducts.rms.domain.RecyclingCategory;
 
 
 /**
@@ -52,29 +46,22 @@ public final class ConsoleUI {
 	private boolean skipOneIterationPostProcessing = false;
 	/** Indication whethert to make spacing after user have chosen an option and retrieved result or not */
 	private boolean makeSpaceAfterInput = true;
-	/**
-	 * Controls whether to perform strict main menu choice checking or not.<br><br>
+
+	/** Create menu instance with default values:<br><br>
 	 *
-	 * Strict checking means that prorgram will stop if something is wrong.<br><br>
-	 *
-	 * Loose checking means that prgoram will skip entry if something is wrong
-	 * (i.e. will continue execution without problematic entries)
-	 */
-	private final boolean strictMainMenuChecking = true;
-
-
-	/**
-	 * Default ANSI option for menu if not provided
-	 * (to not create new object each time, one is reused)
-	 */
-	static private final ConsoleUIANSIOptions defaultMenuAnsiOptions = new ConsoleUIANSIOptions();
-
-	/** Create menu instance with default values */
+	 * - Empty list of options
+	 * - Default ANSI options from {@link Util} class (static field `Util.consoleUIANSIOptions'). */
 	public ConsoleUI() {
-		this(ConsoleUI.defaultMainOptions, ConsoleUI.defaultMenuAnsiOptions);
+		this(ConsoleUI.defaultMainOptions);
 	}
 
-	public ConsoleUI(ConsoleUIEntry[] mainOptions, ConsoleUIANSIOptions menuANSIOptions) {
+	/** Create menu instance provided with list of main menu options
+	 * that will be used during execution for this specific instance of menu,
+	 * as well as custom ANSI options that menu will use during execution. */
+	public ConsoleUI(
+		final ConsoleUIEntry[] mainOptions,
+		final ConsoleUIANSIOptions menuANSIOptions
+	) {
 		this.mainOptions = mainOptions;
 		this.ansiOptions = menuANSIOptions;
 		this.ANSI_CURRENT = this.ansiOptions.USER_INPUT;
@@ -82,20 +69,31 @@ public final class ConsoleUI {
 	}
 
 	/** Create menu instance provided with custom ANSI values that menu will use during execution */
-	public ConsoleUI(ConsoleUIANSIOptions menuANSIOptions) {
+	public ConsoleUI(final ConsoleUIANSIOptions menuANSIOptions) {
 		this(ConsoleUI.defaultMainOptions, menuANSIOptions);
 	}
 
-	public ConsoleUI(ConsoleUIEntry[] mainOptions) {
-		this(mainOptions, ConsoleUI.defaultMenuAnsiOptions);
+	/** Create menu instance provided with list of main menu options
+	 * that will be used during execution for this specific instance of menu.<br>
+	 * Default {@link ConsoleUIANSIOptions} options from {@link Util} class
+	 * will be used for graphics options (static field `Util.consoleUIANSIOptions').
+	 */
+	public ConsoleUI(final ConsoleUIEntry[] mainOptions) {
+		this(mainOptions, Util.consoleUIANSIOptions);
 	}
 
 	/** Initialization logic that will be invoked from constructor to group initialization logic in one place, to not duplicate it across constructor overloads. */
 	private void init() {
 		/// init:
 
-		int processed = 0, length = this.mainOptions.length;
+		int length = this.mainOptions.length;
 		String[] mainChoicesRows = new String[length];
+
+		// will exit the process if something is wrong
+		// In production, it will silently continue,
+		// since all options will be checked before merging into master
+		ConsoleUIEntryChecker.checkConsoleUIEntryOptions(this.mainOptions);
+		// here, all options are valid
 
 		/// init: menu options string
 		for (int i = 0; i < length; i++) {
@@ -106,39 +104,6 @@ public final class ConsoleUI {
 				   description = entry.description(),
 				   command = entry.command();
 			Runnable callback = entry.callback();
-
-			// check that all values in entry are not null
-			if (
-					key == null || description == null ||
-					(callback == null && command == null)
-			) {
-				if (this.strictMainMenuChecking) {
-					System.out.printf("[debug]: choice entry #%d has null values. Aborting...\n", i);
-					System.exit(2);
-				} else continue;
-			} else if (!(key instanceof String)) {
-				if (this.strictMainMenuChecking) {
-					System.out.printf("[debug]: choice entry #%d has no string value for field 'key'. Aborting...\n", i);
-					System.exit(2);
-				} else continue;
-			} else if (!(description instanceof String)) {
-				if (this.strictMainMenuChecking) {
-					System.out.printf("[debug]: choice entry #%d has no string value for field 'description'. Aborting...\n", i);
-					System.exit(2);
-				} else continue;
-			} else if (command == null && !(callback instanceof Runnable)) {
-				if (this.strictMainMenuChecking) {
-					System.out.printf("[debug]: choice entry #%d has no 'Runnable' value for field 'callback'. Aborting...\n", i);
-					System.exit(2);
-				} else continue;
-			} else if (callback == null && !(command instanceof String)) {
-				if (this.strictMainMenuChecking) {
-					System.out.printf("[debug]: choice entry #%d has no string value for field 'command'. Aborting...\n", i);
-					System.exit(2);
-				} else continue;
-			}
-
-			processed++;
 
 			mainChoicesRows[i] = new String(this.format__mainOption)
 				.replaceAll("\\$o", String.format(
@@ -154,19 +119,7 @@ public final class ConsoleUI {
 			this.mainChoicesMappings.put(key, callback);
 		}
 
-		// check that there are no null values
-		if (!this.strictMainMenuChecking && processed != length) {
-			String[] mainChoicesFiltered = new String[processed];
-			for (int i = 0, processedElements = 0; i < this.mainOptions.length; i++) {
-				if (mainChoicesRows[i] == null) continue;
-				else mainChoicesFiltered[processedElements++] = mainChoicesRows[i];
-			}
-			mainChoicesRows = mainChoicesFiltered;
-		}
-
 		this.mainChoicesStr = String.join("\n", mainChoicesRows);
-
-
 	}
 
 	/** Print menu to the output */
@@ -192,58 +145,6 @@ public final class ConsoleUI {
 			case "exit": return this::disableEventLoop;
 			default: return () -> {};
 		}
-	}
-
-	/** Create product, prompting user to fill all the values */
-	private void createProduct() {
-		Util.TODO("implement createProduct");
-	}
-
-	/** Create material, prompting user to fill all the values */
-	private void createMaterial() {
-		Util.TODO("implement createMaterial");
-	}
-
-	/** Create material, prompting user to fill all the values */
-	private void createImpactReport() {
-		Util.TODO("implement createImpactReport");
-	}
-
-	/** Create recycling report for a specific product, or for a series of products */
-	private void createRecyclingGuidance() {
-		Util.TODO("implement createRecyclingGuidance");
-	}
-
-	/** Create a product category */
-	private void createProductCategory() {
-		Util.TODO("implement createProductCategory");
-	}
-
-	/** Create a recycling category */
-	private void createRecyclingCategory() {
-		Util.TODO("implement createRecyclingCategory");
-	}
-
-	// template methods to give clue what is going on
-
-	/** Get all products in the application */
-	private Product[] getAllProducts() {
-		return new Product[]{};
-	}
-
-	/** Get all materials in the application */
-	private Material[] getAllMaterials() {
-		return new Material[]{};
-	}
-
-	/** Get all product categories in the application */
-	private ProductCategory[] getAllProductCategories() {
-		return new ProductCategory[]{};
-	}
-
-	/** Get all product categories in the application */
-	private RecyclingCategory[] getAllRecyclingCategories() {
-		return new RecyclingCategory[]{};
 	}
 
 	/**
