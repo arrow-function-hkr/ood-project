@@ -11,27 +11,23 @@ public final class Util {
 	/** Scanner instance */
 	static private final Scanner scanner = new Scanner(System.in);
 
-	/**
-	 * Output a message to the standard error stream with todo tag
-	 * @param msg message to be shown
-	*/
-	static public final void TODO(String msg) {
-		System.err.printf("[TODO]: %s\n", msg);
-	}
-
-	/**
-	 * Output a message to the standard error stream with todo tag, and exit the program with the provided exit status
-	 * @param msg message to be shown
-	 * @param exitStatus exit status [0, 255]. Number out of this range will be wrapped around.
-	*/
-	static public final void TODO(String msg, int exitStatus) {
-		Util.TODO(msg);
-		System.exit(exitStatus);
-	}
-
 	/** Clear the screen, and move cursor to the top-left corner */
 	static public final void clearScreen() {
 		System.out.print(ANSI.ERRASE_ENTIRE_SCREEN + ANSI.MOVE_CURSOR_TO_HOME);
+	}
+
+	static public ConsoleUIANSIOptions consoleUIANSIOptions = new ConsoleUIANSIOptions();
+
+	/** Change default ANSI options for the {@link ConsoleUI} class and {@link ConsoleUIEntry} options to use.<br>
+	 * Modifies the global state of the static field {@link Util.consoleUIANSIOptions}. */
+	public Util(ConsoleUIANSIOptions consoleUIANSIOptions) {
+		Util.consoleUIANSIOptions = consoleUIANSIOptions;
+	}
+
+	/** Change default ANSI options for the {@link ConsoleUI} class and {@link ConsoleUIEntry} options to use.<br>
+	 * Modifies the global state of the static field {@link Util.consoleUIANSIOptions}. */
+	static public final void changeConsoleUIANSIOptions(ConsoleUIANSIOptions consoleUIANSIOptions) {
+		Util.consoleUIANSIOptions = consoleUIANSIOptions;
 	}
 
 	/**
@@ -39,7 +35,7 @@ public final class Util {
 	 * 
 	 * Using default settings and no modifications
 	 */
-	static public String getLine() {
+	static public final String getLine() {
 		return Util.scanner.nextLine().strip();
 	}
 
@@ -48,7 +44,7 @@ public final class Util {
 	 * 
 	 * Using default settings and no modifications
 	 */
-	static public String getLine(String prompt) {
+	static public final String getLine(String prompt) {
 		// this is where user input graphics comes in
 		return Util.getLine(prompt, "");
 	}
@@ -58,7 +54,7 @@ public final class Util {
 	 * 
 	 * Using custom prompt and custom user input ANSI graphics
 	 */
-	static public String getLine(String prompt, String ansiUserInput) {
+	static public final String getLine(String prompt, String ansiUserInput) {
 		// this is where user input graphics comes in
 		System.out.printf("%s%s", prompt, ansiUserInput);
 		final String in = Util.scanner.nextLine().strip();
@@ -73,7 +69,7 @@ public final class Util {
 	 * 
 	 * Using default settings and no modifications
 	 */
-	static public String getLineAnswer() {
+	static public final String getLineAnswer() {
 		String answer;
 		while ((answer = Util.getLine()).isEmpty());
 		return answer;
@@ -85,7 +81,7 @@ public final class Util {
 	 * 
 	 * Providing parameter for prompt, and parameter to reset prompt after use
 	 */
-	static public String getLineAnswer(final String prompt, final String ansiUserInput) {
+	static public final String getLineAnswer(final String prompt, final String ansiUserInput) {
 		String answer;
 		while ((answer = Util.getLine(prompt, ansiUserInput)).isEmpty());
 		return answer;
@@ -97,7 +93,7 @@ public final class Util {
 	 * 
 	 * Providing parameter for prompt, and parameter to reset prompt after use
 	 */
-	static public String getLineAnswer(final String prompt) {
+	static public final String getLineAnswer(final String prompt) {
 		String answer;
 		while ((answer = Util.getLine(prompt, "")).isEmpty());
 		return answer;
