@@ -3,120 +3,128 @@
 ' RMS stands for Recycling Management System
 package onion.lifeproducts.rms {
 
-	class Product {
-		- Integer id
-		- String name
-		- ProductCategory category
-		- Material[] materials
-		- LocalDateTime manufactureDate
-		- LocalDateTime endDate
-		
-		+ getId(): Integer
-		+ getName(): String
-		+ getCategory(): String
-		+ getManufactureDate(): LocalDateTime
-		+ getEndDate(): LocalDateTime
-		+ getMaterials(): Material[]
-		+ setName(String name): void
-		+ setCategory(String category): void
-	}
+	package onion.lifeproducts.rms.presentation {
 
-	class Material {
-		- Integer id
-		- String name
-		- float recycleRate
-		- float burnAtmosphereImpact
-		- float decayAtmosphereImpact
-		- float decayGroundImpact
-		- float burnEnvironmentImpact
-		- float decayEnvironmentImpact
-		- LocalDateTime burnTime
-		- LocalDateTime decayTime
-		- RecyclingGuidance recyclingInstruction
-
-		+ getId(): Integer
-		+ getName(): String
-		+ getRecycleRate(): float
-		+ getBurnEnvironmentImpact(): float
-		+ getDecayEnvironmentImpact(): float
-		+ getBurnAtmosphereImpact(): float
-		+ getDecayAtmosphereImpact(): float
-		+ getDecayGroundImpact(): float
-		+ getBurnTime(): LocalDateTime
-		+ getDecayTime(): LocalDateTime
-		+ getRecyclingInstruction(): RecyclingGuidance
-		+ setName(String name): void
-	}
-
-	class ProductCategory {
-		- String type
-	}
-
-	class RecyclingGuidance {
-		- String guide
-	}
-
-	class RecyclingService {
+		class ConsoleUI {
+			+ ConsoleUI(): void
+			+ ConsoleUI(ConsoleUIANSIOptions consoleUIANSIOptions): void
+			+ run(): void
+		}
 
 	}
 
+	package onion.lifeproducts.rms.application {
 
-	class RecyclingCategory {
-		- String type
+		class ApplicationService {
+			+ addProduct(String name, ProductCategory category, Integer[] materials, LocalDateTime manufactureDate, LocalDateTime endDate): Integer
+			+ addMaterial(String name, float recycleRate, float burnAtmosphereImpact, float decayAtmosphereImpact, float decayGroundImpact, float burnEnvironmentImpact, float decayEnvironmentImpact, LocalDateTime burnTime, LocalDateTime decayTime): Integer
+			+ addProductCategory(String type): boolean
+			+ addRecyclingCategory(String type): boolean
+			+ addRecyclingGuidance(String type): boolean
 
+			+ getAllProducts(): List<Product>
+			+ getAllProductIds(): List<Integer>
+			+ getAllMaterials(): List<Material>
+			+ getAllMaterialIds(): List<Integer>
+			+ getAllProductCategories(): List<ProductCategory>
+			+ getAllRecyclingCategories(): List<RecyclingCategory>
+		}
+
+		class StoragePool {
+			- List<Product> productsPool
+			- List<Material> materialsPool
+			- List<ProductCategory> productCategoryPool
+			- List<RecyclingCategory> recyclingCategoryPool
+			- List<RecyclingGuidance> recyclingGuidancePool
+		}
+
+		interface ImpactCalculationStrategyInterface {
+			+ calculateImpact(Product product): float
+			+ calculateImpact(Product[] product): float[]
+			+ calculateImpact(List<Product> product): List<Float>
+		}
+
+		class RecyclingService {
+
+		}
 	}
 
-	class ImpactReport {
-		- LocalDateTime generatedAt
-		- float impactValue
-		- int productsAmountUsed
-		- int materialsAmountUsed
-		- int uniqueMaterialAmountUsed
+	package onion.lifeproducts.rms.domain {
+
+		class Product {
+			- Integer id
+			- String name
+			- ProductCategory category
+			- Material[] materials
+			- LocalDateTime manufactureDate
+			- LocalDateTime endDate
+
+			+ getId(): Integer
+			+ getName(): String
+			+ getCategory(): String
+			+ getManufactureDate(): LocalDateTime
+			+ getEndDate(): LocalDateTime
+			+ getMaterials(): Material[]
+			+ setName(String name): void
+			+ setCategory(String category): void
+		}
+
+		class Material {
+			- Integer id
+			- String name
+			- float recycleRate
+			- float burnAtmosphereImpact
+			- float decayAtmosphereImpact
+			- float decayGroundImpact
+			- float burnEnvironmentImpact
+			- float decayEnvironmentImpact
+			- LocalDateTime burnTime
+			- LocalDateTime decayTime
+			- RecyclingGuidance recyclingInstruction
+
+			+ getId(): Integer
+			+ getName(): String
+			+ getRecycleRate(): float
+			+ getBurnEnvironmentImpact(): float
+			+ getDecayEnvironmentImpact(): float
+			+ getBurnAtmosphereImpact(): float
+			+ getDecayAtmosphereImpact(): float
+			+ getDecayGroundImpact(): float
+			+ getBurnTime(): LocalDateTime
+			+ getDecayTime(): LocalDateTime
+			+ getRecyclingInstruction(): RecyclingGuidance
+			+ setName(String name): void
+		}
+
+		class ProductCategory {
+			- String type
+		}
+
+		class RecyclingGuidance {
+			- String guide
+		}
+
+		class RecyclingCategory {
+			- String type
+
+		}
+
+		class ImpactReport {
+			- LocalDateTime generatedAt
+			- float impactValue
+			- int productsAmountUsed
+			- int materialsAmountUsed
+			- int uniqueMaterialAmountUsed
+		}
+
+		class SimpleImpactCalculationStrategy implements onion.lifeproducts.rms.application.ImpactCalculationStrategyInterface {
+
+		}
+
+		class WeightPlusLifespanImpactCalculationStrategy implements onion.lifeproducts.rms.application.ImpactCalculationStrategyInterface {
+
+		}
 	}
-
-	class ConsoleUI {
-		+ ConsoleUI(): void
-		+ ConsoleUI(ConsoleUIANSIOptions consoleUIANSIOptions): void
-		+ run(): void
-	}
-
-	class ApplicationService {
-		+ addProduct(String name, ProductCategory category, Integer[] materials, LocalDateTime manufactureDate, LocalDateTime endDate): Integer
-		+ addMaterial(String name, float recycleRate, float burnAtmosphereImpact, float decayAtmosphereImpact, float decayGroundImpact, float burnEnvironmentImpact, float decayEnvironmentImpact, LocalDateTime burnTime, LocalDateTime decayTime): Integer
-		+ addProductCategory(String type): boolean
-		+ addRecyclingCategory(String type): boolean
-		+ addRecyclingGuidance(String type): boolean
-
-		+ getAllProducts(): List<Product>
-		+ getAllProductIds(): List<Integer>
-		+ getAllMaterials(): List<Material>
-		+ getAllMaterialIds(): List<Integer>
-		+ getAllProductCategories(): List<ProductCategory>
-		+ getAllRecyclingCategories(): List<RecyclingCategory>
-	}
-
-	class StoragePool {
-		- List<Product> productsPool
-		- List<Material> materialsPool
-		- List<ProductCategory> productCategoryPool
-		- List<RecyclingCategory> recyclingCategoryPool
-		- List<RecyclingGuidance> recyclingGuidancePool
-	}
-
-	interface ImpactCalculationStrategy {
-		+ calculateImpact(Product product): float
-		+ calculateImpact(Product[] product): float[]
-		+ calculateImpact(List<Product> product): List<Float>
-	}
-
-	class SimpleImpactCalculationStrategy implements ImpactCalculationStrategy {
-
-	}
-
-	class WeightPlusLifespanImpactCalculationStrategy implements ImpactCalculationStrategy {
-
-	}
-
 
 }
 
@@ -127,7 +135,7 @@ Product "1..1" --> "0..*" ImpactReport : generates
 Material "1..1" *-- "1..1" RecyclingGuidance : has
 Material "1..1" *-- "1..1" RecyclingCategory
 
-ImpactCalculationStrategy "1..1" o--- "0..1"  Product: uses
+ImpactCalculationStrategyInterface "1..1" o--- "0..1"  Product: uses
 
 RecyclingService "1..*" -> "0..*" RecyclingGuidance
 RecyclingService "1..*" --> "1..1" Material
@@ -136,12 +144,12 @@ StoragePool "1..*" o--  "0..*" Product
 StoragePool "1..*" o-- "0..*" ProductCategory
 StoragePool "1..*" o-- "0..*" Material
 StoragePool "1..*" o--  "0..*" RecyclingCategory
-StoragePool "1..*" o-- "0..*" ImpactCalculationStrategy
+StoragePool "1..*" o-- "0..*" ImpactCalculationStrategyInterface
 
 ConsoleUI "1..1" --> "0..*" ApplicationService : uses
 
 ApplicationService "1..1" *-- "1..1" StoragePool : uses
-ApplicationService "1..1" --> "0..*" ImpactCalculationStrategy : uses
+ApplicationService "1..1" --> "0..*" ImpactCalculationStrategyInterface : uses
 ApplicationService "1..1" --> "0..*" RecyclingService : uses
 
 
