@@ -67,22 +67,23 @@ Total roles count: 10
 
 |             Person         |                                                                                                        Roles                                                                                                        |
 |----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Boniface Mwangi Maina 0012 | <a href="#role-design-validator">Design Validator</a><br><a href="#role-domain-logic-developer">Domain Logic Developer</a><br><a href="#role-concept-researcher-and-explainer">Concept Researcher & Explainer</a>   |
+| Boniface Mwangi Maina 0012 | <a href="#role-design-validator">Design Validator</a><br><a href="#role-domain-logic-developer">Domain Logic Developer</a><br><a href="#role-console-ui-developer">Console UI Developer</a>                         |
 | Maksym Ignatiev 0006       | <a href="#role-console-ui-developer">Console UI Developer</a><br><a href="#role-testing-and-ci-engineer">Testing & CI Engineer</a><br><a href="#role-documentation-and-git-manager">Documentation & Git Manager</a> |
 | Shady Khalil 0016          | <a href="#role-integration-coordinator">Integration Coordinator</a><br><a href="#role-application-layer-developer">Application Layer Developer</a>                                                                  |
 | Vladyslav Yanchuk 0001     | <a href="#role-system-architect">System Architect</a><br><a href="#role-strategy-pattern-developer">Strategy Pattern Developer</a>                                                                                  |
+| Ayyub Lindroos 0001        | <a href="#role-concept-researcher-and-explainer">Concept Researcher & Explainer</a>                                                                                                                                 |
 
 ### Per role
 
-|                                        Role                                         |           Person            |
-|-------------------------------------------------------------------------------------|-----------------------------|
-| <a href="#role-system-architect">System Architect</a>                               | Vladyslav Yanchuk 0001      |
-| <a href="#role-domain-logic-developer">Domain Logic Developer</a>                   | Boniface Mwangi Maina 0012  |
-| <a href="#role-strategy-pattern-developer">Strategy Pattern Developer</a>           | Vladyslav Yanchuk 0001      |
-| <a href="#role-application-layer-developer">Application Layer Developer</a>         | Shady Khalil 0016           |
-| <a href="#role-console-ui-developer">Console UI Developer</a>                       | Maksym Ignatiev 0006        |
-| <a href="#role-testing-and-ci-engineer">Testing & CI Engineer</a>                   | Maksym Ignatiev 0006        |
-| <a href="#role-documentation-and-git-manager">Documentation & Git Manager</a>       | Maksym Ignatiev 0006        |
-| <a href="#role-concept-researcher-and-explainer">Concept Researcher & Explainer</a> | Boniface Mwangi Maina 0012  |
-| <a href="#role-design-validator">Design Validator</a>                               | Boniface Mwangi Maina 0012  |
-| <a href="#role-integration-coordinator">Integration Coordinator</a>                 | Shady Khalil 0016           |
+|                                        Role                                         |                          Person                           |
+|-------------------------------------------------------------------------------------|-----------------------------------------------------------|
+| <a href="#role-system-architect">System Architect</a>                               | Vladyslav Yanchuk 0001                                    |
+| <a href="#role-domain-logic-developer">Domain Logic Developer</a>                   | Boniface Mwangi Maina 0012                                |
+| <a href="#role-strategy-pattern-developer">Strategy Pattern Developer</a>           | Vladyslav Yanchuk 0001                                    |
+| <a href="#role-application-layer-developer">Application Layer Developer</a>         | Shady Khalil 0016                                         |
+| <a href="#role-console-ui-developer">Console UI Developer</a>                       | Maksym Ignatiev 0006<br>Boniface Mwangi Maina 0012        |
+| <a href="#role-testing-and-ci-engineer">Testing & CI Engineer</a>                   | Maksym Ignatiev 0006                                      |
+| <a href="#role-documentation-and-git-manager">Documentation & Git Manager</a>       | Maksym Ignatiev 0006                                      |
+| <a href="#role-concept-researcher-and-explainer">Concept Researcher & Explainer</a> | Ayyub Lindroos 0001                                       |
+| <a href="#role-design-validator">Design Validator</a>                               | Boniface Mwangi Maina 0012                                |
+| <a href="#role-integration-coordinator">Integration Coordinator</a>                 | Shady Khalil 0016                                         |
