@@ -1,3 +1,7 @@
-package onion.lifeproducts.rms.domain;
+package org.dom;
 
-public class ImpactReport {}
+public record ImpactReport(
+    double totalCarbonFootprint,
+    double recyclabilityScore,
+    String summary
+) {}

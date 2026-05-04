@@ -1,3 +1,13 @@
-package onion.lifeproducts.rms.domain;
+package org.dom;
 
-public class ProductCategory {}
+//started with an ENUM, but can change it to a record later if needed
+public enum ProductCategory {
+    ELECTRONICS,
+    FURNITURE,
+    FOOD,
+    CLOTHING,
+    OTHER
+}
+
+
+// public record ProductCategory(String name, double impactMultiplier) {}
