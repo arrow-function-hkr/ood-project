@@ -1,6 +1,6 @@
 package onion.lifeproducts.rms.application;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 
@@ -12,27 +12,31 @@ public class ApplicationService {
 		this.storagePool = new StoragePool();
 	}
 
-	public Integer addProduct(String name, ProductCategory category, Integer[] materials, LocalDateTime manufactureDate, LocalDateTime endDate) {
-		Product newProduct = new Product(name, category, materials, manufactureDate, endDate);
+	// update (according to providen environmental impact formulae):
+	//  remove ProductCategory productCategory
+	//  replace Integer[] meterials with Pair<Integer, float>[] 
+	//  replace LocalDateTime manufacture and LocalDateTime endDate with LocalDateTime lifespan  
+	public Integer addProduct(String name, Pair<float, Integer>[] materials, LocalDateTime lifespan) {
+		Product newProduct = new Product(name, materials, lifespan);
 		this.storagePool.addProduct(newProduct);
 		return newProduct.getId();
 	}
 
-	public Integer addMaterial(String name, float recycleRate, float burnAtmosphereImpact, float decayAtmosphereImpact, float decayGroundImpact, float burnEnvironmentImpact, float decayEnvironmentImpact, LocalDateTime burnTime, LocalDateTime decayTime) {
-		Material newMaterial = new Material(name, recycleRate, burnAtmosphereImpact, decayAtmosphereImpact, decayGroundImpact, burnEnvironmentImpact, decayEnvironmentImpact, burnTime, decayTime);
-		this.storagePool.addMaterial(newMaterial);
+	// update (according to providen environmental impact formulae):
+	//  remove float emissionFactorurnEnvironmentImpact
+	//  remove float burnAtmosphereImpact
+	//  remove float decayAtmosphereImpact
+	//  remove float decayGroundImpact
+	//  remove float burnEnvironmentImpact
+	//  remove float decayEnvironmenImpact
+	//  remove float burnTime
+	//  remove float decayTime
+	//  add float emissionFactor
+	public Integer addMaterial(String name, float recycleRate, float emissionFactor, RecycleCategory recycleCategory, RecycleGuidance recycleGuidance) {
+		Material newMaterial = new Material(name, recycleRate, emissionFactor, recycleCategory, recycleGuidance);
 		return newMaterial.getId();
 	}
-	public boolean addProductCategory(String type) {
-		ProductCategory newElement = new ProductCategory(type);
-		for (ProductCategory existingElement : this.storagePool.getAllProductCategories()) {
-			if(newElement == existingElement) {
-				return false;
-			}
-		}
-		this.storagePool.addProductCategory(newElement);
-		return true;
-	}
+
 	public boolean addRecyclingCategory(String type) {
 		RecyclingCategory newElement = new RecyclingCategory(type);
 		for (RecyclingCategory existingElement : this.storagePool.getAllRecyclingCategories()) {
@@ -53,30 +57,30 @@ public class ApplicationService {
 		this.storagePool.addRecyclingGuidance(newElement);
 		return true;
 	}
-	public List<Product> getAllProducts() {
+	public ArrayList<Product> getAllProducts() {
 		return this.storagePool.getAllProducts();
 	}
-	public List<Integer> getAllProductIds() {
+	public ArrayList<Integer> getAllProductIds() {
 		List<Integer> productIds = new List<Integer>();
 		for (Product product : this.storagePool.getAllProducts()) {
 			productIds.add(product.getId());
 		}
 		return productIds;
 	}
-	public List<Material> getAllMaterials() {
+	public ArrayList<Material> getAllMaterials() {
 		return this.storagePool.getAllMaterials();
 	}
-	public List<Integer> getAllMaterialIds() {
-		List<Integer> materialIds = new List<Integer>();
+	public ArrayList<Integer> getAllMaterialIds() {
+		ArrayList<Integer> materialIds = new ArrayList<Integer>();
 		for (Product material : this.storagePool.getAllMaterials()) {
 			materialIds.add(material.getId());
 		}
 		return materialIds;
 	}
-	public List<ProductCategory> getAllProductCategories() {
+	public ArrayList<ProductCategory> getAllProductCategories() {
 		return this.storagePool.getAllProductCategories();
 	}
-	public List<RecyclingCategory> getAllRecyclingCategories() {
+	public ArrayList<RecyclingCategory> getAllRecyclingCategories() {
 		return this.storagePool.getAllRecyclingCategories();
 	}
 }
