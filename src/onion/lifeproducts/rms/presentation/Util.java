@@ -16,18 +16,18 @@ public final class Util {
 		System.out.print(ANSI.ERRASE_ENTIRE_SCREEN + ANSI.MOVE_CURSOR_TO_HOME);
 	}
 
-	static public ConsoleUIANSIOptions consoleUIANSIOptions = new ConsoleUIANSIOptions();
+	static public ConsoleUIANSIOptions defaultConsoleUIANSIOptions = new ConsoleUIANSIOptions();
 
 	/** Change default ANSI options for the {@link ConsoleUI} class and {@link ConsoleUIEntry} options to use.<br>
-	 * Modifies the global state of the static field {@link Util.consoleUIANSIOptions}. */
-	public Util(ConsoleUIANSIOptions consoleUIANSIOptions) {
-		Util.consoleUIANSIOptions = consoleUIANSIOptions;
+	 * Modifies the global state of the static field {@link Util.defaultConsoleUIANSIOptions}. */
+	public Util(ConsoleUIANSIOptions defaultConsoleUIANSIOptions) {
+		Util.defaultConsoleUIANSIOptions = defaultConsoleUIANSIOptions;
 	}
 
 	/** Change default ANSI options for the {@link ConsoleUI} class and {@link ConsoleUIEntry} options to use.<br>
-	 * Modifies the global state of the static field {@link Util.consoleUIANSIOptions}. */
-	static public final void changeConsoleUIANSIOptions(ConsoleUIANSIOptions consoleUIANSIOptions) {
-		Util.consoleUIANSIOptions = consoleUIANSIOptions;
+	 * Modifies the global state of the static field {@link Util.defaultConsoleUIANSIOptions}. */
+	static public final void changeConsoleUIANSIOptions(ConsoleUIANSIOptions defaultConsoleUIANSIOptions) {
+		Util.defaultConsoleUIANSIOptions = defaultConsoleUIANSIOptions;
 	}
 
 	/**
