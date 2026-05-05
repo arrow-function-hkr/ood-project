@@ -7,5 +7,5 @@ import java.util.ArrayList;
 public interface ImpactCalculationStrategyInterface {
     public float calculateImpact(Product product);
     public float calculateImpact(Product[] products);
-    public float calculateImpact(ArrayList<Products> products);
+    public float calculateImpact(ArrayList<Product> products);
 }
