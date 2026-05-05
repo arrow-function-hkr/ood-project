@@ -1,4 +1,4 @@
-package org.dom;
+package onion.lifeproducts.rms.application;
 
 public enum RecyclingCategory {
     PLASTIC,

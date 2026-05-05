@@ -1,4 +1,4 @@
-package org.dom;
+package onion.lifeproducts.rms.application;
 
 //started with an ENUM, but can change it to a record later if needed
 public enum ProductCategory {
