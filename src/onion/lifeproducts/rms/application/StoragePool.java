@@ -7,9 +7,9 @@ import java.util.ArrayList;
 public class StoragePool {
 	private ArrayList<Product> productsPool;
 	private ArrayList<Material> materialsPool;
-	private ArrayList<ProductCategory> productCategoryPool;
 	// update: remove ProductCategory according to a new UML changes
-	//private ArrayList<RecyclingCategory> recyclingCategoryPool;
+	//private ArrayList<ProductCategory> productCategoryPool;
+	private ArrayList<RecyclingCategory> recyclingCategoryPool;
 	private ArrayList<RecyclingGuidance> recyclingGuidancePool;
 
 	public StoragePool() {
@@ -35,23 +35,23 @@ public class StoragePool {
 		this.recyclingCategoryPool.add(recyclingCategory);
 	}
 	public void addRecyclingGuidance(RecyclingGuidance recyclingGuidance) {
-		this.recyclingGuidance.add(recyclingGuidance);
+		this.recyclingGuidancePool.add(recyclingGuidance);
 	}
 
 	public ArrayList<Product> getAllProducts() {
 		return this.productsPool;
 	}
-	public ArrayList<Product> getAllMaterials() {
+	public ArrayList<Material> getAllMaterials() {
 		return this.materialsPool;
 	}
 	// update: remove ProductCategory according to a new UML changes
 	//public ArrayList<Product> getAllProductCategories() {
 	//	return this.productCategory;
 	//}
-	public ArrayList<Product> getAllRecyclingCategories() {
+	public ArrayList<RecyclingCategory> getAllRecyclingCategories() {
 		return this.recyclingCategoryPool;
 	}
-	public ArrayList<Product> getAllRecyclingGuidances() {
-		return this.recyclingGuidance;
+	public ArrayList<RecyclingGuidance> getAllRecyclingGuidances() {
+		return this.recyclingGuidancePool;
 	}
 }

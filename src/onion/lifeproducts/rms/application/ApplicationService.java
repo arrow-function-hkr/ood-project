@@ -2,6 +2,7 @@ package onion.lifeproducts.rms.application;
 import onion.lifeproducts.rms.domain.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.time.LocalDateTime;
 
 
@@ -15,9 +16,9 @@ public class ApplicationService {
 
 	// update (according to providen environmental impact formulae):
 	//  remove ProductCategory productCategory
-	//  replace Integer[] meterials with Pair<Integer, float>[] 
+	//  replace Integer[] meterials with HashMap<Integer, Float> materials 
 	//  replace LocalDateTime manufacture and LocalDateTime endDate with LocalDateTime lifespan  
-	public Integer addProduct(String name, Pair<float, Integer>[] materials, LocalDateTime lifespan) {
+	public Integer addProduct(String name, HashMap<Integer, Float> materials, LocalDateTime lifespan) {
 		Product newProduct = new Product(name, materials, lifespan);
 		this.storagePool.addProduct(newProduct);
 		return newProduct.getId();
@@ -33,13 +34,14 @@ public class ApplicationService {
 	//  remove float burnTime
 	//  remove float decayTime
 	//  add float emissionFactor
-	public Integer addMaterial(String name, float recycleRate, float emissionFactor, RecycleCategory recycleCategory, RecycleGuidance recycleGuidance) {
-		Material newMaterial = new Material(name, recycleRate, emissionFactor, recycleCategory, recycleGuidance);
+	public Integer addMaterial(String name, float recycleRate, float emissionFactor, RecyclingCategory recyclingCategory, RecyclingGuidance recyclingGuidance) {
+		Material newMaterial = new Material(name, recycleRate, emissionFactor, recyclingCategory, recyclingGuidance);
+		this.storagePool.addMaterial(newMaterial);
 		return newMaterial.getId();
 	}
 
-	public boolean addRecyclingCategory(String type) {
-		RecyclingCategory newElement = new RecyclingCategory(type);
+	public boolean addRecyclingCategory(String category) {
+		RecyclingCategory newElement = new RecyclingCategory(category);
 		for (RecyclingCategory existingElement : this.storagePool.getAllRecyclingCategories()) {
 			if(newElement == existingElement) {
 				return false;
@@ -48,8 +50,8 @@ public class ApplicationService {
 		this.storagePool.addRecyclingCategory(newElement);
 		return true;
 	}
-	public boolean addRecyclingGuidance(String type) {
-		RecyclingGuidance newElement = new RecyclingGuidance(type);
+	public boolean addRecyclingGuidance(String guidance) {
+		RecyclingGuidance newElement = new RecyclingGuidance(guidance);
 		for (RecyclingGuidance existingElement : this.storagePool.getAllRecyclingGuidances()) {
 			if(newElement == existingElement) {
 				return false;
@@ -62,7 +64,7 @@ public class ApplicationService {
 		return this.storagePool.getAllProducts();
 	}
 	public ArrayList<Integer> getAllProductIds() {
-		List<Integer> productIds = new List<Integer>();
+		ArrayList<Integer> productIds = new ArrayList<Integer>();
 		for (Product product : this.storagePool.getAllProducts()) {
 			productIds.add(product.getId());
 		}
@@ -73,14 +75,15 @@ public class ApplicationService {
 	}
 	public ArrayList<Integer> getAllMaterialIds() {
 		ArrayList<Integer> materialIds = new ArrayList<Integer>();
-		for (Product material : this.storagePool.getAllMaterials()) {
+		for (Material material : this.storagePool.getAllMaterials()) {
 			materialIds.add(material.getId());
 		}
 		return materialIds;
 	}
-	public ArrayList<ProductCategory> getAllProductCategories() {
-		return this.storagePool.getAllProductCategories();
-	}
+	//update: remove ProductCategory according to a new UML changes
+	//public ArrayList<ProductCategory> getAllProductCategories() {
+	//	return this.storagePool.getAllProductCategories();
+	//}
 	public ArrayList<RecyclingCategory> getAllRecyclingCategories() {
 		return this.storagePool.getAllRecyclingCategories();
 	}
