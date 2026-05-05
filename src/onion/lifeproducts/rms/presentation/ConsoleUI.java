@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 /**
  * Menu representing all available options of the main application in form of CLI application.
+ * Designed to be used in multiple instances for sub-menus. 
  */
 public final class ConsoleUI {
 
@@ -41,7 +42,7 @@ public final class ConsoleUI {
 	private String ANSI_CURRENT;
 
 	/** Indication whether to continue reading user input or not */
-	private boolean activeEventLoop = true;
+	private boolean activeMenuLoop = true;
 	/** Indication whether to skip extra work that is done after processing the main menu enty or not */
 	private boolean skipOneIterationPostProcessing = false;
 	/** Indication whethert to make spacing after user have chosen an option and retrieved result or not */
@@ -49,10 +50,10 @@ public final class ConsoleUI {
 
 	/** Create menu instance with default values:<br><br>
 	 *
-	 * - Empty list of options
-	 * - Default ANSI options from {@link Util} class (static field `Util.consoleUIANSIOptions'). */
+	 * - Default list of options
+	 * - Default ANSI options from {@link Util} class (static field `Util.defaultConsoleUIANSIOptions'). */
 	public ConsoleUI() {
-		this(ConsoleUI.defaultMainOptions);
+		this(ConsoleUI.defaultMainOptions, Util.defaultConsoleUIANSIOptions);
 	}
 
 	/** Create menu instance provided with list of main menu options
@@ -65,27 +66,9 @@ public final class ConsoleUI {
 		this.mainOptions = mainOptions;
 		this.ansiOptions = menuANSIOptions;
 		this.ANSI_CURRENT = this.ansiOptions.USER_INPUT;
-		this.init();
-	}
-
-	/** Create menu instance provided with custom ANSI values that menu will use during execution */
-	public ConsoleUI(final ConsoleUIANSIOptions menuANSIOptions) {
-		this(ConsoleUI.defaultMainOptions, menuANSIOptions);
-	}
-
-	/** Create menu instance provided with list of main menu options
-	 * that will be used during execution for this specific instance of menu.<br>
-	 * Default {@link ConsoleUIANSIOptions} options from {@link Util} class
-	 * will be used for graphics options (static field `Util.consoleUIANSIOptions').
-	 */
-	public ConsoleUI(final ConsoleUIEntry[] mainOptions) {
-		this(mainOptions, Util.consoleUIANSIOptions);
-	}
-
-	/** Initialization logic that will be invoked from constructor to group initialization logic in one place, to not duplicate it across constructor overloads. */
-	private void init() {
-		/// init:
-
+		
+		/// initialization
+		
 		int length = this.mainOptions.length;
 		String[] mainChoicesRows = new String[length];
 
@@ -127,22 +110,23 @@ public final class ConsoleUI {
 		System.out.println(this.mainChoicesStr);
 	}
 
-	/** Toggle the indication of the active event loop, effectively exiting the menu */
-	private void disableEventLoop() {
-		this.activeEventLoop = false;
-	}
-
 	/** Clear the screen and put the cursor in the top-left corner */
 	private void clearScreen() {
 		Util.clearScreen();
 		this.skipOneIterationPostProcessing = true;
 	}
-
+	
+	/** Stops the active event loop, effectively exiting the menu */
+	private void stopMenu() {
+		this.activeMenuLoop = false;
+	}
+	
+	/** Returns callback function for given option that is related to current instance of ConsoleUI */
 	private Runnable getMainChoiseCommandMapping(final String command) {
 		switch (command) {
 			case "print:menu": return this::printMenu;
 			case "clear:screen": return this::clearScreen;
-			case "exit": return this::disableEventLoop;
+			case "exit": return this::stopMenu;
 			default: return () -> {};
 		}
 	}
@@ -151,17 +135,17 @@ public final class ConsoleUI {
 	 * Start the main event loop execution. This method will end execution
 	 * only when user declares so (or if program exits earlier).
 	 */
-	public void run() {
+	public void runMenu() {
 		/// run:
 
-		this.activeEventLoop = true;
+		this.activeMenuLoop = true;
 
 		this.printMenu(); // print menu only once during initialization process
 		if (this.makeSpaceAfterInput) System.out.println();
 
 		String menuOption;
 
-		while (this.activeEventLoop) {
+		while (this.activeMenuLoop) {
 
 			menuOption = Util.getLineAnswer(this.defaultInputPrompt, this.ANSI_CURRENT);
 
@@ -179,7 +163,7 @@ public final class ConsoleUI {
 
 			if (
 				this.makeSpaceAfterInput &&
-				this.activeEventLoop &&
+				this.activeMenuLoop &&
 				!this.skipOneIterationPostProcessing
 			) System.out.println();
 
