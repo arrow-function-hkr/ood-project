@@ -12,6 +12,6 @@ public class Main {
 
 		// this constructor will use default ANSI options from Util class
 		ConsoleUI menu = new ConsoleUI(Data.mainMenuChoices);
-		menu.run();
+		menu.runMenu();
 	}
 }
