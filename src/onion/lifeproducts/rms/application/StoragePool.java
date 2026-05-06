@@ -1,21 +1,24 @@
 package onion.lifeproducts.rms.application;
+import onion.lifeproducts.rms.domain.*;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 public class StoragePool {
-	private List<Product> productsPool;
-	private List<Material> materialsPool;
-	private List<ProductCategory> productCategoryPool;
-	private List<RecyclingCategory> recyclingCategoryPool;
-	private List<RecyclingGuidance> recyclingGuidancePool;
+	private ArrayList<Product> productsPool;
+	private ArrayList<Material> materialsPool;
+	// update: remove ProductCategory according to a new UML changes
+	//private ArrayList<ProductCategory> productCategoryPool;
+	private ArrayList<RecyclingCategory> recyclingCategoryPool;
+	private ArrayList<RecyclingGuidance> recyclingGuidancePool;
 
 	public StoragePool() {
-		productsPool = new List<Product>();
-		materialsPool = new List<Material>();
-		productCategoryPool = new List<ProductCategory>();
-		recyclingCategoryPool = new List<RecyclingCategory>();
-		recyclingGuidancePool = new List<RecyclingGuidance>();
+		productsPool = new ArrayList<Product>();
+		materialsPool = new ArrayList<Material>();
+		// update: remove ProductCategory according to a new UML changes
+		//productCategoryPool = new ArrayList<ProductCategory>();
+		recyclingCategoryPool = new ArrayList<RecyclingCategory>();
+		recyclingGuidancePool = new ArrayList<RecyclingGuidance>();
 	}
 
 	public void addProduct(Product product) {
@@ -24,29 +27,31 @@ public class StoragePool {
 	public void addMaterial(Material material) {
 		this.materialsPool.add(material);
 	}
-	public void addProductCategory(ProductCategory productCategory) {
-		this.productCategory.add(productCategory);
-	}
+	// update: remove ProductCategory according to a new UML changes
+	//public void addProductCategory(ProductCategory productCategory) {
+	//	this.productCategory.add(productCategory);
+	//}
 	public void addRecyclingCategory(RecyclingCategory recyclingCategory) {
 		this.recyclingCategoryPool.add(recyclingCategory);
 	}
 	public void addRecyclingGuidance(RecyclingGuidance recyclingGuidance) {
-		this.recyclingGuidance.add(recyclingGuidance);
+		this.recyclingGuidancePool.add(recyclingGuidance);
 	}
 
-	public List<Product> getAllProducts() {
+	public ArrayList<Product> getAllProducts() {
 		return this.productsPool;
 	}
-	public List<Product> getAllMaterials() {
+	public ArrayList<Material> getAllMaterials() {
 		return this.materialsPool;
 	}
-	public List<Product> getAllProductCategories() {
-		return this.productCategory;
-	}
-	public List<Product> getAllRecyclingCategories() {
+	// update: remove ProductCategory according to a new UML changes
+	//public ArrayList<Product> getAllProductCategories() {
+	//	return this.productCategory;
+	//}
+	public ArrayList<RecyclingCategory> getAllRecyclingCategories() {
 		return this.recyclingCategoryPool;
 	}
-	public List<Product> getAllRecyclingGuidances() {
-		return this.recyclingGuidance;
+	public ArrayList<RecyclingGuidance> getAllRecyclingGuidances() {
+		return this.recyclingGuidancePool;
 	}
 }
