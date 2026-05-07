@@ -15,6 +15,8 @@ The description of the project can be found in [docs/project_description.md](doc
 
 The distributed roles across group members can be found in [docs/roles.md](docs/roles.md) file.
 
+This project is designed and tested with Java 25. There is no 100% guarantee that the project will work on older versions of Java but it most litkely will, since this project uses pretty stable API from Java 17 and above.
+
 ---
 
 ## License
