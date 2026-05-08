@@ -2,7 +2,6 @@ package onion.lifeproducts.rms.application;
 
 import onion.lifeproducts.rms.domain.Material;
 import onion.lifeproducts.rms.domain.Product;
-import onion.lifeproducts.rms.domain.ProductCategory;
 import onion.lifeproducts.rms.domain.RecyclingCategory;
 import onion.lifeproducts.rms.domain.RecyclingGuidance;
 
@@ -29,10 +28,6 @@ public class StoragePool {
 	 */
 	private final List<Material> materialsPool;
 
-	/**
-	 * Stores all product categories.
-	 */
-	private final List<ProductCategory> productCategoryPool;
 
 	/**
 	 * Stores all recycling categories.
@@ -55,7 +50,6 @@ public class StoragePool {
 		productsPool = new ArrayList<>();
 		materialsPool = new ArrayList<>();
 
-		productCategoryPool = new ArrayList<>();
 		recyclingCategoryPool = new ArrayList<>();
 
 		recyclingGuidancePool = new ArrayList<>();
@@ -75,12 +69,6 @@ public class StoragePool {
 		this.materialsPool.add(material);
 	}
 
-	/**
-	 * Adds a product category to storage.
-	 */
-	public void addProductCategory(ProductCategory productCategory) {
-		this.productCategoryPool.add(productCategory);
-	}
 
 	/**
 	 * Adds a recycling category to storage.
@@ -112,12 +100,6 @@ public class StoragePool {
 		return this.materialsPool;
 	}
 
-	/**
-	 * Returns all stored product categories.
-	 */
-	public List<ProductCategory> getAllProductCategories() {
-		return this.productCategoryPool;
-	}
 
 	/**
 	 * Returns all stored recycling categories.

@@ -23,7 +23,6 @@ package onion.lifeproducts.rms {
             + addProduct(String name, List<Material> materials, LocalDateTime manufactureDate, LocalDateTime endDate): Integer
             + addMaterial(String name, float recycleRate, float burnAtmosphereImpact, float decayAtmosphereImpact, float decayGroundImpact, float burnEnvironmentImpact, float decayEnvironmentImpact, LocalDateTime burnTime, LocalDateTime decayTime): Integer
 
-            + addProductCategory(String type): boolean
             + addRecyclingCategory(String type): boolean
             + addRecyclingGuidance(String type): boolean
 
@@ -31,26 +30,22 @@ package onion.lifeproducts.rms {
             + getAllProductIds(): List<Integer>
             + getAllMaterials(): List<Material>
             + getAllMaterialIds(): List<Integer>
-            + getAllProductCategories(): List<ProductCategory>
             + getAllRecyclingCategories(): List<RecyclingCategory>
         }
 
         class StoragePool {
             - List<Product> productsPool
             - List<Material> materialsPool
-            - List<ProductCategory> productCategoryPool
             - List<RecyclingCategory> recyclingCategoryPool
             - List<RecyclingGuidance> recyclingGuidancePool
 
             + addProduct(Product product): void
             + addMaterial(Material material): void
-            + addProductCategory(ProductCategory productCategory): void
             + addRecyclingCategory(RecyclingCategory recyclingCategory): void
             + addRecyclingGuidance(RecyclingGuidance recyclingGuidance): void
 
             + getAllProducts(): List<Product>
             + getAllMaterials(): List<Material>
-            + getAllProductCategories(): List<ProductCategory>
             + getAllRecyclingCategories(): List<RecyclingCategory>
             + getAllRecyclingGuidances(): List<RecyclingGuidance>
         }
@@ -100,12 +95,6 @@ package onion.lifeproducts.rms {
             + getDecayTime(): LocalDateTime
         }
 
-        class ProductCategory {
-            - String type
-            + ProductCategory(String type)
-            + getType(): String
-        }
-
         class RecyclingCategory {
             - String type
             + RecyclingCategory(String type)
@@ -137,7 +126,6 @@ Product "1" *-- "0..*" Material : contains
 
 StoragePool "1" o-- "0..*" Product
 StoragePool "1" o-- "0..*" Material
-StoragePool "1" o-- "0..*" ProductCategory
 StoragePool "1" o-- "0..*" RecyclingCategory
 StoragePool "1" o-- "0..*" RecyclingGuidance
 

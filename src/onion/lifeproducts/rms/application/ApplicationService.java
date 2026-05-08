@@ -2,7 +2,6 @@ package onion.lifeproducts.rms.application;
 
 import onion.lifeproducts.rms.domain.Material;
 import onion.lifeproducts.rms.domain.Product;
-import onion.lifeproducts.rms.domain.ProductCategory;
 import onion.lifeproducts.rms.domain.RecyclingCategory;
 import onion.lifeproducts.rms.domain.RecyclingGuidance;
 
@@ -16,7 +15,7 @@ import java.util.List;
  */
 public class ApplicationService {
 
-	private StoragePool storagePool;
+	private final StoragePool storagePool;
 
 	/**
 	 * Creates the application service with its storage pool.
@@ -79,22 +78,6 @@ public class ApplicationService {
 		this.storagePool.addMaterial(newMaterial);
 
 		return newMaterial.getId();
-	}
-
-	/**
-	 * Adds a product category if it does not already exist.
-	 */
-	public boolean addProductCategory(String type) {
-		ProductCategory newElement = new ProductCategory(type);
-
-		for (ProductCategory existingElement : this.storagePool.getAllProductCategories()) {
-			if (newElement == existingElement) {
-				return false;
-			}
-		}
-
-		this.storagePool.addProductCategory(newElement);
-		return true;
 	}
 
 	/**
@@ -167,13 +150,6 @@ public class ApplicationService {
 		}
 
 		return materialIds;
-	}
-
-	/**
-	 * Returns all product categories.
-	 */
-	public List<ProductCategory> getAllProductCategories() {
-		return this.storagePool.getAllProductCategories();
 	}
 
 	/**
