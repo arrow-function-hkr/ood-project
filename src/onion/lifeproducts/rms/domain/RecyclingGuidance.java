@@ -1,30 +1,53 @@
 package onion.lifeproducts.rms.domain;
 
 /**
- * Represents guidance for how a product or material should be recycled.
+ * Represents recycling guidance for a material.
+ *
+ * Example:
+ * "Place in plastic recycling bin."
  */
 public class RecyclingGuidance {
 
     private static int nextId = 1;
 
-    private int id;
-    private String type;
+    private final int id;
+    private final String guide;
 
     /**
-     * Creates recycling guidance with a type or description.
+     * Creates recycling guidance.
+     *
+     * @param guide guidance text
      */
-    public RecyclingGuidance(String type) {
+    public RecyclingGuidance(String guide) {
         this.id = nextId++;
-        this.type = type;
+        this.guide = guide;
     }
 
-    /** Returns guidance id. */
+    /**
+     * Returns guidance id.
+     *
+     * @return guidance id
+     */
     public int getId() {
-        return id;
+        return this.id;
     }
 
-    /** Returns guidance type or description. */
-    public String getType() {
-        return type;
+    /**
+     * Returns guidance text.
+     *
+     * @return guidance text
+     */
+    public String getGuide() {
+        return this.guide;
+    }
+
+    /**
+     * Returns readable guidance text.
+     *
+     * @return guidance description
+     */
+    @Override
+    public String toString() {
+        return this.guide;
     }
 }

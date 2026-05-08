@@ -1,69 +1,54 @@
 package onion.lifeproducts.rms.domain;
 
+import java.time.Duration;
 import java.util.List;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 /**
- * Advanced impact strategy.
- * Uses raw material impact and adjusts it by product lifespan.
+ * Impact strategy that includes both material weight/amount and product lifespan.
+ *
+ * This is a more advanced strategy than SimpleImpactCalculationStrategy.
  */
-public class WeightPlusLifespanImpactCalculationStrategy
-        implements ImpactCalculationStrategyInterface {
+public class WeightPlusLifespanImpactCalculationStrategy implements ImpactCalculationStrategyInterface {
 
     /**
-     * Calculate impact for one product.
+     * Calculates impact using material amount and lifespan.
+     *
+     * Simple idea:
+     * - More material amount gives higher impact.
+     * - Longer lifespan reduces impact because the product is used longer.
+     *
+     * @param product product to calculate impact for
+     * @return calculated impact value
      */
     @Override
     public float calculateImpact(Product product) {
+        float totalWeight = 0;
 
-        float rawImpact = 0f;
-
-        /*
-         * Step 1 + Step 2:
-         * Calculate raw product impact by summing all material impacts.
-         */
-        for (Material material : product.getMaterials()) {
-
-            float materialImpact = 0f;
-
-            materialImpact += material.getBurnAtmosphereImpact();
-            materialImpact += material.getDecayAtmosphereImpact();
-            materialImpact += material.getDecayGroundImpact();
-            materialImpact += material.getBurnEnvironmentImpact();
-            materialImpact += material.getDecayEnvironmentImpact();
-
-            rawImpact += materialImpact;
+        for (float materialAmount : product.getMaterials().values()) {
+            totalWeight += materialAmount;
         }
 
-        /*
-         * Step 3:
-         * Calculate product lifespan in years.
-         */
-        LocalDateTime manufactureDate = product.getManufactureDate();
-        LocalDateTime endDate = product.getEndDate();
+        long lifespanDays = Duration.between(
+                product.getManufactureDate(),
+                product.getEndDate()
+        ).toDays();
 
-        long lifespanDays = ChronoUnit.DAYS.between(manufactureDate, endDate);
-        float lifespanYears = lifespanDays / 365.0f;
-
-        if (lifespanYears <= 0f) {
-            lifespanYears = 1f;
+        if (lifespanDays <= 0) {
+            return totalWeight;
         }
 
-        /*
-         * Step 4:
-         * Annual impact = raw impact divided by lifespan.
-         */
-        return rawImpact / lifespanYears;
+        return totalWeight / lifespanDays;
     }
 
     /**
-     * Calculate total impact for an array of products.
+     * Calculates impact for an array of products.
+     *
+     * @param products products to calculate impact for
+     * @return total impact value
      */
     @Override
     public float calculateImpact(Product[] products) {
-
-        float totalImpact = 0f;
+        float totalImpact = 0;
 
         for (Product product : products) {
             totalImpact += calculateImpact(product);
@@ -73,12 +58,14 @@ public class WeightPlusLifespanImpactCalculationStrategy
     }
 
     /**
-     * Calculate total impact for a list of products.
+     * Calculates impact for a list of products.
+     *
+     * @param products products to calculate impact for
+     * @return total impact value
      */
     @Override
     public float calculateImpact(List<Product> products) {
-
-        float totalImpact = 0f;
+        float totalImpact = 0;
 
         for (Product product : products) {
             totalImpact += calculateImpact(product);

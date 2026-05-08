@@ -1,61 +1,119 @@
 package onion.lifeproducts.rms.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashMap;
 
 /**
- * Represents one product in the system.
+ * Represents a product in the recycling management system.
+ *
+ * A product has an id, name, materials, manufacture date, and end date.
+ * The materials are stored as a map:
+ *
+ * key   = material id
+ * value = amount or weight of that material in the product
  */
 public class Product {
 
     private static int nextId = 1;
 
-    private int id;
-
+    private final int id;
     private String name;
-    private List<Material> materials;
-
-    private LocalDateTime manufactureDate;
-    private LocalDateTime endDate;
+    private final HashMap<Integer, Float> materials;
+    private final LocalDateTime manufactureDate;
+    private final LocalDateTime endDate;
 
     /**
-     * Creates a product with materials and lifespan.
+     * Creates a new product.
+     *
+     * @param name product name
+     * @param materials map of material ids and their amounts/weights
+     * @param manufactureDate date when the product was manufactured
+     * @param endDate date when the product reaches end of life
      */
     public Product(
             String name,
-            List<Material> materials,
+            HashMap<Integer, Float> materials,
             LocalDateTime manufactureDate,
             LocalDateTime endDate
     ) {
         this.id = nextId++;
-
         this.name = name;
         this.materials = materials;
         this.manufactureDate = manufactureDate;
         this.endDate = endDate;
     }
-    /** Returns product id */
+
+    /**
+     * Returns product id.
+     *
+     * @return product id
+     */
     public int getId() {
-        return id;
+        return this.id;
     }
 
-    /** Returns product name */
+    /**
+     * Returns product name.
+     *
+     * @return product name
+     */
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    /** Returns all materials inside the product */
-    public List<Material> getMaterials() {
-        return materials;
-    }
-
-    /** Returns manufacture date */
+    /**
+     * Returns manufacture date.
+     *
+     * @return manufacture date
+     */
     public LocalDateTime getManufactureDate() {
-        return manufactureDate;
+        return this.manufactureDate;
     }
 
-    /** Returns end-of-life date */
+    /**
+     * Returns end date.
+     *
+     * @return end date
+     */
     public LocalDateTime getEndDate() {
-        return endDate;
+        return this.endDate;
+    }
+
+    /**
+     * Returns product materials.
+     *
+     * @return map of material ids and amounts/weights
+     */
+    public HashMap<Integer, Float> getMaterials() {
+        return this.materials;
+    }
+
+    /**
+     * Changes product name.
+     *
+     * @param name new product name
+     * @return true if name was changed, false if name was invalid
+     */
+    public boolean setName(String name) {
+        if (name == null || name.isBlank()) {
+            return false;
+        }
+
+        this.name = name;
+        return true;
+    }
+
+    /**
+     * Returns a readable product description.
+     *
+     * @return product description
+     */
+    @Override
+    public String toString() {
+        return "Product ID: " + this.id
+                + ", Name: " + this.name
+                + ", Materials: " + this.materials
+                + ", Manufacture date: " + this.manufactureDate
+                + ", End date: " + this.endDate;
     }
 }

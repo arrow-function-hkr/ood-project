@@ -3,25 +3,34 @@ package onion.lifeproducts.rms.domain;
 import java.util.List;
 
 /**
- * Strategy interface for environmental impact calculations.
+ * Defines the contract for impact calculation strategies.
  *
- * Different calculation strategies can implement
- * different environmental formulas.
+ * Different classes can implement this interface to calculate impact
+ * in different ways.
  */
 public interface ImpactCalculationStrategyInterface {
 
     /**
      * Calculates impact for one product.
+     *
+     * @param product product to calculate impact for
+     * @return impact value
      */
     float calculateImpact(Product product);
 
     /**
-     * Calculates impact for array of products.
+     * Calculates impact for an array of products.
+     *
+     * @param products products to calculate impact for
+     * @return total impact value
      */
     float calculateImpact(Product[] products);
 
     /**
-     * Calculates impact for list of products.
+     * Calculates impact for a list of products.
+     *
+     * @param products products to calculate impact for
+     * @return total impact value
      */
     float calculateImpact(List<Product> products);
 }
