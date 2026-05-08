@@ -1,52 +1,135 @@
 package onion.lifeproducts.rms.application;
 
+import onion.lifeproducts.rms.domain.Material;
+import onion.lifeproducts.rms.domain.Product;
+import onion.lifeproducts.rms.domain.ProductCategory;
+import onion.lifeproducts.rms.domain.RecyclingCategory;
+import onion.lifeproducts.rms.domain.RecyclingGuidance;
+
+import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * StoragePool works as an in-memory storage container.
+ *
+ * This class stores all domain objects while
+ * the application is running.
+ *
+ * It acts like a very small temporary database.
+ */
 public class StoragePool {
-	private List<Product> productsPool;
-	private List<Material> materialsPool;
-	private List<ProductCategory> productCategoryPool;
-	private List<RecyclingCategory> recyclingCategoryPool;
-	private List<RecyclingGuidance> recyclingGuidancePool;
 
+	/**
+	 * Stores all products.
+	 */
+	private final List<Product> productsPool;
+
+	/**
+	 * Stores all materials.
+	 */
+	private final List<Material> materialsPool;
+
+	/**
+	 * Stores all product categories.
+	 */
+	private final List<ProductCategory> productCategoryPool;
+
+	/**
+	 * Stores all recycling categories.
+	 */
+	private final List<RecyclingCategory> recyclingCategoryPool;
+
+	/**
+	 * Stores all recycling guidance objects.
+	 */
+	private final List<RecyclingGuidance> recyclingGuidancePool;
+
+	/**
+	 * Creates empty storage lists.
+	 *
+	 * We use ArrayList because List is only an interface
+	 * and cannot be created directly.
+	 */
 	public StoragePool() {
-		productsPool = new List<Product>();
-		materialsPool = new List<Material>();
-		productCategoryPool = new List<ProductCategory>();
-		recyclingCategoryPool = new List<RecyclingCategory>();
-		recyclingGuidancePool = new List<RecyclingGuidance>();
+
+		productsPool = new ArrayList<>();
+		materialsPool = new ArrayList<>();
+
+		productCategoryPool = new ArrayList<>();
+		recyclingCategoryPool = new ArrayList<>();
+
+		recyclingGuidancePool = new ArrayList<>();
 	}
 
+	/**
+	 * Adds a product to storage.
+	 */
 	public void addProduct(Product product) {
 		this.productsPool.add(product);
 	}
+
+	/**
+	 * Adds a material to storage.
+	 */
 	public void addMaterial(Material material) {
 		this.materialsPool.add(material);
 	}
+
+	/**
+	 * Adds a product category to storage.
+	 */
 	public void addProductCategory(ProductCategory productCategory) {
-		this.productCategory.add(productCategory);
+		this.productCategoryPool.add(productCategory);
 	}
+
+	/**
+	 * Adds a recycling category to storage.
+	 */
 	public void addRecyclingCategory(RecyclingCategory recyclingCategory) {
 		this.recyclingCategoryPool.add(recyclingCategory);
 	}
-	public void addRecyclingGuidance(RecyclingGuidance recyclingGuidance) {
-		this.recyclingGuidance.add(recyclingGuidance);
+
+	/**
+	 * Adds recycling guidance to storage.
+	 */
+	public void addRecyclingGuidance(
+			RecyclingGuidance recyclingGuidance
+	) {
+		this.recyclingGuidancePool.add(recyclingGuidance);
 	}
 
+	/**
+	 * Returns all stored products.
+	 */
 	public List<Product> getAllProducts() {
 		return this.productsPool;
 	}
-	public List<Product> getAllMaterials() {
+
+	/**
+	 * Returns all stored materials.
+	 */
+	public List<Material> getAllMaterials() {
 		return this.materialsPool;
 	}
-	public List<Product> getAllProductCategories() {
-		return this.productCategory;
+
+	/**
+	 * Returns all stored product categories.
+	 */
+	public List<ProductCategory> getAllProductCategories() {
+		return this.productCategoryPool;
 	}
-	public List<Product> getAllRecyclingCategories() {
+
+	/**
+	 * Returns all stored recycling categories.
+	 */
+	public List<RecyclingCategory> getAllRecyclingCategories() {
 		return this.recyclingCategoryPool;
 	}
-	public List<Product> getAllRecyclingGuidances() {
-		return this.recyclingGuidance;
+
+	/**
+	 * Returns all stored recycling guidance objects.
+	 */
+	public List<RecyclingGuidance> getAllRecyclingGuidances() {
+		return this.recyclingGuidancePool;
 	}
 }
