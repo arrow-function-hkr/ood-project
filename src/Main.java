@@ -11,7 +11,7 @@ public class Main {
 		// Util.changeConsoleUIANSIOptions(new ConsoleUIANSIOptions(ANSI.FG_GREEN));
 
 		// this constructor will use default ANSI options from Util class
-		ConsoleUI menu = new ConsoleUI(Data.mainMenuChoices);
+		ConsoleUI menu = new ConsoleUI(Data.mainMenuChoices,Util.defaultConsoleUIANSIOptions);
 		menu.runMenu();
 	}
 }

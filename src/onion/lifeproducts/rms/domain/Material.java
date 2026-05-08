@@ -1,130 +1,127 @@
 package onion.lifeproducts.rms.domain;
 
-import java.time.LocalDateTime;
-
 /**
- * Represents one material and its environmental properties.
+ * Represents a material used inside products.
+ *
+ * A material has a recycle rate, emission factor,
+ * recycling category, and recycling guidance.
  */
 public class Material {
 
-    /**
-     * Static counter used to generate unique ids.
-     */
     private static int nextId = 1;
 
-    /**
-     * Unique material id.
-     */
-    private int id;
-
-    /**
-     * Material name.
-     */
+    private final int id;
     private String name;
+    private final float recycleRate;
+    private final float emissionFactor;
+    private final RecyclingCategory recyclingCategory;
+    private final RecyclingGuidance recyclingGuidance;
 
     /**
-     * Recyclability score between 0 and 1.
-     */
-    private float recycleRate;
-
-    /**
-     * Environmental impact values.
-     */
-    private float burnAtmosphereImpact;
-    private float decayAtmosphereImpact;
-
-    private float decayGroundImpact;
-
-    private float burnEnvironmentImpact;
-    private float decayEnvironmentImpact;
-
-    /**
-     * Estimated burn and decay times.
-     */
-    private LocalDateTime burnTime;
-    private LocalDateTime decayTime;
-
-    /**
-     * Creates a material with environmental impact values.
+     * Creates a new material.
+     *
+     * @param name material name
+     * @param recycleRate how recyclable the material is
+     * @param emissionFactor environmental impact/emission factor
+     * @param recyclingCategory category of recyclability
+     * @param recyclingGuidance guidance for recycling this material
      */
     public Material(
             String name,
             float recycleRate,
-            float burnAtmosphereImpact,
-            float decayAtmosphereImpact,
-            float decayGroundImpact,
-            float burnEnvironmentImpact,
-            float decayEnvironmentImpact,
-            LocalDateTime burnTime,
-            LocalDateTime decayTime
+            float emissionFactor,
+            RecyclingCategory recyclingCategory,
+            RecyclingGuidance recyclingGuidance
     ) {
-
-        // Generate unique id automatically
         this.id = nextId++;
+        this.name = name;
+        this.recycleRate = recycleRate;
+        this.emissionFactor = emissionFactor;
+        this.recyclingCategory = recyclingCategory;
+        this.recyclingGuidance = recyclingGuidance;
+    }
+
+    /**
+     * Returns material id.
+     *
+     * @return material id
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /**
+     * Returns material name.
+     *
+     * @return material name
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Returns recycle rate.
+     *
+     * @return recycle rate
+     */
+    public float getRecycleRate() {
+        return this.recycleRate;
+    }
+
+    /**
+     * Returns emission factor.
+     *
+     * @return emission factor
+     */
+    public float getEmissionFactor() {
+        return this.emissionFactor;
+    }
+
+    /**
+     * Returns recycling category.
+     *
+     * @return recycling category
+     */
+    public RecyclingCategory getRecyclingCategory() {
+        return this.recyclingCategory;
+    }
+
+    /**
+     * Returns recycling guidance.
+     *
+     * @return recycling guidance
+     */
+    public RecyclingGuidance getRecyclingGuidance() {
+        return this.recyclingGuidance;
+    }
+
+    /**
+     * Changes material name.
+     *
+     * @param name new material name
+     * @return true if name was changed, false if name was invalid
+     */
+    public boolean setName(String name) {
+        if (name == null || name.isBlank()) {
+            return false;
+        }
 
         this.name = name;
-
-        this.recycleRate = recycleRate;
-
-        this.burnAtmosphereImpact = burnAtmosphereImpact;
-        this.decayAtmosphereImpact = decayAtmosphereImpact;
-
-        this.decayGroundImpact = decayGroundImpact;
-
-        this.burnEnvironmentImpact = burnEnvironmentImpact;
-        this.decayEnvironmentImpact = decayEnvironmentImpact;
-
-        this.burnTime = burnTime;
-        this.decayTime = decayTime;
+        return true;
     }
 
-    /** Returns material id */
-    public int getId() {
-        return id;
-    }
-
-    /** Returns material name */
-    public String getName() {
-        return name;
-    }
-
-    /** Returns recyclability score */
-    public float getRecycleRate() {
-        return recycleRate;
-    }
-
-    /** Returns burn atmosphere impact */
-    public float getBurnAtmosphereImpact() {
-        return burnAtmosphereImpact;
-    }
-
-    /** Returns decay atmosphere impact */
-    public float getDecayAtmosphereImpact() {
-        return decayAtmosphereImpact;
-    }
-
-    /** Returns decay ground impact */
-    public float getDecayGroundImpact() {
-        return decayGroundImpact;
-    }
-
-    /** Returns burn environmental impact */
-    public float getBurnEnvironmentImpact() {
-        return burnEnvironmentImpact;
-    }
-
-    /** Returns decay environmental impact */
-    public float getDecayEnvironmentImpact() {
-        return decayEnvironmentImpact;
-    }
-
-    /** Returns burn time */
-    public LocalDateTime getBurnTime() {
-        return burnTime;
-    }
-
-    /** Returns decay time */
-    public LocalDateTime getDecayTime() {
-        return decayTime;
+    /**
+     * Returns a readable material description.
+     *
+     * @return material description
+     */
+    @Override
+    public String toString() {
+        return "Material ID: " + this.id
+                + ", Name: " + this.name
+                + ", Recycle rate: " + this.recycleRate
+                + ", Emission factor: " + this.emissionFactor
+                + ", Category: " + this.recyclingCategory
+                + ", Guidance: " + this.recyclingGuidance;
     }
 }

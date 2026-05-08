@@ -14,10 +14,11 @@ public class RecyclingCategory {
 }
 =======
 /**
- * Represents a recycling category.
+ * Represents the recycling category of a material.
  */
-public class RecyclingCategory {
+public enum RecyclingCategory {
 
+<<<<<<< HEAD
     private String type;
 
     /**
@@ -33,3 +34,9 @@ public class RecyclingCategory {
     }
 }
 >>>>>>> 02aaf39 (feat(strategy): implement impact calculation strategies)
+=======
+    RECYCLABLE,
+    PARTIALLY_RECYCLABLE,
+    NON_RECYCLABLE
+}
+>>>>>>> c3fc143 (feat(application,domain): redesign application and domain layers based on updated UML architecture)

@@ -3,55 +3,43 @@ package onion.lifeproducts.rms.domain;
 import java.util.List;
 
 /**
- * Simple impact strategy.
+ * Simple impact calculation strategy.
  *
- * Uses only direct environmental impact values
- * from materials.
+ * This strategy calculates impact by adding the material amounts/weights
+ * stored inside a product.
  */
-public class SimpleImpactCalculationStrategy
-        implements ImpactCalculationStrategyInterface {
+public class SimpleImpactCalculationStrategy implements ImpactCalculationStrategyInterface {
 
     /**
      * Calculates impact for one product.
+     *
+     * Current simple formula:
+     * total impact = sum of all material amounts/weights
+     *
+     * @param product product to calculate impact for
+     * @return calculated impact value
      */
     @Override
     public float calculateImpact(Product product) {
+        float totalImpact = 0;
 
-        float totalImpact = 0f;
-
-        /*
-         * Loop through all materials inside the product.
-         */
-        for (Material material : product.getMaterials()) {
-
-            /*
-             * Add all environmental impacts from the material.
-             */
-            totalImpact += material.getBurnAtmosphereImpact();
-
-            totalImpact += material.getDecayAtmosphereImpact();
-
-            totalImpact += material.getDecayGroundImpact();
-
-            totalImpact += material.getBurnEnvironmentImpact();
-
-            totalImpact += material.getDecayEnvironmentImpact();
+        for (float materialAmount : product.getMaterials().values()) {
+            totalImpact += materialAmount;
         }
 
         return totalImpact;
     }
 
     /**
-     * Calculates impact for array of products.
+     * Calculates impact for an array of products.
+     *
+     * @param products products to calculate impact for
+     * @return total impact value
      */
     @Override
     public float calculateImpact(Product[] products) {
+        float totalImpact = 0;
 
-        float totalImpact = 0f;
-
-        /*
-         * Reuse single-product method.
-         */
         for (Product product : products) {
             totalImpact += calculateImpact(product);
         }
@@ -60,16 +48,15 @@ public class SimpleImpactCalculationStrategy
     }
 
     /**
-     * Calculates impact for list of products.
+     * Calculates impact for a list of products.
+     *
+     * @param products products to calculate impact for
+     * @return total impact value
      */
     @Override
     public float calculateImpact(List<Product> products) {
+        float totalImpact = 0;
 
-        float totalImpact = 0f;
-
-        /*
-         * Reuse single-product method.
-         */
         for (Product product : products) {
             totalImpact += calculateImpact(product);
         }
