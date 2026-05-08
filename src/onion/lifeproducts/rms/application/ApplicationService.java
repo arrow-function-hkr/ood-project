@@ -7,7 +7,6 @@ import java.util.HashMap;
 =======
 import onion.lifeproducts.rms.domain.Material;
 import onion.lifeproducts.rms.domain.Product;
-import onion.lifeproducts.rms.domain.ProductCategory;
 import onion.lifeproducts.rms.domain.RecyclingCategory;
 import onion.lifeproducts.rms.domain.RecyclingGuidance;
 
@@ -22,7 +21,7 @@ import java.util.List;
  */
 public class ApplicationService {
 
-	private StoragePool storagePool;
+	private final StoragePool storagePool;
 
 	/**
 	 * Creates the application service with its storage pool.
@@ -115,22 +114,6 @@ public class ApplicationService {
 	public boolean addRecyclingCategory(String category) {
 		RecyclingCategory newElement = new RecyclingCategory(category);
 =======
-	/**
-	 * Adds a product category if it does not already exist.
-	 */
-	public boolean addProductCategory(String type) {
-		ProductCategory newElement = new ProductCategory(type);
-
-		for (ProductCategory existingElement : this.storagePool.getAllProductCategories()) {
-			if (newElement == existingElement) {
-				return false;
-			}
-		}
-
-		this.storagePool.addProductCategory(newElement);
-		return true;
-	}
-
 	/**
 	 * Adds a recycling category if it does not already exist.
 	 */
@@ -231,13 +214,6 @@ public class ApplicationService {
 	//}
 	public ArrayList<RecyclingCategory> getAllRecyclingCategories() {
 =======
-
-	/**
-	 * Returns all product categories.
-	 */
-	public List<ProductCategory> getAllProductCategories() {
-		return this.storagePool.getAllProductCategories();
-	}
 
 	/**
 	 * Returns all recycling categories.
