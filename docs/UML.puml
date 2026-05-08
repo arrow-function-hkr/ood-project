@@ -3,22 +3,30 @@
 ' RMS stands for Recycling Management System
 package onion.lifeproducts.rms {
 
-	package onion.lifeproducts.rms.presentation {
+	package presentation {
 
 		class ConsoleUI {
 			+ ConsoleUI(): void
-			+ ConsoleUI(ConsoleUIANSIOptions consoleUIANSIOptions): void
-			+ run(): void
+			+ ConsoleUI(ConsoleUIEntry[] mainOptions, ConsoleUIANSIOptions consoleUIANSIOptions): void
+			+ runMenu(): void
 		}
 
+		class ConsoleUIEntryChecker {
+			{static} + checkConsoleUIEntryOptions(ConsoleUIEntry[] consoleUIEntries): void
+		}
+
+		class ANSI {}
+		class ConsoleUIANSIOptions {}
+		class ConsoleUIEntry {}
+		class Data {}
+		class Util {}
 	}
 
-	package onion.lifeproducts.rms.application {
+	package application {
 
 		class ApplicationService {
-			+ addProduct(String name, ProductCategory category, Integer[] materials, LocalDateTime manufactureDate, LocalDateTime endDate): Integer
-			+ addMaterial(String name, float recycleRate, float burnAtmosphereImpact, float decayAtmosphereImpact, float decayGroundImpact, float burnEnvironmentImpact, float decayEnvironmentImpact, LocalDateTime burnTime, LocalDateTime decayTime): Integer
-			+ addProductCategory(String type): boolean
+			+ addProduct(String name, HashMap<Integer, Float> materials, LocalDateTime lifespan): int
+			+ addMaterial(String name, float recycleRate, float emissionFactor, int recyclingCategory, String recyclingGuidance): int
 			+ addRecyclingCategory(String type): boolean
 			+ addRecyclingGuidance(String type): boolean
 
@@ -26,87 +34,105 @@ package onion.lifeproducts.rms {
 			+ getAllProductIds(): List<Integer>
 			+ getAllMaterials(): List<Material>
 			+ getAllMaterialIds(): List<Integer>
-			+ getAllProductCategories(): List<ProductCategory>
 			+ getAllRecyclingCategories(): List<RecyclingCategory>
+
+			+ getAllProductDesciptions(): List<String>
+			+ getAllMaterialDesciptions(): List<String>
+			+ getAllRecyclingCategorieDesciptions(): List<String>
+
+			+ getProductDesciptionById(int id): List<String>
+			+ getMaterialDesciptionById(int id): List<String>
+			+ getRecyclingCategorieDesciptionById(int id): List<String>
+
+			+ recycleProductById(int id, int impactCalculationStrategyId): List<String>
 		}
 
 		class StoragePool {
 			- List<Product> productsPool
 			- List<Material> materialsPool
-			- List<ProductCategory> productCategoryPool
 			- List<RecyclingCategory> recyclingCategoryPool
 			- List<RecyclingGuidance> recyclingGuidancePool
+
+			+ addProduct(Product product): void
+			+ addMaterial(Material material): void
+			+ addRecyclingCategory(RecyclingCategory recyclingCategoryPool): void
+			+ addRecyclingGuidance(RecyclingGuidance recyclingGuidancePool): void
+
+			+ getAllProducts(): List<Product>
+			+ getAllMaterials(): List<Material>
+			+ getAllRecyclingCategory(): List<AllRecyclingCategory>
+			+ getAllRecyclingGuidance(): List<RecyclingGuidance>
+
+			+ getProductById(int id): Product
+			+ getMaterialById(int id): Material
+			+ getRecyclingCategorById(int id): RecyclingCategory
+			+ getRecyclingGuidancById(int id): RecyclingGuidance
+
+			+ deleteProductById(int id): Product
+			+ deleteMaterialById(int id): Material
+			+ deleteRecyclingCategorById(int id): RecyclingCategory
+			+ deleteRecyclingGuidancById(int id): RecyclingGuidance
+
 		}
 
-		interface ImpactCalculationStrategyInterface {
-			+ calculateImpact(Product product): float
-			+ calculateImpact(Product[] product): float[]
-			+ calculateImpact(List<Product> product): List<Float>
-		}
 
 		class RecyclingService {
+			- ImpactCalculationStrategyInterface impactCalculationStrategy
 
+			+ RecyclingService(ImpactCalculationStrategyInterface impactCalculationStrategy): void
+			+ recycle(Product product): float
+			+ recycleAll(Product[] products): float
+			+ recycle(Material material): float
+			+ recycleAll(Material[] material): float
+			+ generateReport(Product product): ImpactReport
+			+ generateReportForAll(Product[] product): ImpactReport
+			+ generateReportForEach(Product[] product): ImpactReport[]
 		}
 	}
 
-	package onion.lifeproducts.rms.domain {
+	package domain {
 
 		class Product {
-			- Integer id
+			- int id
 			- String name
-			- ProductCategory category
-			- Material[] materials
+			- HashMap<Ingeter, Float> materials
 			- LocalDateTime manufactureDate
 			- LocalDateTime endDate
 
-			+ getId(): Integer
+			+ getId(): int
 			+ getName(): String
-			+ getCategory(): String
 			+ getManufactureDate(): LocalDateTime
 			+ getEndDate(): LocalDateTime
-			+ getMaterials(): Material[]
-			+ setName(String name): void
-			+ setCategory(String category): void
+			+ getMaterials(): HashMap<Integer, Float>
+			+ setName(String name): boolean
 		}
 
 		class Material {
-			- Integer id
+			- int id
 			- String name
 			- float recycleRate
-			- float burnAtmosphereImpact
-			- float decayAtmosphereImpact
-			- float decayGroundImpact
-			- float burnEnvironmentImpact
-			- float decayEnvironmentImpact
-			- LocalDateTime burnTime
-			- LocalDateTime decayTime
-			- RecyclingGuidance recyclingInstruction
+			- float emissionFactor
+			- RecyclingCategory recyclingCategory
+			- RecyclingGuidance recyclingGuidance
 
-			+ getId(): Integer
+			+ getId(): int
 			+ getName(): String
 			+ getRecycleRate(): float
-			+ getBurnEnvironmentImpact(): float
-			+ getDecayEnvironmentImpact(): float
-			+ getBurnAtmosphereImpact(): float
-			+ getDecayAtmosphereImpact(): float
-			+ getDecayGroundImpact(): float
-			+ getBurnTime(): LocalDateTime
-			+ getDecayTime(): LocalDateTime
-			+ getRecyclingInstruction(): RecyclingGuidance
-			+ setName(String name): void
-		}
-
-		class ProductCategory {
-			- String type
+			+ getRecyclingGuidance(): RecyclingGuidance
+			+ setName(String name): boolean
 		}
 
 		class RecyclingGuidance {
+			- int id
 			- String guide
+
+			+ RecyclingGuidance(String guide): void
 		}
 
-		class RecyclingCategory {
-			- String type
-
+		enum RecyclingCategory {
+			RECYCLABLE
+			PARTIALLY_RECYCLABLE
+			NON_RECYCLABLE
 		}
 
 		class ImpactReport {
@@ -115,13 +141,26 @@ package onion.lifeproducts.rms {
 			- int productsAmountUsed
 			- int materialsAmountUsed
 			- int uniqueMaterialAmountUsed
+
+			+ ImpactReport(LocalDateTime generatedAt, float impactValue, int productsAmountUsed, int materialsAmountUsed, int uniqueMaterialAmountUsed)
+			+ getGeneratedAtDate(): LocalDateTime
+			+ getImpactValue(): float
+			+ getProductsAmountUsed(): int
+			+ getMaterialsAmountUsed(): int
+			+ getUniqueMaterialAmountUsed(): int
 		}
 
-		class SimpleImpactCalculationStrategy implements onion.lifeproducts.rms.application.ImpactCalculationStrategyInterface {
+		interface ImpactCalculationStrategyInterface {
+			+ calculateImpact(Product product): float
+			+ calculateImpact(Product[] product): float
+			+ calculateImpact(List<Product> product): float
+		}
+
+		class SimpleImpactCalculationStrategy implements ImpactCalculationStrategyInterface {
 
 		}
 
-		class WeightPlusLifespanImpactCalculationStrategy implements onion.lifeproducts.rms.application.ImpactCalculationStrategyInterface {
+		class WeightPlusLifespanImpactCalculationStrategy implements ImpactCalculationStrategyInterface {
 
 		}
 	}
@@ -129,24 +168,27 @@ package onion.lifeproducts.rms {
 }
 
 Product "0..*" *-- "1..*" Material : uses
-Product "1..1" *-- "1..1" ProductCategory : has
-Product "1..1" --> "0..*" ImpactReport : generates
 
 Material "1..1" *-- "1..1" RecyclingGuidance : has
-Material "1..1" *-- "1..1" RecyclingCategory
+Material "1..1" *-- "1..1" RecyclingCategory : belongs to
 
-ImpactCalculationStrategyInterface "1..1" o--- "0..1"  Product: uses
+ImpactCalculationStrategyInterface "1..1" o-- "0..1"  Product : uses
 
-RecyclingService "1..*" -> "0..*" RecyclingGuidance
+RecyclingService "1..*" --> "0..*" RecyclingGuidance
 RecyclingService "1..*" --> "1..1" Material
+RecyclingService "1..*" --> "1..1" ImpactReport : generates
 
 StoragePool "1..*" o--  "0..*" Product
-StoragePool "1..*" o-- "0..*" ProductCategory
 StoragePool "1..*" o-- "0..*" Material
-StoragePool "1..*" o--  "0..*" RecyclingCategory
-StoragePool "1..*" o-- "0..*" ImpactCalculationStrategyInterface
 
 ConsoleUI "1..1" --> "0..*" ApplicationService : uses
+
+ConsoleUI "0..*" --> "1..1" ANSI : uses
+ConsoleUI "0..*" --> "1..1" Data : uses
+ConsoleUI "0..*" --> "0..*" ConsoleUIEntry : uses
+ConsoleUI "0..*" --> "0..*" ConsoleUIANSIOptions : uses
+ConsoleUI "0..*" --> "1..1" Util : uses
+ConsoleUI "0..*" --> "0..*" ConsoleUIEntryChecker : uses
 
 ApplicationService "1..1" *-- "1..1" StoragePool : uses
 ApplicationService "1..1" --> "0..*" ImpactCalculationStrategyInterface : uses
