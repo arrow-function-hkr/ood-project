@@ -1,4 +1,5 @@
 package onion.lifeproducts.rms.application;
+import onion.lifeproducts.rms.domain.*;
 
 import onion.lifeproducts.rms.domain.Material;
 import onion.lifeproducts.rms.domain.Product;
