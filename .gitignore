@@ -1,17 +1,9 @@
-*.class
-*.log
-*.ctxt
-.mtj.tmp/
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-.env*
-.build/
-build/
-.idea/
-*.iml
-
+# ignore all files and directories by default
+/*
+# keep only allowed files
+!/src
+!/docs
+!/.gitignore
+!/LICENSE
+!/Makefile
+!/README.md
