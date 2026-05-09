@@ -8,7 +8,7 @@
 
 ## Types of commits/branch names
 
-<!-- hyperlink: [`change-type`](#types-of-commits%2Fbranch-names) -->
+<!-- hyperlink: [`change-type`](#types-of-commAits%2Fbranch-names) -->
 
 All general-purpose types of commit messages and branch names
 (will be aliased in this document as: [`change-type`](#types-of-commits%2Fbranch-names))

@@ -12,3 +12,6 @@
 .env*
 .build/
 build/
+.idea/
+*.iml
+

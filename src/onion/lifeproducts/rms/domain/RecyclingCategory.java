@@ -1,13 +1,11 @@
 package onion.lifeproducts.rms.domain;
 
-public class RecyclingCategory {
-	final private String category;
-	
-	public RecyclingCategory(String category) {
-		this.category = category;
-	}
-	
-	public String getCategory() {
-		return this.category;
-	}
+/**
+ * Represents the recycling category of a material.
+ */
+public enum RecyclingCategory {
+
+    RECYCLABLE,
+    PARTIALLY_RECYCLABLE,
+    NON_RECYCLABLE
 }
