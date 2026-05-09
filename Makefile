@@ -218,7 +218,6 @@ endif
 ifeq ($(verbose),true)
 test-check-libs-dir: __test-check-libs-dir__verbose__creating_dir_msg := [Test] Creating test build directory: $(FG_YELLOW)$(LIBS_DIR_NAME)$(DD)$(CA)
 endif
-#$(call RUN_PS,if (-Not (Test-Path $(LIBS_DIR_NAME))) { if ('$(verbose)' -ceq 'true') { Write-Output '$(__test-check-libs-dir__verbose__creating_dir_msg)' }; mkdir $(LIBS_DIR_NAME) > $$null ; })
 test-check-libs-dir:
 	$(call RUN_CMD, \
 		if not exist $(LIBS_DIR_NAME) ( \
