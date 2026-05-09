@@ -144,7 +144,7 @@ endif
 
 # execute the compiled java bytecode with potimization applied
 execute: __execute__fail__no_build_dir := Build directory doesn't exist: $(FG_YELLOW)$(BUILD_DIR)/$(CA)
-execute: __execute__java_run_command := java -cp '$(BUILD_DIR)' -XX:+TieredCompilation -XX:TieredStopAtLevel=4 $(ENTRY_POINT_BASE_CLASS)
+execute: __execute__java_run_command := java -cp $(BUILD_DIR) -XX:+TieredCompilation -XX:TieredStopAtLevel=4 $(ENTRY_POINT_BASE_CLASS)
 execute:
 ifeq ($(verbose), true)
 	$(call ECHO,[Java] Executing...)
