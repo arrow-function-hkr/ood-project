@@ -1,6 +1,5 @@
 @startuml
 
-' RMS stands for Recycling Management System
 package onion.lifeproducts.rms {
 
 	package presentation {
@@ -159,6 +158,9 @@ package onion.lifeproducts.rms {
 		}
 	}
 
+        class SimpleImpactCalculationStrategy
+        class WeightPlusLifespanImpactCalculationStrategy
+    }
 }
 
 Product "0..*" *-- "1..*" Material : uses
@@ -191,3 +193,4 @@ ApplicationService "1..1" --> "0..*" RecyclingService : uses
 
 @enduml
 
+@enduml
