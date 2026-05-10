@@ -199,9 +199,9 @@ test-execute: EXPERIMENTAL_JAVA_FLAGS := --enable-final-field-mutation=ALL-UNNAM
 # '$(EXPERIMENTAL_JAVA_FLAGS)' flag works only on Java 26+, so there is a check whether this flag is supported or not
 # tree-sitter for syntax highlighting goes crazy on next 4 lines, but they are containing correct syntax
 ifeq ($(IS_WIN),1)
-test-execute: __test-execute__java_args := $(shell $(call remove_suppress,$(call RUN_CMD, java $(EXPERIMENTAL_JAVA_FLAGS) -version > nul 2>&1 && echo $(EXPERIMENTAL_JAVA_FLAGS))))
+test-execute: __test-execute__java_args := $(shell $(call remove_suppress,$(call RUN_CMD, java $(EXPERIMENTAL_JAVA_FLAGS) -version > nul 2>&1 && echo $(EXPERIMENTAL_JAVA_FLAGS) || :)))
 else
-test-execute: __test-execute__java_args := $(shell sh -c "java $(EXPERIMENTAL_JAVA_FLAGS) -version > /dev/null 2>&1; [ $$? -eq 0 ] && echo '$(EXPERIMENTAL_JAVA_FLAGS)' || echo ''")
+test-execute: __test-execute__java_args := $(shell sh -c "set +e; java $(EXPERIMENTAL_JAVA_FLAGS) -version > /dev/null 2>&1 && echo '$(EXPERIMENTAL_JAVA_FLAGS)' || echo ''")
 endif
 test-execute: get-junit
 ifneq ($(silent), true)
