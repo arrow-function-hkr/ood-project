@@ -25,4 +25,4 @@ jobs:
           javac -version
 
       - name: Run tests
-        run: /bin/time make test-full verbose=true
+        run: /bin/time -v make test-full verbose=true
