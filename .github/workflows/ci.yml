@@ -21,7 +21,10 @@ jobs:
         run: |
           echo "JAVA_HOME=$JAVA_HOME_25_X64" >> $GITHUB_ENV
           echo "$JAVA_HOME_25_X64/bin" >> $GITHUB_PATH
-          java -version  # check that java is of the right version
+
+      - name: Check Java version
+        run: |
+          java -version
           javac -version
 
       - name: Run tests
