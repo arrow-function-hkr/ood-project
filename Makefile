@@ -247,31 +247,32 @@ __get_junit_jar: __get_junit_jar__win__download_cmd__curl := curl -L -o $(LIBS_D
 
 # Method and command to execute on Windows to download the JUnit .jar file:
 #   Method   | Command
-#     ''     | bitsadmin
-#     1      | bitsadmin
-# bitsadmin  | bitsadmin
-#     2      | powershell
+#     ''     | powershell
+#     1      | powershell
 # powershell | powershell
+#     2      | bitsadmin
+# bitsadmin  | bitsadmin
 #     3      | curl
 #    curl    | curl
 # Note! Doesn't affect Unix-like environment. Only for windows
-__get_junit_jar__valid_methods := 1 bitsadmin 2 powershell 3 curl
+__get_junit_jar__valid_methods := 1 powershell 2 bitsadmin 3 curl
 
 define __get_junit_jar__valid_methods_msg
 Unknown method: $(FG_YELLOW)$(method)$(CA). Valid methods: $(subst $(SPACE),$(COMMA)$(SPACE),$(foreach m,$(__get_junit_jar__valid_methods),$(FG_GREEN)$(m)$(CA)))
 If other methods doesn't work, you can download the JUnit .jar file directly from the source via other methods:
 $(JUNIT_DOWNLOAD_URL)
 endef
+
 ifeq ($(method),)
-__get_junit_jar: __get_junit_jar__win__download_cmd := $(__get_junit_jar__win__download_cmd__bitsadmin)
+__get_junit_jar: __get_junit_jar__win__download_cmd := $(__get_junit_jar__win__download_cmd__powershell)
 else ifeq ($(method),1)
-__get_junit_jar: __get_junit_jar__win__download_cmd := $(__get_junit_jar__win__download_cmd__bitsadmin)
-else ifeq ($(method),bitsadmin)
-__get_junit_jar: __get_junit_jar__win__download_cmd := $(__get_junit_jar__win__download_cmd__bitsadmin)
-else ifeq ($(method),2)
 __get_junit_jar: __get_junit_jar__win__download_cmd := $(__get_junit_jar__win__download_cmd__powershell)
 else ifeq ($(method),powershell)
 __get_junit_jar: __get_junit_jar__win__download_cmd := $(__get_junit_jar__win__download_cmd__powershell)
+else ifeq ($(method),2)
+__get_junit_jar: __get_junit_jar__win__download_cmd := $(__get_junit_jar__win__download_cmd__bitsadmin)
+else ifeq ($(method),bitsadmin)
+__get_junit_jar: __get_junit_jar__win__download_cmd := $(__get_junit_jar__win__download_cmd__bitsadmin)
 else ifeq ($(method),3)
 __get_junit_jar: __get_junit_jar__win__download_cmd := $(__get_junit_jar__win__download_cmd__curl)
 else ifeq ($(method),curl)

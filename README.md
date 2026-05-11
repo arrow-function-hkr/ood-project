@@ -44,7 +44,7 @@ make test
 with optional parameters:
   - `silent=<boolean>`: suppresses the logging of each testing step
   - `verbose=<boolean>`: shows extra information what make does under the hood
-  - `method=<1|bitsadmin|2|powershell|3|curl>`: method for downloading dependency files on Windows (default: `bitsadmin`). If one method is slow or unavailable, try another one.
+  - `method=<1|powershell|2|bitsadmin|3|curl>`: method for downloading dependency files on Windows (default: `powershell`). If one method is slow or unavailable, try another one.
 
 or compile the source test code from the `./src/test/` directory manually, including the JUnit framework jar dependency, which can be obtained by running the:
 ```sh
