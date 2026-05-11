@@ -4,6 +4,7 @@
 !/src
 !/docs
 !/.gitignore
+!/.github
 !/LICENSE
 !/Makefile
 !/README.md
