@@ -27,5 +27,11 @@ jobs:
           java -version
           javac -version
 
-      - name: Run tests
-        run: /bin/time -v make test-full verbose=true
+      - name: Compile main project code
+        run: /bin/time -v make compile verbose=true
+
+      - name: Compile tests
+        run: /bin/time -v make test-compile verbose=true
+
+      - name: Execute tests
+        run: /bin/time -v make test-execute verbose=true
