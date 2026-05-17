@@ -41,7 +41,6 @@ public final class ApplicationService {
 	 */
 	private ApplicationService() {
 	}
-
 	/**
 	 * Creates and stores a new product.
 	 *
@@ -54,15 +53,14 @@ public final class ApplicationService {
 	 * @param lifespan product end date
 	 * @return id of the created product
 	 */
-	public static int addProduct(String name, Map<Integer, Float> materialRatios, LocalDateTime lifespan) {
-		Map<Material, Float> materials = resolveMaterials(materialRatios);
+	public static int addProduct(String name, HashMap<Integer, Float> materialRatios, LocalDateTime lifespan) {
+		HashMap<Material, Float> materials = (HashMap<Material, Float>)resolveMaterials(materialRatios);
 		Product product = new Product(name, materials, LocalDateTime.now(), lifespan);
 
 		storagePool.addProduct(product);
 
 		return product.getId();
 	}
-
 	/**
 	 * Creates and stores a new material.
 	 *

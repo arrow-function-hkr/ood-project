@@ -1,7 +1,8 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 import onion.lifeproducts.rms.application.ApplicationService;
 import onion.lifeproducts.rms.domain.Material;
@@ -17,24 +18,6 @@ import java.util.Map;
 
 public class MainTest {
 
-	/// example tests
-
-	/// passing
-
-	// @DisplayName("The friendly name of the test (5 < 7)")
-	// @Test
-	// void fiveLessThanSeven() {
-	// 	assertTrue(5 < 7);
-	// }
-	
-	/// failing
-
-	// @DisplayName("The friendly name of the test (5 < 3)")
-	// @Test
-	// void fiveLessThanThree() {
-	// 	assertTrue(5 < 3);
-	// }
-
 	@Test
 	void simpleImpactUsesMaterialEmissionFactors() {
 		Material steel = new Material(
@@ -44,6 +27,7 @@ public class MainTest {
 				RecyclingCategory.RECYCLABLE,
 				new RecyclingGuidance("Recycle as metal.")
 		);
+
 		Material glass = new Material(
 				"Glass",
 				0.8f,
@@ -88,15 +72,15 @@ public class MainTest {
 				LocalDateTime.of(2026, 1, 11, 0, 0)
 		);
 
-		float impact = new WeightPlusLifespanImpactCalculationStrategy().calculateImpact(product);
+		float impact = new WeightPlusLifespanImpactCalculationStrategy()
+				.calculateImpact(product);
 
 		assertEquals(0.15f, impact, 0.0001f);
 	}
 
 	@Test
 	void applicationServiceResolvesMaterialIdsBeforeCreatingProduct() {
-		ApplicationService applicationService = new ApplicationService();
-		int steelId = applicationService.addMaterial(
+		int steelId = ApplicationService.addMaterial(
 				"Steel",
 				0.7f,
 				2.5f,
@@ -104,23 +88,26 @@ public class MainTest {
 				"Recycle as metal."
 		);
 
-		HashMap<Integer, Float> materialRatios = new HashMap<>();
+		Map<Integer, Float> materialRatios = new HashMap<>();
 		materialRatios.put(steelId, 0.4f);
 		materialRatios.put(-1, 0.6f);
 
-		int productId = applicationService.addProduct(
+		int productId = ApplicationService.addProduct(
 				"Cell phone",
 				materialRatios,
 				LocalDateTime.of(2027, 1, 1, 0, 0)
 		);
 
-		Product product = applicationService.getAllProducts().stream()
+		Product product = ApplicationService.getAllProducts()
+				.stream()
 				.filter(candidate -> candidate.getId() == productId)
 				.findFirst()
 				.orElseThrow();
 
 		assertEquals(1, product.getMaterials().size());
+
 		Material material = product.getMaterials().keySet().iterator().next();
+
 		assertEquals("Steel", material.getName());
 		assertEquals(0.4f, product.getMaterials().get(material), 0.0001f);
 	}

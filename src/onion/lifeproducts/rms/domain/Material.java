@@ -3,8 +3,11 @@ package onion.lifeproducts.rms.domain;
 /**
  * Represents a material used inside products.
  *
- * A material has a recycle rate, emission factor,
- * recycling category, and recycling guidance.
+ * A material has:
+ * - a recycle rate
+ * - an emission factor
+ * - a recycling category
+ * - recycling guidance information
  */
 public class Material {
 
@@ -41,30 +44,68 @@ public class Material {
         this.recyclingGuidance = recyclingGuidance;
     }
 
+    /**
+     * Returns the material ID.
+     *
+     * @return material ID
+     */
     public int getId() {
         return this.id;
     }
 
+    /**
+     * Returns the material name.
+     *
+     * @return material name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Returns the recycle rate.
+     *
+     * @return recycle rate
+     */
     public float getRecycleRate() {
         return this.recycleRate;
     }
 
+    /**
+     * Returns the emission factor.
+     *
+     * @return emission factor
+     */
     public float getEmissionFactor() {
         return this.emissionFactor;
     }
 
+    /**
+     * Returns the recycling category.
+     *
+     * @return recycling category
+     */
     public RecyclingCategory getRecyclingCategory() {
         return this.recyclingCategory;
     }
 
+    /**
+     * Returns the recycling guidance.
+     *
+     * @return recycling guidance
+     */
     public RecyclingGuidance getRecyclingGuidance() {
         return this.recyclingGuidance;
     }
 
+    /**
+     * Updates the material name.
+     *
+     * The name cannot be null or blank.
+     *
+     * @param name new material name
+     * @return true if updated successfully, otherwise false
+     */
     public boolean setName(String name) {
         if (name == null || name.isBlank()) {
             return false;
@@ -74,6 +115,11 @@ public class Material {
         return true;
     }
 
+    /**
+     * Returns a readable string representation of the material.
+     *
+     * @return formatted material information
+     */
     @Override
     public String toString() {
         return "Material ID: " + this.id
@@ -84,3 +130,4 @@ public class Material {
                 + ", Guidance: " + this.recyclingGuidance;
     }
 }
+
