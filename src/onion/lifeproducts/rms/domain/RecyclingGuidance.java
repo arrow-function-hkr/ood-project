@@ -23,29 +23,14 @@ public class RecyclingGuidance {
         this.guide = guide;
     }
 
-    /**
-     * Returns guidance id.
-     *
-     * @return guidance id
-     */
     public int getId() {
         return this.id;
     }
 
-    /**
-     * Returns guidance text.
-     *
-     * @return guidance text
-     */
     public String getGuide() {
         return this.guide;
     }
 
-    /**
-     * Returns readable guidance text.
-     *
-     * @return guidance description
-     */
     @Override
     public String toString() {
         return this.guide;

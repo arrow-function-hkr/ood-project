@@ -1,5 +1,4 @@
 package onion.lifeproducts.rms.application;
-import onion.lifeproducts.rms.domain.*;
 
 import onion.lifeproducts.rms.domain.Material;
 import onion.lifeproducts.rms.domain.Product;
@@ -29,66 +28,30 @@ public class StoragePool {
 		this.recyclingGuidancePool = new ArrayList<>();
 	}
 
-	/**
-	 * Adds a product to storage.
-	 *
-	 * @param product product to add
-	 */
 	public void addProduct(Product product) {
 		this.productsPool.add(product);
 	}
 
-	/**
-	 * Adds a material to storage.
-	 *
-	 * @param material material to add
-	 */
 	public void addMaterial(Material material) {
 		this.materialsPool.add(material);
 	}
 
-	/**
-	 * Adds recycling guidance to storage.
-	 *
-	 * @param recyclingGuidance guidance to add
-	 */
 	public void addRecyclingGuidance(RecyclingGuidance recyclingGuidance) {
 		this.recyclingGuidancePool.add(recyclingGuidance);
 	}
 
-	/**
-	 * Returns all products.
-	 *
-	 * @return list of products
-	 */
 	public List<Product> getAllProducts() {
 		return this.productsPool;
 	}
 
-	/**
-	 * Returns all materials.
-	 *
-	 * @return list of materials
-	 */
 	public List<Material> getAllMaterials() {
 		return this.materialsPool;
 	}
 
-	/**
-	 * Returns all recycling guidance objects.
-	 *
-	 * @return list of recycling guidance objects
-	 */
 	public List<RecyclingGuidance> getAllRecyclingGuidance() {
 		return this.recyclingGuidancePool;
 	}
 
-	/**
-	 * Finds a product by id.
-	 *
-	 * @param id product id
-	 * @return product if found, otherwise null
-	 */
 	public Product getProductById(int id) {
 		for (Product product : this.productsPool) {
 			if (product.getId() == id) {
@@ -99,12 +62,6 @@ public class StoragePool {
 		return null;
 	}
 
-	/**
-	 * Finds a material by id.
-	 *
-	 * @param id material id
-	 * @return material if found, otherwise null
-	 */
 	public Material getMaterialById(int id) {
 		for (Material material : this.materialsPool) {
 			if (material.getId() == id) {
@@ -115,12 +72,6 @@ public class StoragePool {
 		return null;
 	}
 
-	/**
-	 * Finds recycling guidance by id.
-	 *
-	 * @param id recycling guidance id
-	 * @return recycling guidance if found, otherwise null
-	 */
 	public RecyclingGuidance getRecyclingGuidanceById(int id) {
 		for (RecyclingGuidance guidance : this.recyclingGuidancePool) {
 			if (guidance.getId() == id) {
@@ -131,12 +82,6 @@ public class StoragePool {
 		return null;
 	}
 
-	/**
-	 * Deletes a product by id.
-	 *
-	 * @param id product id
-	 * @return deleted product if found, otherwise null
-	 */
 	public Product deleteProductById(int id) {
 		Product product = getProductById(id);
 
@@ -147,12 +92,6 @@ public class StoragePool {
 		return product;
 	}
 
-	/**
-	 * Deletes a material by id.
-	 *
-	 * @param id material id
-	 * @return deleted material if found, otherwise null
-	 */
 	public Material deleteMaterialById(int id) {
 		Material material = getMaterialById(id);
 
@@ -163,12 +102,6 @@ public class StoragePool {
 		return material;
 	}
 
-	/**
-	 * Deletes recycling guidance by id.
-	 *
-	 * @param id recycling guidance id
-	 * @return deleted guidance if found, otherwise null
-	 */
 	public RecyclingGuidance deleteRecyclingGuidanceById(int id) {
 		RecyclingGuidance guidance = getRecyclingGuidanceById(id);
 

@@ -71,7 +71,7 @@ package onion.lifeproducts.rms.application {
   class ApplicationService {
     - StoragePool storagePool
     + ApplicationService()
-    + addProduct(String name, HashMap<Integer, Float> materials, LocalDateTime lifespan): int
+    + addProduct(String name, Map<Integer, Float> materialRatios, LocalDateTime lifespan): int
     + addMaterial(String name, float recycleRate, float emissionFactor, int recyclingCategory, String recyclingGuidance): int
     + addRecyclingGuidance(String type): boolean
     + getAllProducts(): List<Product>
@@ -88,6 +88,7 @@ package onion.lifeproducts.rms.application {
     + recycleProductById(int id, int impactCalculationStrategyId): List<String>
     - getRecyclingCategoryFromIndex(int index): RecyclingCategory
     - createImpactCalculationStrategy(int strategyId): ImpactCalculationStrategyInterface
+    - resolveMaterials(Map<Integer, Float> materialRatios): Map<Material, Float>
   }
 
   class StoragePool {
@@ -127,15 +128,15 @@ package onion.lifeproducts.rms.domain {
     {static} - int nextId
     - int id
     - String name
-    - HashMap<Integer, Float> materials
+    - Map<Material, Float> materials
     - LocalDateTime manufactureDate
     - LocalDateTime endDate
-    + Product(String name, HashMap<Integer, Float> materials, LocalDateTime manufactureDate, LocalDateTime endDate)
+    + Product(String name, Map<Material, Float> materials, LocalDateTime manufactureDate, LocalDateTime endDate)
     + getId(): int
     + getName(): String
     + getManufactureDate(): LocalDateTime
     + getEndDate(): LocalDateTime
-    + getMaterials(): HashMap<Integer, Float>
+    + getMaterials(): Map<Material, Float>
     + setName(String name): boolean
     + toString(): String
   }
@@ -233,10 +234,13 @@ RecyclingService --> ImpactReport
 Material *-- RecyclingGuidance
 Material --> RecyclingCategory
 
-Product ..> Material : stores material IDs/weights
+Product --> "0..*" Material : stores materials/ratios
 
 ImpactCalculationStrategyInterface <|.. SimpleImpactCalculationStrategy
 ImpactCalculationStrategyInterface <|.. WeightPlusLifespanImpactCalculationStrategy
 ImpactCalculationStrategyInterface --> Product
+
+SimpleImpactCalculationStrategy --> Material : uses emissionFactor
+WeightPlusLifespanImpactCalculationStrategy --> Material : uses emissionFactor
 
 @enduml

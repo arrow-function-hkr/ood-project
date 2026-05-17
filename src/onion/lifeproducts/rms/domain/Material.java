@@ -41,66 +41,30 @@ public class Material {
         this.recyclingGuidance = recyclingGuidance;
     }
 
-    /**
-     * Returns material id.
-     *
-     * @return material id
-     */
     public int getId() {
         return this.id;
     }
 
-    /**
-     * Returns material name.
-     *
-     * @return material name
-     */
     public String getName() {
         return this.name;
     }
 
-    /**
-     * Returns recycle rate.
-     *
-     * @return recycle rate
-     */
     public float getRecycleRate() {
         return this.recycleRate;
     }
 
-    /**
-     * Returns emission factor.
-     *
-     * @return emission factor
-     */
     public float getEmissionFactor() {
         return this.emissionFactor;
     }
 
-    /**
-     * Returns recycling category.
-     *
-     * @return recycling category
-     */
     public RecyclingCategory getRecyclingCategory() {
         return this.recyclingCategory;
     }
 
-    /**
-     * Returns recycling guidance.
-     *
-     * @return recycling guidance
-     */
     public RecyclingGuidance getRecyclingGuidance() {
         return this.recyclingGuidance;
     }
 
-    /**
-     * Changes material name.
-     *
-     * @param name new material name
-     * @return true if name was changed, false if name was invalid
-     */
     public boolean setName(String name) {
         if (name == null || name.isBlank()) {
             return false;
@@ -110,11 +74,6 @@ public class Material {
         return true;
     }
 
-    /**
-     * Returns a readable material description.
-     *
-     * @return material description
-     */
     @Override
     public String toString() {
         return "Material ID: " + this.id

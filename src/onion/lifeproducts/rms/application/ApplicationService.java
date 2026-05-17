@@ -1,5 +1,4 @@
 package onion.lifeproducts.rms.application;
-import onion.lifeproducts.rms.domain.*;
 
 import onion.lifeproducts.rms.domain.ImpactCalculationStrategyInterface;
 import onion.lifeproducts.rms.domain.ImpactReport;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ApplicationService is the bridge between the presentation layer
@@ -37,12 +37,17 @@ public class ApplicationService {
 	/**
 	 * Creates and stores a new product.
 	 *
+	 * The presentation layer sends material IDs with ratios/amounts.
+	 * This method resolves those IDs into real Material objects before
+	 * creating the Product domain object.
+	 *
 	 * @param name product name
-	 * @param materials map where key = material id and value = material amount/weight
+	 * @param materialRatios map where key = material id and value = material ratio/amount
 	 * @param lifespan product end date
 	 * @return id of the created product
 	 */
-	public int addProduct(String name, HashMap<Integer, Float> materials, LocalDateTime lifespan) {
+	public int addProduct(String name, Map<Integer, Float> materialRatios, LocalDateTime lifespan) {
+		Map<Material, Float> materials = resolveMaterials(materialRatios);
 		Product product = new Product(name, materials, LocalDateTime.now(), lifespan);
 
 		this.storagePool.addProduct(product);
@@ -85,12 +90,6 @@ public class ApplicationService {
 		return material.getId();
 	}
 
-	/**
-	 * Adds recycling guidance if it does not already exist.
-	 *
-	 * @param type guidance text
-	 * @return true if added, false if it already exists
-	 */
 	public boolean addRecyclingGuidance(String type) {
 		for (RecyclingGuidance guidance : this.storagePool.getAllRecyclingGuidance()) {
 			if (guidance.toString().equalsIgnoreCase(type)) {
@@ -102,20 +101,10 @@ public class ApplicationService {
 		return true;
 	}
 
-	/**
-	 * Returns all products.
-	 *
-	 * @return list of products
-	 */
 	public List<Product> getAllProducts() {
 		return this.storagePool.getAllProducts();
 	}
 
-	/**
-	 * Returns all product ids.
-	 *
-	 * @return list of product ids
-	 */
 	public List<Integer> getAllProductIds() {
 		List<Integer> ids = new ArrayList<>();
 
@@ -126,20 +115,10 @@ public class ApplicationService {
 		return ids;
 	}
 
-	/**
-	 * Returns all materials.
-	 *
-	 * @return list of materials
-	 */
 	public List<Material> getAllMaterials() {
 		return this.storagePool.getAllMaterials();
 	}
 
-	/**
-	 * Returns all material ids.
-	 *
-	 * @return list of material ids
-	 */
 	public List<Integer> getAllMaterialIds() {
 		List<Integer> ids = new ArrayList<>();
 
@@ -150,20 +129,10 @@ public class ApplicationService {
 		return ids;
 	}
 
-	/**
-	 * Returns all recycling categories from the enum.
-	 *
-	 * @return list of recycling categories
-	 */
 	public List<RecyclingCategory> getAllRecyclingCategories() {
 		return Arrays.asList(RecyclingCategory.values());
 	}
 
-	/**
-	 * Returns descriptions of all products.
-	 *
-	 * @return product descriptions
-	 */
 	public List<String> getAllProductDescriptions() {
 		List<String> descriptions = new ArrayList<>();
 
@@ -174,11 +143,6 @@ public class ApplicationService {
 		return descriptions;
 	}
 
-	/**
-	 * Returns descriptions of all materials.
-	 *
-	 * @return material descriptions
-	 */
 	public List<String> getAllMaterialDescriptions() {
 		List<String> descriptions = new ArrayList<>();
 
@@ -189,11 +153,6 @@ public class ApplicationService {
 		return descriptions;
 	}
 
-	/**
-	 * Returns descriptions of all recycling categories.
-	 *
-	 * @return recycling category descriptions
-	 */
 	public List<String> getAllRecyclingCategoryDescriptions() {
 		List<String> descriptions = new ArrayList<>();
 
@@ -204,12 +163,6 @@ public class ApplicationService {
 		return descriptions;
 	}
 
-	/**
-	 * Returns description of one product by id.
-	 *
-	 * @param id product id
-	 * @return list with product description, or empty list if not found
-	 */
 	public List<String> getProductDescriptionById(int id) {
 		List<String> result = new ArrayList<>();
 		Product product = this.storagePool.getProductById(id);
@@ -221,12 +174,6 @@ public class ApplicationService {
 		return result;
 	}
 
-	/**
-	 * Returns description of one material by id.
-	 *
-	 * @param id material id
-	 * @return list with material description, or empty list if not found
-	 */
 	public List<String> getMaterialDescriptionById(int id) {
 		List<String> result = new ArrayList<>();
 		Material material = this.storagePool.getMaterialById(id);
@@ -238,12 +185,6 @@ public class ApplicationService {
 		return result;
 	}
 
-	/**
-	 * Returns description of one recycling category by index.
-	 *
-	 * @param id category index
-	 * @return list with category description, or empty list if index is invalid
-	 */
 	public List<String> getRecyclingCategoryDescriptionById(int id) {
 		List<String> result = new ArrayList<>();
 		RecyclingCategory[] categories = RecyclingCategory.values();
@@ -255,13 +196,6 @@ public class ApplicationService {
 		return result;
 	}
 
-	/**
-	 * Recycles a product by id using a selected impact calculation strategy.
-	 *
-	 * @param id product id
-	 * @param impactCalculationStrategyId selected strategy id
-	 * @return result lines for the UI
-	 */
 	public List<String> recycleProductById(int id, int impactCalculationStrategyId) {
 		List<String> result = new ArrayList<>();
 		Product product = this.storagePool.getProductById(id);
@@ -284,12 +218,6 @@ public class ApplicationService {
 		return result;
 	}
 
-	/**
-	 * Converts an integer index into a RecyclingCategory enum value.
-	 *
-	 * @param index category index
-	 * @return recycling category
-	 */
 	private RecyclingCategory getRecyclingCategoryFromIndex(int index) {
 		RecyclingCategory[] categories = RecyclingCategory.values();
 
@@ -300,17 +228,31 @@ public class ApplicationService {
 		return categories[index];
 	}
 
-	/**
-	 * Creates the selected impact calculation strategy.
-	 *
-	 * @param strategyId strategy id
-	 * @return selected impact calculation strategy
-	 */
 	private ImpactCalculationStrategyInterface createImpactCalculationStrategy(int strategyId) {
 		if (strategyId == 2) {
 			return new WeightPlusLifespanImpactCalculationStrategy();
 		}
 
 		return new SimpleImpactCalculationStrategy();
+	}
+
+	/**
+	 * Resolves material IDs from the presentation layer into Material domain objects.
+	 *
+	 * @param materialRatios map where key = material id and value = material ratio/amount
+	 * @return map where key = Material object and value = material ratio/amount
+	 */
+	private Map<Material, Float> resolveMaterials(Map<Integer, Float> materialRatios) {
+		Map<Material, Float> materials = new HashMap<>();
+
+		for (Map.Entry<Integer, Float> entry : materialRatios.entrySet()) {
+			Material material = this.storagePool.getMaterialById(entry.getKey());
+
+			if (material != null) {
+				materials.put(material, entry.getValue());
+			}
+		}
+
+		return materials;
 	}
 }

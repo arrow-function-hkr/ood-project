@@ -2,6 +2,7 @@ package onion.lifeproducts.rms.domain;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a product in the recycling management system.
@@ -9,8 +10,8 @@ import java.util.HashMap;
  * A product has an id, name, materials, manufacture date, and end date.
  * The materials are stored as a map:
  *
- * key   = material id
- * value = amount or weight of that material in the product
+ * key   = material
+ * value = ratio or amount of that material in the product
  */
 public class Product {
 
@@ -18,7 +19,7 @@ public class Product {
 
     private final int id;
     private String name;
-    private final HashMap<Integer, Float> materials;
+    private final Map<Material, Float> materials;
     private final LocalDateTime manufactureDate;
     private final LocalDateTime endDate;
 
@@ -26,74 +27,43 @@ public class Product {
      * Creates a new product.
      *
      * @param name product name
-     * @param materials map of material ids and their amounts/weights
+     * @param materials map of materials and their ratios/amounts
      * @param manufactureDate date when the product was manufactured
      * @param endDate date when the product reaches end of life
      */
     public Product(
             String name,
-            HashMap<Integer, Float> materials,
+            Map<Material, Float> materials,
             LocalDateTime manufactureDate,
             LocalDateTime endDate
     ) {
         this.id = nextId++;
         this.name = name;
-        this.materials = materials;
+        this.materials = new HashMap<>(materials);
         this.manufactureDate = manufactureDate;
         this.endDate = endDate;
     }
 
-    /**
-     * Returns product id.
-     *
-     * @return product id
-     */
     public int getId() {
         return this.id;
     }
 
-    /**
-     * Returns product name.
-     *
-     * @return product name
-     */
     public String getName() {
         return this.name;
     }
 
-    /**
-     * Returns manufacture date.
-     *
-     * @return manufacture date
-     */
     public LocalDateTime getManufactureDate() {
         return this.manufactureDate;
     }
 
-    /**
-     * Returns end date.
-     *
-     * @return end date
-     */
     public LocalDateTime getEndDate() {
         return this.endDate;
     }
 
-    /**
-     * Returns product materials.
-     *
-     * @return map of material ids and amounts/weights
-     */
-    public HashMap<Integer, Float> getMaterials() {
-        return this.materials;
+    public Map<Material, Float> getMaterials() {
+        return new HashMap<>(this.materials);
     }
 
-    /**
-     * Changes product name.
-     *
-     * @param name new product name
-     * @return true if name was changed, false if name was invalid
-     */
     public boolean setName(String name) {
         if (name == null || name.isBlank()) {
             return false;
@@ -103,11 +73,6 @@ public class Product {
         return true;
     }
 
-    /**
-     * Returns a readable product description.
-     *
-     * @return product description
-     */
     @Override
     public String toString() {
         return "Product ID: " + this.id

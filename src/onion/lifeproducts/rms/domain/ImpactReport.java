@@ -5,8 +5,9 @@ import java.time.LocalDateTime;
 /**
  * Represents a report generated after impact calculation.
  *
- * The report stores the generated date, impact value,
- * number of products, number of materials, and number of unique materials.
+ * The report stores the generated date, calculated impact value,
+ * number of products included, total material references used,
+ * and number of unique materials used.
  */
 public class ImpactReport {
 
@@ -21,9 +22,9 @@ public class ImpactReport {
      *
      * @param generatedAt time when report was generated
      * @param impactValue calculated impact value
-     * @param productsAmountUsed number of products used
-     * @param materialsAmountUsed total material references used
-     * @param uniqueMaterialAmountUsed number of unique materials used
+     * @param productsAmountUsed number of products used in the report
+     * @param materialsAmountUsed total material references used in the report
+     * @param uniqueMaterialAmountUsed number of unique materials used in the report
      */
     public ImpactReport(
             LocalDateTime generatedAt,
@@ -39,47 +40,22 @@ public class ImpactReport {
         this.uniqueMaterialAmountUsed = uniqueMaterialAmountUsed;
     }
 
-    /**
-     * Returns report generation date.
-     *
-     * @return generated date
-     */
     public LocalDateTime getGeneratedAtDate() {
         return this.generatedAt;
     }
 
-    /**
-     * Returns impact value.
-     *
-     * @return impact value
-     */
     public float getImpactValue() {
         return this.impactValue;
     }
 
-    /**
-     * Returns number of products used.
-     *
-     * @return product amount
-     */
     public int getProductsAmountUsed() {
         return this.productsAmountUsed;
     }
 
-    /**
-     * Returns number of material references used.
-     *
-     * @return material amount
-     */
     public int getMaterialsAmountUsed() {
         return this.materialsAmountUsed;
     }
 
-    /**
-     * Returns number of unique materials used.
-     *
-     * @return unique material amount
-     */
     public int getUniqueMaterialAmountUsed() {
         return this.uniqueMaterialAmountUsed;
     }
