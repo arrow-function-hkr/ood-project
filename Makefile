@@ -27,7 +27,7 @@ DD := /
 endif
 
 # ========================
-# helper functions 
+# helper functions
 
 # Apply wildcard recursively in the given directory
 # Usage: $(call rwildcard,[directory where to look],[glob to apply])
