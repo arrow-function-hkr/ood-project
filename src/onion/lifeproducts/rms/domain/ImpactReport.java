@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 /**
  * Represents a report generated after impact calculation.
- *
- * The report stores the generated date, impact value,
- * number of products, number of materials, and number of unique materials.
+ * The report stores:
+ * - when the report was generated
+ * - the calculated environmental impact value
+ * - how many products were used
+ * - how many material references were used
+ * - how many unique materials were involved
  */
 public class ImpactReport {
 
@@ -17,12 +20,12 @@ public class ImpactReport {
     private final int uniqueMaterialAmountUsed;
 
     /**
-     * Creates an impact report.
+     * Creates a new impact report.
      *
-     * @param generatedAt time when report was generated
+     * @param generatedAt time when the report was generated
      * @param impactValue calculated impact value
      * @param productsAmountUsed number of products used
-     * @param materialsAmountUsed total material references used
+     * @param materialsAmountUsed total number of material references used
      * @param uniqueMaterialAmountUsed number of unique materials used
      */
     public ImpactReport(
@@ -40,16 +43,16 @@ public class ImpactReport {
     }
 
     /**
-     * Returns report generation date.
+     * Returns the date and time when the report was generated.
      *
-     * @return generated date
+     * @return report generation date and time
      */
     public LocalDateTime getGeneratedAtDate() {
         return this.generatedAt;
     }
 
     /**
-     * Returns impact value.
+     * Returns the calculated impact value.
      *
      * @return impact value
      */
@@ -58,29 +61,44 @@ public class ImpactReport {
     }
 
     /**
-     * Returns number of products used.
+     * Returns how many products were used in the report.
      *
-     * @return product amount
+     * @return number of products used
      */
     public int getProductsAmountUsed() {
         return this.productsAmountUsed;
     }
 
     /**
-     * Returns number of material references used.
+     * Returns the total number of material references used.
      *
-     * @return material amount
+     * @return number of material references used
      */
     public int getMaterialsAmountUsed() {
         return this.materialsAmountUsed;
     }
 
     /**
-     * Returns number of unique materials used.
+     * Returns the number of unique materials used.
      *
-     * @return unique material amount
+     * @return number of unique materials used
      */
     public int getUniqueMaterialAmountUsed() {
         return this.uniqueMaterialAmountUsed;
+    }
+
+    /**
+     * Returns a readable string representation of the impact report.
+     *
+     * @return formatted impact report information
+     */
+    @Override
+    public String toString() {
+        return "Impact Report\n"
+                + "Generated At: " + this.generatedAt + "\n"
+                + "Impact Value: " + this.impactValue + "\n"
+                + "Products Used: " + this.productsAmountUsed + "\n"
+                + "Materials Used: " + this.materialsAmountUsed + "\n"
+                + "Unique Materials Used: " + this.uniqueMaterialAmountUsed;
     }
 }

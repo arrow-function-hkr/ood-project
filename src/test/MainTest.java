@@ -12,15 +12,15 @@ public class MainTest {
 	// @DisplayName("The friendly name of the test (5 < 7)")
 	// @Test
 	// void fiveLessThanSeven() {
-	// 	assertTrue(5 < 7);
+	//     assertTrue(5 < 7);
 	// }
-	
+
 	/// failing
 
 	// @DisplayName("The friendly name of the test (5 < 3)")
 	// @Test
 	// void fiveLessThanThree() {
-	// 	assertTrue(5 < 3);
+	//     assertTrue(5 < 3);
 	// }
 
 }

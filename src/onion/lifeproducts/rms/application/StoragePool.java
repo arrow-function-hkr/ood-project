@@ -1,5 +1,4 @@
 package onion.lifeproducts.rms.application;
-import onion.lifeproducts.rms.domain.*;
 
 import onion.lifeproducts.rms.domain.Material;
 import onion.lifeproducts.rms.domain.Product;
@@ -9,10 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * StoragePool works as an in-memory storage container.
+ * StoragePool works as an in-memory storage container
+ * for the application layer.
  *
- * It stores products, materials, and recycling guidance objects
- * while the application is running.
+ * This class stores domain objects temporarily while
+ * the application is running.
+ *
+ * StoragePool is responsible for:
+ * <ul>
+ *     <li>Storing products</li>
+ *     <li>Storing materials</li>
+ *     <li>Storing recycling guidance objects</li>
+ *     <li>Searching objects by ID</li>
+ *     <li>Removing objects by ID</li>
+ * </ul>
+ *
+ * The storage is not persistent. All data exists only
+ * during the current application execution.
  */
 public class StoragePool {
 
@@ -21,7 +33,7 @@ public class StoragePool {
 	private final List<RecyclingGuidance> recyclingGuidancePool;
 
 	/**
-	 * Creates empty storage lists.
+	 * Creates empty in-memory storage lists.
 	 */
 	public StoragePool() {
 		this.productsPool = new ArrayList<>();
@@ -30,64 +42,64 @@ public class StoragePool {
 	}
 
 	/**
-	 * Adds a product to storage.
+	 * Adds a product to the storage pool.
 	 *
-	 * @param product product to add
+	 * @param product product to store
 	 */
 	public void addProduct(Product product) {
 		this.productsPool.add(product);
 	}
 
 	/**
-	 * Adds a material to storage.
+	 * Adds a material to the storage pool.
 	 *
-	 * @param material material to add
+	 * @param material material to store
 	 */
 	public void addMaterial(Material material) {
 		this.materialsPool.add(material);
 	}
 
 	/**
-	 * Adds recycling guidance to storage.
+	 * Adds a recycling guidance object to the storage pool.
 	 *
-	 * @param recyclingGuidance guidance to add
+	 * @param recyclingGuidance recycling guidance to store
 	 */
 	public void addRecyclingGuidance(RecyclingGuidance recyclingGuidance) {
 		this.recyclingGuidancePool.add(recyclingGuidance);
 	}
 
 	/**
-	 * Returns all products.
+	 * Returns all stored products.
 	 *
-	 * @return list of products
+	 * @return list of all products
 	 */
 	public List<Product> getAllProducts() {
 		return this.productsPool;
 	}
 
 	/**
-	 * Returns all materials.
+	 * Returns all stored materials.
 	 *
-	 * @return list of materials
+	 * @return list of all materials
 	 */
 	public List<Material> getAllMaterials() {
 		return this.materialsPool;
 	}
 
 	/**
-	 * Returns all recycling guidance objects.
+	 * Returns all stored recycling guidance objects.
 	 *
-	 * @return list of recycling guidance objects
+	 * @return list of all recycling guidance objects
 	 */
 	public List<RecyclingGuidance> getAllRecyclingGuidance() {
 		return this.recyclingGuidancePool;
 	}
 
 	/**
-	 * Finds a product by id.
+	 * Searches for a product by its ID.
 	 *
-	 * @param id product id
-	 * @return product if found, otherwise null
+	 * @param id product ID
+	 * @return matching product, or null if not found
 	 */
 	public Product getProductById(int id) {
 		for (Product product : this.productsPool) {
@@ -100,10 +112,10 @@ public class StoragePool {
 	}
 
 	/**
-	 * Finds a material by id.
+	 * Searches for a material by its ID.
 	 *
-	 * @param id material id
-	 * @return material if found, otherwise null
+	 * @param id material ID
+	 * @return matching material, or null if not found
 	 */
 	public Material getMaterialById(int id) {
 		for (Material material : this.materialsPool) {
@@ -116,10 +128,10 @@ public class StoragePool {
 	}
 
 	/**
-	 * Finds recycling guidance by id.
+	 * Searches for a recycling guidance object by its ID.
 	 *
-	 * @param id recycling guidance id
-	 * @return recycling guidance if found, otherwise null
+	 * @param id recycling guidance ID
+	 * @return matching recycling guidance, or null if not found
 	 */
 	public RecyclingGuidance getRecyclingGuidanceById(int id) {
 		for (RecyclingGuidance guidance : this.recyclingGuidancePool) {
@@ -132,10 +144,10 @@ public class StoragePool {
 	}
 
 	/**
-	 * Deletes a product by id.
+	 * Deletes a product by its ID.
 	 *
-	 * @param id product id
-	 * @return deleted product if found, otherwise null
+	 * @param id product ID
+	 * @return removed product, or null if not found
 	 */
 	public Product deleteProductById(int id) {
 		Product product = getProductById(id);
@@ -148,10 +160,10 @@ public class StoragePool {
 	}
 
 	/**
-	 * Deletes a material by id.
+	 * Deletes a material by its ID.
 	 *
-	 * @param id material id
-	 * @return deleted material if found, otherwise null
+	 * @param id material ID
+	 * @return removed material, or null if not found
 	 */
 	public Material deleteMaterialById(int id) {
 		Material material = getMaterialById(id);
@@ -164,10 +176,10 @@ public class StoragePool {
 	}
 
 	/**
-	 * Deletes recycling guidance by id.
+	 * Deletes a recycling guidance object by its ID.
 	 *
-	 * @param id recycling guidance id
-	 * @return deleted guidance if found, otherwise null
+	 * @param id recycling guidance ID
+	 * @return removed recycling guidance, or null if not found
 	 */
 	public RecyclingGuidance deleteRecyclingGuidanceById(int id) {
 		RecyclingGuidance guidance = getRecyclingGuidanceById(id);

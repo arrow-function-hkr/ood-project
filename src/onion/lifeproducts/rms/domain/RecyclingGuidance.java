@@ -24,16 +24,16 @@ public class RecyclingGuidance {
     }
 
     /**
-     * Returns guidance id.
+     * Returns the recycling guidance ID.
      *
-     * @return guidance id
+     * @return guidance ID
      */
     public int getId() {
         return this.id;
     }
 
     /**
-     * Returns guidance text.
+     * Returns the recycling guidance text.
      *
      * @return guidance text
      */
@@ -42,9 +42,9 @@ public class RecyclingGuidance {
     }
 
     /**
-     * Returns readable guidance text.
+     * Returns the recycling guidance as readable text.
      *
-     * @return guidance description
+     * @return guidance text
      */
     @Override
     public String toString() {

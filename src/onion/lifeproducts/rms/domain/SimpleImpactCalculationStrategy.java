@@ -1,20 +1,25 @@
 package onion.lifeproducts.rms.domain;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Simple impact calculation strategy.
  *
- * This strategy calculates impact by adding the material amounts/weights
- * stored inside a product.
+ * This strategy calculates environmental impact using:
+ *
+ * material amount × emission factor
+ *
+ * for all materials inside a product.
  */
 public class SimpleImpactCalculationStrategy implements ImpactCalculationStrategyInterface {
 
     /**
      * Calculates impact for one product.
      *
-     * Current simple formula:
-     * total impact = sum of all material amounts/weights
+     * The impact is calculated from each material's:
+     * - ratio/amount
+     * - emission factor
      *
      * @param product product to calculate impact for
      * @return calculated impact value
@@ -23,15 +28,16 @@ public class SimpleImpactCalculationStrategy implements ImpactCalculationStrateg
     public float calculateImpact(Product product) {
         float totalImpact = 0;
 
-        for (float materialAmount : product.getMaterials().values()) {
-            totalImpact += materialAmount;
+        for (Map.Entry<Material, Float> materialEntry : product.getMaterials().entrySet()) {
+            totalImpact += materialEntry.getValue()
+                    * materialEntry.getKey().getEmissionFactor();
         }
 
         return totalImpact;
     }
 
     /**
-     * Calculates impact for an array of products.
+     * Calculates total impact for multiple products stored in an array.
      *
      * @param products products to calculate impact for
      * @return total impact value
@@ -48,7 +54,7 @@ public class SimpleImpactCalculationStrategy implements ImpactCalculationStrateg
     }
 
     /**
-     * Calculates impact for a list of products.
+     * Calculates total impact for multiple products stored in a list.
      *
      * @param products products to calculate impact for
      * @return total impact value

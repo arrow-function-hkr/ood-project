@@ -3,8 +3,11 @@ package onion.lifeproducts.rms.domain;
 /**
  * Represents a material used inside products.
  *
- * A material has a recycle rate, emission factor,
- * recycling category, and recycling guidance.
+ * A material has:
+ * - a recycle rate
+ * - an emission factor
+ * - a recycling category
+ * - recycling guidance information
  */
 public class Material {
 
@@ -42,16 +45,16 @@ public class Material {
     }
 
     /**
-     * Returns material id.
+     * Returns the material ID.
      *
-     * @return material id
+     * @return material ID
      */
     public int getId() {
         return this.id;
     }
 
     /**
-     * Returns material name.
+     * Returns the material name.
      *
      * @return material name
      */
@@ -60,7 +63,7 @@ public class Material {
     }
 
     /**
-     * Returns recycle rate.
+     * Returns the recycle rate.
      *
      * @return recycle rate
      */
@@ -69,7 +72,7 @@ public class Material {
     }
 
     /**
-     * Returns emission factor.
+     * Returns the emission factor.
      *
      * @return emission factor
      */
@@ -78,7 +81,7 @@ public class Material {
     }
 
     /**
-     * Returns recycling category.
+     * Returns the recycling category.
      *
      * @return recycling category
      */
@@ -87,7 +90,7 @@ public class Material {
     }
 
     /**
-     * Returns recycling guidance.
+     * Returns the recycling guidance.
      *
      * @return recycling guidance
      */
@@ -96,10 +99,12 @@ public class Material {
     }
 
     /**
-     * Changes material name.
+     * Updates the material name.
+     *
+     * The name cannot be null or blank.
      *
      * @param name new material name
-     * @return true if name was changed, false if name was invalid
+     * @return true if updated successfully, otherwise false
      */
     public boolean setName(String name) {
         if (name == null || name.isBlank()) {
@@ -111,9 +116,9 @@ public class Material {
     }
 
     /**
-     * Returns a readable material description.
+     * Returns a readable string representation of the material.
      *
-     * @return material description
+     * @return formatted material information
      */
     @Override
     public String toString() {
@@ -125,3 +130,4 @@ public class Material {
                 + ", Guidance: " + this.recyclingGuidance;
     }
 }
+

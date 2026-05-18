@@ -1,202 +1,214 @@
 @startuml
-skinparam packageStyle rectangle
 
+class Main {
+	+ main(String[] args): void
+}
+
+' RMS stands for Recycling Management System
 package onion.lifeproducts.rms.presentation {
-  class Main {
-    + main(String[] args): void
-  }
 
-  class ConsoleUI {
-    - ConsoleUIEntry[] mainOptions
-    - HashMap<String, Runnable> mainChoicesMappings
-    - ConsoleUIANSIOptions ansiOptions
-    - String ANSI_CURRENT
-    - boolean activeMenuLoop
-    + ConsoleUI()
-    + ConsoleUI(ConsoleUIEntry[] mainOptions, ConsoleUIANSIOptions menuANSIOptions)
-    + runMenu(): void
-  }
+	class ConsoleUI {
+		- HashMap<String, Lambda<String>> mainChoicesMappings
+		- ConsoleUIANSIOptions ansiOptions
 
-  class ConsoleUIEntry {
-    - String key
-    - String description
-    - String command
-    - Runnable callback
-    {static} - String[] allowedCommands
-    + ConsoleUIEntry(String key, String description, String command)
-    + ConsoleUIEntry(String key, String description, Runnable callback)
-    + key(): String
-    + description(): String
-    + command(): String
-    + callback(): Runnable
-  }
+		+ ConsoleUI()
+		+ ConsoleUI(ConsoleUIEntry[] mainOptions)
+		+ ConsoleUI(ConsoleUIEntry[] mainOptions, Util util)
+		+ setEntriesFormat(String format): ConsoleUI
+		+ setDefaultInputPrompt(String prompt): ConsoleUI
+		+ setPrintMenuAtStartup(boolean value): ConsoleUI
+		+ setMakeSpaceAfterInput(boolean value): ConsoleUI
+		+ setIncludeDeaultOptions(boolean value): ConsoleUI
+		+ setUtil(Util util): ConsoleUI
+		+ setAnsiOptions(ConsoleUIANSIOptions ansiOptions): ConsoleUI
+		+ runMenu(): void
+	}
 
-  class ConsoleUIEntryChecker {
-    {static} + checkConsoleUIEntryOptions(ConsoleUIEntry[] consoleUIEntries): void
-  }
+	class ConsoleUIEntry {
+		- String option
+		- String description
+		- String command
+		- Runnable callback
+		- String[] allowedCommands {static}
 
-  class ConsoleUIANSIOptions {
-    + String USER_INPUT
-    + String MENU_OPTION_KEY
-    + String MENU_OPTION_HIGHLIGHT
-    + ConsoleUIANSIOptions()
-    + ConsoleUIANSIOptions(String userInput)
-    + ConsoleUIANSIOptions(String userInput, String menuOptionKey, String menuOptionHighlight)
-  }
+		+ ConsoleUIEntry(String key, String description, String command)
+		+ ConsoleUIEntry(String key, String description, Runnable callback)
+		+ option(): String
+		+ description(): String
+		+ command(): String
+		+ callback(): Runnable
+		+ run(): void
+	}
 
-  class ANSI {
-    {static} + formatString(String str, String format): String
-  }
+	class ConsoleUIEntryChecker {
+		+ checkConsoleUIEntryOptions(ConsoleUIEntry[] consoleUIEntries): boolean {static}
+	}
 
-  class Util {
-    {static} - Scanner scanner
-    {static} + ConsoleUIANSIOptions defaultConsoleUIANSIOptions
-    + Util(ConsoleUIANSIOptions defaultConsoleUIANSIOptions)
-    {static} + clearScreen(): void
-    {static} + changeConsoleUIANSIOptions(ConsoleUIANSIOptions defaultConsoleUIANSIOptions): void
-    {static} + getLine(): String
-    {static} + getLine(String prompt): String
-    {static} + getLine(String prompt, String ansiUserInput): String
-    {static} + getLineAnswer(): String
-    {static} + getLineAnswer(String prompt): String
-    {static} + getLineAnswer(String prompt, String ansiUserInput): String
-  }
+	class ConsoleUIANSIOptions {
+		+ String USER_INPUT
+		+ String MENU_OPTION_KEY
+		+ String MENU_OPTION_HIGHLIGHT
+		+ ConsoleUIANSIOptions()
+		+ ConsoleUIANSIOptions(String userInput)
+		+ ConsoleUIANSIOptions(String userInput, String menuOptionKey, String menuOptionHighlight)
+	}
 
-  class Data {
-    {static} + ConsoleUIEntry[] mainMenuChoices
-  }
+	class ANSI {
+		+ formatString(String str, String format): String {static}
+	}
+
+	class Util {
+		- Scanner scanner {static}
+
+		+ ConsoleUIANSIOptions defaultConsoleUIANSIOptions {static}
+		+ Util(ConsoleUIANSIOptions defaultConsoleUIANSIOptions)
+		+ clearScreen(): void {static}
+		+ changeConsoleUIANSIOptions(ConsoleUIANSIOptions defaultConsoleUIANSIOptions): void {static}
+		+ getLine(): String {static}
+		+ getLine(String prompt): String {static}
+		+ getLine(String prompt, String ansiUserInput): String {static}
+		+ getLineAnswer(): String {static}
+		+ getLineAnswer(String prompt): String {static}
+		+ getLineAnswer(String prompt, String ansiUserInput): String {static}
+	}
+
+	class Data {
+		+ ConsoleUIEntry[] mainMenuChoices {static}
+	}
+
+	class Lambda<T> {
+		+ run(): void
+		+ run(T arg): void
+	}
 }
 
 package onion.lifeproducts.rms.application {
-  class ApplicationService {
-    - StoragePool storagePool
-    + ApplicationService()
-    + addProduct(String name, HashMap<Integer, Float> materials, LocalDateTime lifespan): int
-    + addMaterial(String name, float recycleRate, float emissionFactor, int recyclingCategory, String recyclingGuidance): int
-    + addRecyclingGuidance(String type): boolean
-    + getAllProducts(): List<Product>
-    + getAllProductIds(): List<Integer>
-    + getAllMaterials(): List<Material>
-    + getAllMaterialIds(): List<Integer>
-    + getAllRecyclingCategories(): List<RecyclingCategory>
-    + getAllProductDescriptions(): List<String>
-    + getAllMaterialDescriptions(): List<String>
-    + getAllRecyclingCategoryDescriptions(): List<String>
-    + getProductDescriptionById(int id): List<String>
-    + getMaterialDescriptionById(int id): List<String>
-    + getRecyclingCategoryDescriptionById(int id): List<String>
-    + recycleProductById(int id, int impactCalculationStrategyId): List<String>
-    - getRecyclingCategoryFromIndex(int index): RecyclingCategory
-    - createImpactCalculationStrategy(int strategyId): ImpactCalculationStrategyInterface
-  }
+	class ApplicationService {
+		- StoragePool storagePool {static}
 
-  class StoragePool {
-    - List<Product> productsPool
-    - List<Material> materialsPool
-    - List<RecyclingGuidance> recyclingGuidancePool
-    + StoragePool()
-    + addProduct(Product product): void
-    + addMaterial(Material material): void
-    + addRecyclingGuidance(RecyclingGuidance recyclingGuidance): void
-    + getAllProducts(): List<Product>
-    + getAllMaterials(): List<Material>
-    + getAllRecyclingGuidance(): List<RecyclingGuidance>
-    + getProductById(int id): Product
-    + getMaterialById(int id): Material
-    + getRecyclingGuidanceById(int id): RecyclingGuidance
-    + deleteProductById(int id): Product
-    + deleteMaterialById(int id): Material
-    + deleteRecyclingGuidanceById(int id): RecyclingGuidance
-  }
+		+ addProduct(String name, HashMap<Integer, Float> materials, LocalDateTime lifespan): int {static}
+		+ addMaterial(String name, float recycleRate, float emissionFactor, int recyclingCategory, String recyclingGuidance): int {static}
+		+ addRecyclingGuidance(String type): boolean {static}
+		+ getAllProductIds(): List<Integer> {static}
+		+ getAllMaterialIds(): List<Integer> {static}
+		+ getAllRecyclingCategories(): List<String> {static}
+		+ getAllProductDescriptions(): List<String> {static}
+		+ getAllMaterialDescriptions(): List<String> {static}
+		+ getAllRecyclingCategoryDescriptions(): List<String> {static}
+		+ getAllImpactCalculationStrategiesDescriptions(): List<String> {static}
+		+ recycleProductById(int id, int impactCalculationStrategyId): List<String> {static}
+		+ recycleMaterialById(int id, int impactCalculationStrategyId): List<String> {static}
+	}
 
-  class RecyclingService {
-    - ImpactCalculationStrategyInterface impactCalculationStrategy
-    + RecyclingService(ImpactCalculationStrategyInterface impactCalculationStrategy)
-    + recycle(Product product): float
-    + recycleAll(Product[] products): float
-    + recycle(Material material): float
-    + recycleAll(Material[] materials): float
-    + generateReport(Product product): ImpactReport
-    + generateReportForAll(Product[] products): ImpactReport
-    + generateReportForEach(Product[] products): ImpactReport[]
-  }
+	class StoragePool {
+		- List<Product> productsPool
+		- List<Material> materialsPool
+		- List<RecyclingGuidance> recyclingGuidancePool
+
+		+ addProduct(Product product): boolean
+		+ addMaterial(Material material): boolean
+		+ addRecyclingGuidance(RecyclingGuidance recyclingGuidance): boolean
+		+ getAllProducts(): List<Product>
+		+ getAllMaterials(): List<Material>
+		+ getAllRecyclingGuidances(): List<RecyclingGuidance>
+		+ getProductById(int id): Product
+		+ getMaterialById(int id): Material
+		+ getRecyclingGuidanceById(int id): RecyclingGuidance
+		+ deleteProductById(int id): Product
+		+ deleteMaterialById(int id): Material
+		+ deleteRecyclingGuidanceById(int id): RecyclingGuidance
+	}
+
+	class RecyclingService {
+		- ImpactCalculationStrategyInterface impactCalculationStrategy
+
+		+ RecyclingService(ImpactCalculationStrategyInterface impactCalculationStrategy)
+		+ recycle(Product product): float
+		+ recycleAll(Product[] products): float
+		+ recycle(Material material): float
+		+ recycleAll(Material[] materials): float
+		+ generateReport(Product product): ImpactReport
+		+ generateReportForAll(Product[] products): ImpactReport
+		+ generateReportForEach(Product[] products): ImpactReport[]
+	}
 }
 
 package onion.lifeproducts.rms.domain {
-  class Product {
-    {static} - int nextId
-    - int id
-    - String name
-    - HashMap<Integer, Float> materials
-    - LocalDateTime manufactureDate
-    - LocalDateTime endDate
-    + Product(String name, HashMap<Integer, Float> materials, LocalDateTime manufactureDate, LocalDateTime endDate)
-    + getId(): int
-    + getName(): String
-    + getManufactureDate(): LocalDateTime
-    + getEndDate(): LocalDateTime
-    + getMaterials(): HashMap<Integer, Float>
-    + setName(String name): boolean
-    + toString(): String
-  }
+	class Product {
+		- int nextId {static}
+		- int id
+		- String name
+		- HashMap<Material, Float> materialRatios
+		- LocalDateTime manufactureDate
+		- LocalDateTime endDate
+		+ Product(String name, HashMap<Material, Float> materialRatios, LocalDateTime manufactureDate, LocalDateTime endDate)
+		+ getId(): int
+		+ getName(): String
+		+ getManufactureDate(): LocalDateTime
+		+ getEndDate(): LocalDateTime
+		+ getMaterials(): HashMap<Material, Float>
+		+ setName(String name): boolean
+		+ toString(): String
+	}
 
-  class Material {
-    {static} - int nextId
-    - int id
-    - String name
-    - float recycleRate
-    - float emissionFactor
-    - RecyclingCategory recyclingCategory
-    - RecyclingGuidance recyclingGuidance
-    + Material(String name, float recycleRate, float emissionFactor, RecyclingCategory recyclingCategory, RecyclingGuidance recyclingGuidance)
-    + getId(): int
-    + getName(): String
-    + getRecycleRate(): float
-    + getEmissionFactor(): float
-    + getRecyclingCategory(): RecyclingCategory
-    + getRecyclingGuidance(): RecyclingGuidance
-    + setName(String name): boolean
-    + toString(): String
-  }
+	class Material {
+		- int nextId {static}
+		- int id
+		- String name
+		- float recycleRate
+		- float emissionFactor
+		- RecyclingCategory recyclingCategory
+		- RecyclingGuidance recyclingGuidance
+		+ Material(String name, float recycleRate, float emissionFactor, RecyclingCategory recyclingCategory, RecyclingGuidance recyclingGuidance)
+		+ getId(): int
+		+ getName(): String
+		+ getRecycleRate(): float
+		+ getEmissionFactor(): float
+		+ getRecyclingCategory(): RecyclingCategory
+		+ getRecyclingGuidance(): RecyclingGuidance
+		+ setName(String name): boolean
+		+ toString(): String
+	}
 
-  class RecyclingGuidance {
-    {static} - int nextId
-    - int id
-    - String guide
-    + RecyclingGuidance(String guide)
-    + getId(): int
-    + getGuide(): String
-    + toString(): String
-  }
+	class RecyclingGuidance {
+		- int nextId {static}
+		- int id
+		- String guide
+		+ RecyclingGuidance(String guide)
+		+ getId(): int
+		+ getGuide(): String
+		+ toString(): String
+	}
 
-  enum RecyclingCategory {
-    RECYCLABLE
-    PARTIALLY_RECYCLABLE
-    NON_RECYCLABLE
-  }
+	enum RecyclingCategory {
+		RECYCLABLE
+		PARTIALLY_RECYCLABLE
+		NON_RECYCLABLE
+	}
 
-  class ImpactReport {
-    - LocalDateTime generatedAt
-    - float impactValue
-    - int productsAmountUsed
-    - int materialsAmountUsed
-    - int uniqueMaterialAmountUsed
-    + ImpactReport(LocalDateTime generatedAt, float impactValue, int productsAmountUsed, int materialsAmountUsed, int uniqueMaterialAmountUsed)
-    + getGeneratedAtDate(): LocalDateTime
-    + getImpactValue(): float
-    + getProductsAmountUsed(): int
-    + getMaterialsAmountUsed(): int
-    + getUniqueMaterialAmountUsed(): int
-  }
+	class ImpactReport {
+		- LocalDateTime generatedAt
+		- float impactValue
+		- int productsAmountUsed
+		- int materialsAmountUsed
+		- int uniqueMaterialAmountUsed
+		+ ImpactReport(LocalDateTime generatedAt, float impactValue, int productsAmountUsed, int materialsAmountUsed, int uniqueMaterialAmountUsed)
+		+ getGeneratedAtDate(): LocalDateTime
+		+ getImpactValue(): float
+		+ getProductsAmountUsed(): int
+		+ getMaterialsAmountUsed(): int
+		+ getUniqueMaterialAmountUsed(): int
+		+ toString(): String
+	}
 
-  interface ImpactCalculationStrategyInterface {
-    + calculateImpact(Product product): float
-    + calculateImpact(Product[] products): float
-    + calculateImpact(List<Product> products): float
-  }
+	interface ImpactCalculationStrategyInterface {
+		+ calculateImpact(Product product): float
+		+ calculateImpact(Product[] products): float
+		+ calculateImpact(List<Product> products): float
+	}
 
-  class SimpleImpactCalculationStrategy
-  class WeightPlusLifespanImpactCalculationStrategy
+	class SimpleImpactCalculationStrategy
+	class WeightPlusLifespanImpactCalculationStrategy
 }
 
 Main --> ConsoleUI
@@ -208,6 +220,8 @@ ConsoleUI --> ConsoleUIANSIOptions
 ConsoleUI --> ConsoleUIEntryChecker
 ConsoleUI --> Util
 ConsoleUI --> ANSI
+ConsoleUI --> ApplicationService
+ConsoleUI --> Lambda
 
 Data --> ConsoleUIEntry
 Util --> ConsoleUIANSIOptions
@@ -225,15 +239,15 @@ StoragePool o-- "0..*" Product
 StoragePool o-- "0..*" Material
 StoragePool o-- "0..*" RecyclingGuidance
 
-RecyclingService o-- ImpactCalculationStrategyInterface
+RecyclingService "0..*" *-- "1..1" ImpactCalculationStrategyInterface
 RecyclingService --> Product
 RecyclingService --> Material
 RecyclingService --> ImpactReport
 
-Material *-- RecyclingGuidance
-Material --> RecyclingCategory
+Material "0..*" *-- "1..1" RecyclingGuidance
+Material "0..*" o-- "1..1" RecyclingCategory
 
-Product ..> Material : stores material IDs/weights
+Product "0..*" o-- "1..*" Material : stores material/ratio
 
 ImpactCalculationStrategyInterface <|.. SimpleImpactCalculationStrategy
 ImpactCalculationStrategyInterface <|.. WeightPlusLifespanImpactCalculationStrategy

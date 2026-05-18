@@ -2,30 +2,34 @@ package onion.lifeproducts.rms.domain;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Impact strategy that includes both material weight/amount and product lifespan.
+ * Impact strategy that includes material emission impact and product lifespan.
  *
- * This is a more advanced strategy than SimpleImpactCalculationStrategy.
+ * This strategy first calculates material impact using:
+ * material amount × emission factor
+ *
+ * Then it divides the result by the product lifespan in days.
  */
 public class WeightPlusLifespanImpactCalculationStrategy implements ImpactCalculationStrategyInterface {
 
     /**
-     * Calculates impact using material amount and lifespan.
+     * Calculates impact for one product.
      *
-     * Simple idea:
-     * - More material amount gives higher impact.
-     * - Longer lifespan reduces impact because the product is used longer.
+     * If the product has a valid lifespan, the material impact is divided
+     * by the number of lifespan days.
      *
      * @param product product to calculate impact for
      * @return calculated impact value
      */
     @Override
     public float calculateImpact(Product product) {
-        float totalWeight = 0;
+        float totalImpact = 0;
 
-        for (float materialAmount : product.getMaterials().values()) {
-            totalWeight += materialAmount;
+        for (Map.Entry<Material, Float> materialEntry : product.getMaterials().entrySet()) {
+            totalImpact += materialEntry.getValue()
+                    * materialEntry.getKey().getEmissionFactor();
         }
 
         long lifespanDays = Duration.between(
@@ -34,14 +38,14 @@ public class WeightPlusLifespanImpactCalculationStrategy implements ImpactCalcul
         ).toDays();
 
         if (lifespanDays <= 0) {
-            return totalWeight;
+            return totalImpact;
         }
 
-        return totalWeight / lifespanDays;
+        return totalImpact / lifespanDays;
     }
 
     /**
-     * Calculates impact for an array of products.
+     * Calculates total impact for multiple products stored in an array.
      *
      * @param products products to calculate impact for
      * @return total impact value
@@ -58,7 +62,7 @@ public class WeightPlusLifespanImpactCalculationStrategy implements ImpactCalcul
     }
 
     /**
-     * Calculates impact for a list of products.
+     * Calculates total impact for multiple products stored in a list.
      *
      * @param products products to calculate impact for
      * @return total impact value

@@ -1,5 +1,4 @@
 package onion.lifeproducts.rms.application;
-import onion.lifeproducts.rms.domain.*;
 
 import onion.lifeproducts.rms.domain.ImpactCalculationStrategyInterface;
 import onion.lifeproducts.rms.domain.ImpactReport;
@@ -12,60 +11,78 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * RecyclingService handles recycling-related use cases.
+ * RecyclingService handles recycling-related application use cases.
  *
- * It uses the Strategy Pattern through ImpactCalculationStrategyInterface.
- * This means different impact calculation algorithms can be used
- * without changing this service.
+ * This service acts as a coordinator between the application layer
+ * and the domain layer during recycling operations.
+ *
+ * RecyclingService uses the Strategy Pattern through
+ * ImpactCalculationStrategyInterface. This allows the system
+ * to switch between different impact calculation algorithms
+ * without changing the recycling workflow itself.
+ *
+ * The service is responsible for:
+ * <ul>
+ *     <li>Recycling products</li>
+ *     <li>Recycling collections of products</li>
+ *     <li>Generating impact reports</li>
+ *     <li>Calculating material-related impact values</li>
+ * </ul>
+ *
+ * Business calculation logic itself is delegated to strategy classes
+ * located in the domain layer.
  */
 public class RecyclingService {
 
     private final ImpactCalculationStrategyInterface impactCalculationStrategy;
 
     /**
-     * Creates a recycling service with a selected calculation strategy.
+     * Creates a RecyclingService with a selected impact calculation strategy.
      *
-     * @param impactCalculationStrategy strategy used to calculate impact
+     * @param impactCalculationStrategy strategy used to calculate environmental impact
      */
     public RecyclingService(ImpactCalculationStrategyInterface impactCalculationStrategy) {
         this.impactCalculationStrategy = impactCalculationStrategy;
     }
 
     /**
-     * Calculates recycling impact for one product.
+     * Recycles a single product using the selected impact calculation strategy.
      *
      * @param product product to recycle
-     * @return calculated impact value
+     * @return calculated environmental impact value
      */
     public float recycle(Product product) {
         return this.impactCalculationStrategy.calculateImpact(product);
     }
 
     /**
-     * Calculates recycling impact for many products.
+     * Recycles multiple products using the selected impact calculation strategy.
      *
-     * @param products products to recycle
-     * @return total calculated impact value
+     * @param products array of products to recycle
+     * @return total calculated environmental impact value
      */
     public float recycleAll(Product[] products) {
         return this.impactCalculationStrategy.calculateImpact(products);
     }
 
     /**
-     * Calculates recycling impact for one material.
+     * Recycles a single material.
+     *
+     * Currently, the material emission factor is used directly
+     * as the material impact value.
      *
      * @param material material to recycle
-     * @return calculated material impact
+     * @return material emission factor
      */
     public float recycle(Material material) {
         return material.getEmissionFactor();
     }
 
     /**
-     * Calculates recycling impact for many materials.
+     * Recycles multiple materials and sums their impact values.
      *
-     * @param materials materials to recycle
-     * @return total material impact
+     * @param materials array of materials to recycle
+     * @return total impact value for all materials
      */
     public float recycleAll(Material[] materials) {
         float totalImpact = 0;
@@ -78,9 +95,9 @@ public class RecyclingService {
     }
 
     /**
-     * Generates an impact report for one product.
+     * Generates an impact report for a single recycled product.
      *
-     * @param product product used in the report
+     * @param product recycled product
      * @return generated impact report
      */
     public ImpactReport generateReport(Product product) {
@@ -96,9 +113,17 @@ public class RecyclingService {
     }
 
     /**
-     * Generates one combined impact report for many products.
+     * Generates a combined impact report for multiple recycled products.
      *
-     * @param products products used in the report
+     * The report includes:
+     * <ul>
+     *     <li>Total impact value</li>
+     *     <li>Total amount of products</li>
+     *     <li>Total material amount</li>
+     *     <li>Amount of unique materials used</li>
+     * </ul>
+     *
+     * @param products products to recycle
      * @return generated impact report
      */
     public ImpactReport generateReportForAll(Product[] products) {
@@ -108,7 +133,10 @@ public class RecyclingService {
         int materialAmount = 0;
 
         for (Product product : products) {
-            uniqueMaterialIds.addAll(product.getMaterials().keySet());
+            for (Material material : product.getMaterials().keySet()) {
+                uniqueMaterialIds.add(material.getId());
+            }
+
             materialAmount += product.getMaterials().size();
         }
 
@@ -122,10 +150,10 @@ public class RecyclingService {
     }
 
     /**
-     * Generates one impact report for each product.
+     * Generates separate impact reports for each product in the array.
      *
-     * @param products products used in the reports
-     * @return array of impact reports
+     * @param products products to recycle
+     * @return array of generated impact reports
      */
     public ImpactReport[] generateReportForEach(Product[] products) {
         return Arrays.stream(products)
@@ -133,3 +161,4 @@ public class RecyclingService {
                 .toArray(ImpactReport[]::new);
     }
 }
+
