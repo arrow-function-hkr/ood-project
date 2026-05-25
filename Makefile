@@ -231,7 +231,7 @@ test-check-libs-dir:
 	}
 
 get-junit: test-check-libs-dir
-	$(call RUN_CMD, if not exist $(LIBS_DIR_NAME)$(DD)$(JUNIT_JAR_FILE) ( $(MAKE) -s __safe=true __get_junit_jar & exit /b %ERRORLEVEL% ))
+	$(call RUN_CMD, if not exist $(LIBS_DIR_NAME)$(DD)$(JUNIT_JAR_FILE) ( "$(MAKE)" -s __safe=true __get_junit_jar & exit /b %ERRORLEVEL% ))
 	$(UNIX) [ ! -f "$(LIBS_DIR_NAME)$(DD)$(JUNIT_JAR_FILE)" ] && \
 		{ $(MAKE) -s __safe=true __get_junit_jar 2>/dev/null ; exit $$? ; } || \
 		true
