@@ -89,12 +89,16 @@ package onion.lifeproducts.rms.application {
 		+ addProduct(String name, HashMap<Integer, Float> materials, LocalDateTime lifespan): int {static}
 		+ addMaterial(String name, float recycleRate, float emissionFactor, int recyclingCategory, String recyclingGuidance): int {static}
 		+ addRecyclingGuidance(String type): boolean {static}
+		+ getProductById(int id): String {static}
+		+ getMaterialById(int id): String {static}
+		+ getRecyclingGuidanceById(int id): String {static}
 		+ getAllProductIds(): List<Integer> {static}
 		+ getAllMaterialIds(): List<Integer> {static}
 		+ getAllRecyclingCategories(): List<String> {static}
 		+ getAllProductDescriptions(): List<String> {static}
 		+ getAllMaterialDescriptions(): List<String> {static}
 		+ getAllRecyclingCategoryDescriptions(): List<String> {static}
+		+ getAllRecyclingGuidanceDescriptions(): List<String> {static}
 		+ getAllImpactCalculationStrategiesDescriptions(): List<String> {static}
 		+ recycleProductById(int id, int impactCalculationStrategyId): List<String> {static}
 		+ recycleMaterialById(int id, int impactCalculationStrategyId): List<String> {static}
