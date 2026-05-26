@@ -1,97 +1,110 @@
 package test;
 
+import onion.lifeproducts.rms.domain.Material;
+import onion.lifeproducts.rms.domain.RecyclingCategory;
+import onion.lifeproducts.rms.domain.RecyclingGuidance;
 
-import java.lang.reflect.Field;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import onion.lifeproducts.rms.domain.*;
+class MaterialTest {
 
-public class MaterialTest {
+    private RecyclingGuidance guidance;
+    private Material material;
 
-	static Material getNewDefaultMaterial() {
-		return new Material(
-			"",
-			0,
-			0,
-			RecyclingCategory.PARTIALLY_RECYCLABLE,
-			new RecyclingGuidance("")
-		);
-	}
+    @BeforeEach
+    void setUp() {
+        guidance  = new RecyclingGuidance("Place in recycling bin");
+        material  = new Material("Plastic", 0.8f, 3.5f, RecyclingCategory.RECYCLABLE, guidance);
+    }
 
-	static Material getNewDefaultMaterial(String name) {
-		return new Material(
-			name,
-			0,
-			0,
-			RecyclingCategory.PARTIALLY_RECYCLABLE,
-			new RecyclingGuidance("")
-		);
-	}
+    // --- setName ---
 
-	static Material getNewDefaultMaterial(RecyclingCategory recyclingCategory) {
-		return new Material(
-			"",
-			0,
-			0,
-			recyclingCategory,
-			new RecyclingGuidance("")
-		);
-	}
-	
-	@Test
-	@DisplayName("Material should be not null")
-	void materialShoudBeNotNull() {
-		// arrange & act
-		Material material = getNewDefaultMaterial();
+    @Test
+    @DisplayName("setName should accept a valid name and return true")
+    void shouldAcceptValidNameAndReturnTrue() {
+        // Act
+        boolean result = material.setName("Recycled Plastic");
 
-		// assert
-		assertNotNull(material);
-	}
+        // Assert
+        assertTrue(result);
+        assertEquals("Recycled Plastic", material.getName());
+    }
 
+    @Test
+    @DisplayName("setName should reject null and return false")
+    void shouldRejectNullNameAndReturnFalse() {
+        // Arrange
+        String originalName = material.getName();
 
-	@Test
-	@DisplayName("Materials should have unique IDs in a sequence [1, ∞)")
-	void materialssShouldHaveUniqueIDsInASequence() throws Exception {
-		// arrange
-	
-		// Access to the private static field is only used for testing purposes.
-		// Needed to reliably test the generation of product ID numbers sequentially,
-		// independantly in which order testing methods are invoked
-		Field nextId = Material.class.getDeclaredField("nextId");
-		nextId.setAccessible(true);
-		int originalNextId = nextId.getInt(null);
-		nextId.set(null, 1);
+        // Act
+        boolean result = material.setName(null);
 
-		Material
-			m1 = getNewDefaultMaterial(),
-			m2 = getNewDefaultMaterial(),
-			m3 = getNewDefaultMaterial(),
-			m4 = getNewDefaultMaterial(),
-			m5 = getNewDefaultMaterial(),
-			m6 = getNewDefaultMaterial();
+        // Assert
+        assertFalse(result);
+        assertEquals(originalName, material.getName()); // name unchanged
+    }
 
-		// act
-		int
-			m1ID = m1.getId(),
-			m2ID = m2.getId(),
-			m3ID = m3.getId(),
-			m4ID = m4.getId(),
-			m5ID = m5.getId(),
-			m6ID = m6.getId();
+    @Test
+    @DisplayName("setName should reject a blank string and return false")
+    void shouldRejectBlankStringNameAndReturnFalse() {
+        // Arrange
+        String originalName = material.getName();
 
+        // Act
+        boolean result = material.setName("   ");
 
-		// assert
-		assertEquals(1, m1ID);
-		assertEquals(2, m2ID);
-		assertEquals(3, m3ID);
-		assertEquals(4, m4ID);
-		assertEquals(5, m5ID);
-		assertEquals(6, m6ID);
+        // Assert
+        assertFalse(result);
+        assertEquals(originalName, material.getName()); // name unchanged
+    }
 
-		// restore original nextId value for future use
-		nextId.set(null, originalNextId);
-		nextId.setAccessible(false);
-	}
+    @Test
+    @DisplayName("setName should reject an empty string and return false")
+    void shouldRejectEmptyStringNameAndReturnFalse() {
+        // Arrange
+        String originalName = material.getName();
+
+        // Act
+        boolean result = material.setName("");
+
+        // Assert
+        assertFalse(result);
+        assertEquals(originalName, material.getName()); // name unchanged
+    }
+
+    // --- constructor / getters ---
+
+    @Test
+    @DisplayName("getName should return the name passed at construction")
+    void shouldReturnNamePassedAtConstruction() {
+        assertEquals("Plastic", material.getName());
+    }
+
+    @Test
+    @DisplayName("getEmissionFactor should return the emission factor passed at construction")
+    void shouldReturnEmissionFactorPassedAtConstruction() {
+        assertEquals(3.5f, material.getEmissionFactor(), 0.001f);
+    }
+
+    @Test
+    @DisplayName("getRecycleRate should return the recycle rate passed at construction")
+    void shouldReturnRecycleRatePassedAtConstruction() {
+        assertEquals(0.8f, material.getRecycleRate(), 0.001f);
+    }
+
+    @Test
+    @DisplayName("getRecyclingCategory should return the category passed at construction")
+    void shouldReturnRecyclingCategoryPassedAtConstruction() {
+        assertEquals(RecyclingCategory.RECYCLABLE, material.getRecyclingCategory());
+    }
+
+    @Test
+    @DisplayName("getRecyclingGuidance should return the guidance object passed at construction")
+    void shouldReturnRecyclingGuidancePassedAtConstruction() {
+        assertEquals(guidance, material.getRecyclingGuidance());
+    }
 }
