@@ -38,7 +38,7 @@ class ProductTest {
 
     @Test
     @DisplayName("setName should accept a valid name and return true")
-    void setNameShouldAcceptValidName() {
+    void shouldAcceptValidNameAndReturnTrue() {
         // Arrange
         Product p = productWithOneMaterial();
 
@@ -52,7 +52,7 @@ class ProductTest {
 
     @Test
     @DisplayName("setName should reject null and return false")
-    void setNameShouldRejectNull() {
+    void shouldRejectNullNameAndReturnFalse() {
         // Arrange
         Product p = productWithOneMaterial();
         String originalName = p.getName();
@@ -67,7 +67,7 @@ class ProductTest {
 
     @Test
     @DisplayName("setName should reject a blank string and return false")
-    void setNameShouldRejectBlankString() {
+    void shouldRejectBlankStringNameAndReturnFalse() {
         // Arrange
         Product p = productWithOneMaterial();
         String originalName = p.getName();
@@ -82,7 +82,7 @@ class ProductTest {
 
     @Test
     @DisplayName("setName should reject an empty string and return false")
-    void setNameShouldRejectEmptyString() {
+    void shouldRejectEmptyStringNameAndReturnFalse() {
         // Arrange
         Product p = productWithOneMaterial();
         String originalName = p.getName();
@@ -99,7 +99,7 @@ class ProductTest {
 
     @Test
     @DisplayName("getMaterials should return a copy - external mutations do not affect the product")
-    void getMaterialsShouldReturnDefensiveCopy() {
+    void shouldReturnDefensiveCopyFromGetMaterials() {
         // Arrange
         Product p = productWithOneMaterial();
         int originalSize = p.getMaterials().size();
@@ -116,7 +116,7 @@ class ProductTest {
 
     @Test
     @DisplayName("getManufactureDate should return the date passed at construction")
-    void getManufactureDateShouldReturnConstructorValue() {
+    void shouldReturnManufactureDatePassedAtConstruction() {
         // Arrange
         Product p = productWithOneMaterial();
 
@@ -126,7 +126,7 @@ class ProductTest {
 
     @Test
     @DisplayName("getEndDate should return the date passed at construction")
-    void getEndDateShouldReturnConstructorValue() {
+    void shouldReturnEndDatePassedAtConstruction() {
         // Arrange
         Product p = productWithOneMaterial();
 

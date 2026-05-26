@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class StoragePoolTest {
@@ -45,7 +44,7 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("addProduct then getProductById should return the same product")
-    void addProductShouldMakeItRetrievableById() {
+    void shouldMakeProductRetrievableByIdAfterAdding() {
         // Arrange
         Material mat = newMaterial("Plastic");
         Product product = newProduct("Bottle", mat);
@@ -62,7 +61,7 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("getProductById should return null when no product with that ID exists")
-    void getProductByIdShouldReturnNullForUnknownId() {
+    void shouldReturnNullForUnknownProductId() {
         // Arrange - empty pool
         // Act
         Product found = pool.getProductById(99999);
@@ -73,7 +72,7 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("getAllProducts should return all added products")
-    void getAllProductsShouldReturnAllAddedProducts() {
+    void shouldReturnAllAddedProducts() {
         // Arrange
         Material mat = newMaterial("Plastic");
         pool.addProduct(newProduct("Bottle",  mat));
@@ -86,7 +85,7 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("deleteProductById should remove the product and return it")
-    void deleteProductByIdShouldRemoveAndReturnProduct() {
+    void shouldRemoveAndReturnProductOnDelete() {
         // Arrange
         Material mat = newMaterial("Plastic");
         Product product = newProduct("Bottle", mat);
@@ -103,7 +102,7 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("deleteProductById should return null when the product does not exist")
-    void deleteProductByIdShouldReturnNullForUnknownId() {
+    void shouldReturnNullWhenDeletingUnknownProductId() {
         // Arrange - empty pool
         // Act
         Product deleted = pool.deleteProductById(99999);
@@ -116,7 +115,7 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("addMaterial then getMaterialById should return the same material")
-    void addMaterialShouldMakeItRetrievableById() {
+    void shouldMakeMaterialRetrievableByIdAfterAdding() {
         // Arrange
         Material material = newMaterial("Aluminum");
 
@@ -132,7 +131,7 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("getMaterialById should return null when no material with that ID exists")
-    void getMaterialByIdShouldReturnNullForUnknownId() {
+    void shouldReturnNullForUnknownMaterialId() {
         // Act
         Material found = pool.getMaterialById(99999);
 
@@ -142,7 +141,7 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("deleteMaterialById should remove the material and return it")
-    void deleteMaterialByIdShouldRemoveAndReturnMaterial() {
+    void shouldRemoveAndReturnMaterialOnDelete() {
         // Arrange
         Material material = newMaterial("Glass");
         pool.addMaterial(material);
@@ -160,7 +159,7 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("addRecyclingGuidance then getRecyclingGuidanceById should return the same guidance")
-    void addGuidanceShouldMakeItRetrievableById() {
+    void shouldMakeGuidanceRetrievableByIdAfterAdding() {
         // Arrange
         RecyclingGuidance rg = new RecyclingGuidance("Sort by colour");
 
@@ -175,11 +174,12 @@ class StoragePoolTest {
 
     @Test
     @DisplayName("getRecyclingGuidanceById should return null for an unknown ID")
-    void getGuidanceByIdShouldReturnNullForUnknownId() {
+    void shouldReturnNullForUnknownGuidanceId() {
         // Act
         RecyclingGuidance found = pool.getRecyclingGuidanceById(99999);
 
         // Assert
         assertNull(found);
     }
+
 }

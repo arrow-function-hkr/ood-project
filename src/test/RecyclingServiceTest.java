@@ -49,8 +49,8 @@ class RecyclingServiceTest {
     // --- recycle(Product) ---
 
     @Test
-    @DisplayName("recycle(Product) should delegate to the injected strategy")
-    void recycleShouldDelegateToStrategy() {
+    @DisplayName("should delegate to the injected strategy when recycling a product")
+    void shouldDelegateToInjectedStrategyWhenRecyclingProduct() {
         // Arrange - 1.0 * 3.5 = 3.5
         HashMap<Material, Float> materials = new HashMap<>();
         materials.put(material("Plastic", 3.5f), 1.0f);
@@ -66,8 +66,8 @@ class RecyclingServiceTest {
     // --- recycle(Material) ---
 
     @Test
-    @DisplayName("recycle(Material) should return the material emission factor directly")
-    void recycleMaterialShouldReturnEmissionFactor() {
+    @DisplayName("should return the material emission factor directly when recycling a material")
+    void shouldReturnEmissionFactorDirectlyWhenRecyclingMaterial() {
         // Arrange
         Material m = material("Aluminum", 12.0f);
 
@@ -81,8 +81,8 @@ class RecyclingServiceTest {
     // --- recycleAll(Material[]) ---
 
     @Test
-    @DisplayName("recycleAll(Material[]) should sum emission factors of all materials")
-    void recycleAllMaterialsShouldSumEmissionFactors() {
+    @DisplayName("should sum emission factors of all materials when recycling an array")
+    void shouldSumEmissionFactorsWhenRecyclingMaterialArray() {
         // Arrange
         Material[] materials = {
             material("Aluminum", 12.0f),
@@ -100,8 +100,8 @@ class RecyclingServiceTest {
     // --- generateReport(Product) ---
 
     @Test
-    @DisplayName("generateReport should return a non-null report")
-    void generateReportShouldReturnNonNullReport() {
+    @DisplayName("should return a non-null report from generateReport")
+    void shouldReturnNonNullReportFromGenerateReport() {
         // Arrange
         HashMap<Material, Float> materials = new HashMap<>();
         materials.put(material("Plastic", 3.5f), 1.0f);
@@ -115,8 +115,8 @@ class RecyclingServiceTest {
     }
 
     @Test
-    @DisplayName("generateReport should set impact value to the strategy result")
-    void generateReportShouldSetCorrectImpactValue() {
+    @DisplayName("should set the impact value to the strategy result in generateReport")
+    void shouldSetImpactValueToStrategyResultInGenerateReport() {
         // Arrange - 2.0 * 5.0 = 10.0
         HashMap<Material, Float> materials = new HashMap<>();
         materials.put(material("Plastic", 5.0f), 2.0f);
@@ -130,8 +130,8 @@ class RecyclingServiceTest {
     }
 
     @Test
-    @DisplayName("generateReport should record one product used")
-    void generateReportShouldRecordOneProduct() {
+    @DisplayName("should record one product used in generateReport")
+    void shouldRecordOneProductUsedInGenerateReport() {
         // Arrange
         HashMap<Material, Float> materials = new HashMap<>();
         materials.put(material("Plastic", 3.5f), 1.0f);
@@ -145,8 +145,8 @@ class RecyclingServiceTest {
     }
 
     @Test
-    @DisplayName("generateReport should record the correct number of materials")
-    void generateReportShouldRecordMaterialCount() {
+    @DisplayName("should record the correct number of materials in generateReport")
+    void shouldRecordCorrectMaterialCountInGenerateReport() {
         // Arrange - product with two materials
         HashMap<Material, Float> materials = new HashMap<>();
         materials.put(material("Plastic", 3.5f), 1.0f);
@@ -163,8 +163,8 @@ class RecyclingServiceTest {
     // --- generateReportForAll(Product[]) ---
 
     @Test
-    @DisplayName("generateReportForAll should sum impact across all products")
-    void generateReportForAllShouldSumImpact() {
+    @DisplayName("should sum impact across all products in generateReportForAll")
+    void shouldSumImpactAcrossAllProductsInGenerateReportForAll() {
         // Arrange - each product: 1.0 * 3.5 = 3.5 → total 7.0
         HashMap<Material, Float> materials = new HashMap<>();
         materials.put(material("Plastic", 3.5f), 1.0f);
@@ -179,8 +179,8 @@ class RecyclingServiceTest {
     }
 
     @Test
-    @DisplayName("generateReportForAll should record the correct product count")
-    void generateReportForAllShouldRecordProductCount() {
+    @DisplayName("should record the correct product count in generateReportForAll")
+    void shouldRecordCorrectProductCountInGenerateReportForAll() {
         // Arrange
         HashMap<Material, Float> materials = new HashMap<>();
         materials.put(material("Plastic", 3.5f), 1.0f);
@@ -195,8 +195,27 @@ class RecyclingServiceTest {
     }
 
     @Test
-    @DisplayName("generateReportForAll should set generated-at timestamp")
-    void generateReportForAllShouldSetGeneratedAtTimestamp() {
+    @DisplayName("should count shared materials only once as unique in generateReportForAll")
+    void shouldCountSharedMaterialsOnlyOnceAsUniqueInGenerateReportForAll() {
+        // Arrange - both products share the exact same Material object
+        Material sharedMaterial = material("Plastic", 3.5f);
+        HashMap<Material, Float> materials = new HashMap<>();
+        materials.put(sharedMaterial, 1.0f);
+
+        Product[] products = { product(materials), product(materials) };
+        // Total material references = 2, but unique materials = 1
+
+        // Act
+        ImpactReport report = service.generateReportForAll(products);
+
+        // Assert
+        assertEquals(2, report.getMaterialsAmountUsed());      // 2 references
+        assertEquals(1, report.getUniqueMaterialAmountUsed()); // 1 unique
+    }
+
+    @Test
+    @DisplayName("should set generated-at timestamp in generateReportForAll")
+    void shouldSetGeneratedAtTimestampInGenerateReportForAll() {
         // Arrange
         HashMap<Material, Float> materials = new HashMap<>();
         materials.put(material("Plastic", 3.5f), 1.0f);
@@ -207,5 +226,43 @@ class RecyclingServiceTest {
 
         // Assert
         assertNotNull(report.getGeneratedAtDate());
+    }
+
+    // --- generateReportForEach(Product[]) ---
+
+    @Test
+    @DisplayName("should return one report per product in generateReportForEach")
+    void shouldReturnOneReportPerProductInGenerateReportForEach() {
+        // Arrange
+        HashMap<Material, Float> materials = new HashMap<>();
+        materials.put(material("Plastic", 3.5f), 1.0f);
+
+        Product[] products = { product(materials), product(materials), product(materials) };
+
+        // Act
+        ImpactReport[] reports = service.generateReportForEach(products);
+
+        // Assert
+        assertEquals(3, reports.length);
+    }
+
+    @Test
+    @DisplayName("should calculate impact independently for each product in generateReportForEach")
+    void shouldCalculateImpactIndependentlyForEachProductInGenerateReportForEach() {
+        // Arrange - two products with different materials
+        HashMap<Material, Float> m1 = new HashMap<>();
+        m1.put(material("Plastic", 3.5f), 1.0f); // impact = 3.5
+
+        HashMap<Material, Float> m2 = new HashMap<>();
+        m2.put(material("Steel", 2.2f), 1.0f); // impact = 2.2
+
+        Product[] products = { product(m1), product(m2) };
+
+        // Act
+        ImpactReport[] reports = service.generateReportForEach(products);
+
+        // Assert - each report has only its own product's impact
+        assertEquals(3.5f, reports[0].getImpactValue(), DELTA);
+        assertEquals(2.2f, reports[1].getImpactValue(), DELTA);
     }
 }
