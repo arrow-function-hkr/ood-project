@@ -266,16 +266,96 @@ public final class ApplicationService {
 		return descriptions;
 	}
 
+
 	/**
-	 * Returns text descriptions of all stored recycling guidances.
+	 * Returns the IDs of all stored recycling guidances.
 	 *
-	 * This method keeps the requested misspelled API name for compatibility.
+	 * This method allows the presentation layer to show or validate available
+	 * recycling guidance choices without accessing StoragePool directly.
 	 *
-	 * @return list of recycling guidance descriptions
+	 * @return list of recycling guidance IDs
 	 */
-	public static List<String> getAllRecyclingGuidanceDesciptions() {
-		return getAllRecyclingGuidanceDescriptions();
+	public static List<Integer> getAllRecyclingGuidanceIds() {
+		List<Integer> ids = new ArrayList<>();
+
+		for (RecyclingGuidance guidance : storagePool.getAllRecyclingGuidance()) {
+			ids.add(guidance.getId());
+		}
+
+		return ids;
 	}
+
+	/**
+	 * Returns text descriptions of all available impact calculation strategies.
+	 *
+	 * This method allows the presentation layer to display the available strategy
+	 * choices to the user without knowing which concrete strategy classes exist.
+	 *
+	 * @return list of impact calculation strategy descriptions
+	 */
+	public static List<String> getAllImpactCalculationStrategiesDescriptions() {
+		List<String> descriptions = new ArrayList<>();
+
+		descriptions.add("1. Simple impact calculation");
+		descriptions.add("2. Weight plus lifespan impact calculation");
+
+		return descriptions;
+	}
+
+	/**
+	 * Returns the IDs of all available impact calculation strategies.
+	 *
+	 * This method allows the presentation layer to validate strategy choices
+	 * without depending on concrete strategy classes.
+	 *
+	 * @return list of impact calculation strategy IDs
+	 */
+	public static List<Integer> getAllImpactCalculationStrategyIds() {
+		List<Integer> ids = new ArrayList<>();
+
+		ids.add(1);
+		ids.add(2);
+
+		return ids;
+	}
+
+	/**
+	 * Recycles a material by ID and generates a text-based impact result.
+	 *
+	 * This method allows the presentation layer to recycle or inspect a single
+	 * material without accessing StoragePool directly. The strategy ID parameter
+	 * is accepted for API consistency with product recycling, but material
+	 * recycling currently uses the material emission factor directly through
+	 * RecyclingService.
+	 *
+	 * @param id material ID
+	 * @param impactCalculationStrategyId selected impact calculation strategy ID
+	 * @return list of text lines describing the recycling result
+	 */
+	public static List<String> recycleMaterialById(int id, int impactCalculationStrategyId) {
+		List<String> result = new ArrayList<>();
+		Material material = storagePool.getMaterialById(id);
+
+		if (material == null) {
+			result.add("Material not found.");
+			return result;
+		}
+
+		ImpactCalculationStrategyInterface strategy =
+				createImpactCalculationStrategy(impactCalculationStrategyId);
+
+		RecyclingService recyclingService = new RecyclingService(strategy);
+		float impactValue = recyclingService.recycle(material);
+
+		result.add("Material recycled: " + material.getName());
+		result.add("Impact value: " + impactValue);
+		result.add("Recycling guidance: " + material.getRecyclingGuidance());
+
+		return result;
+	}
+
+
+
 
 	/**
 	 * Returns the description of one product by its ID.
