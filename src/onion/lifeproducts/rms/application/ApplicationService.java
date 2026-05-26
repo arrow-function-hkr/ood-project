@@ -19,18 +19,9 @@ import java.util.Map;
 /**
  * ApplicationService is the static bridge between the presentation layer
  * and the domain/application logic.
- *
- * This class is designed with static methods because ConsoleUIEntry callbacks
- * are created outside of ConsoleUI and cannot access a shared ApplicationService
- * instance through ConsoleUI composition or aggregation.
- *
  * The presentation layer should call this class instead of calling domain
- * objects directly. This keeps the presentation layer separated from the
- * internal domain model.
- *
- * ApplicationService coordinates use cases such as creating products,
- * creating materials, listing stored objects, and recycling products.
- * It does not contain the impact calculation business logic itself.
+ * objects or StoragePool directly. This keeps the presentation layer separated
+ * from the internal domain model.
  */
 public final class ApplicationService {
 
@@ -41,35 +32,33 @@ public final class ApplicationService {
 	 */
 	private ApplicationService() {
 	}
+
 	/**
 	 * Creates and stores a new product.
 	 *
-	 * The presentation layer sends material IDs with ratios or amounts.
-	 * This method resolves those IDs into real Material domain objects before
-	 * creating the Product object.
-	 *
 	 * @param name product name
-	 * @param materialRatios map where key = material id and value = material ratio/amount
+	 * @param materialRatios map where key = material ID and value = material ratio/amount
 	 * @param lifespan product end date
-	 * @return id of the created product
+	 * @return ID of the created product
 	 */
-	public static int addProduct(String name, HashMap<Integer, Float> materialRatios, LocalDateTime lifespan) {
-		HashMap<Material, Float> materials = (HashMap<Material, Float>)resolveMaterials(materialRatios);
+	public static int addProduct(String name, Map<Integer, Float> materialRatios, LocalDateTime lifespan) {
+		HashMap<Material, Float> materials = new HashMap<>(resolveMaterials(materialRatios));
 		Product product = new Product(name, materials, LocalDateTime.now(), lifespan);
 
 		storagePool.addProduct(product);
 
 		return product.getId();
 	}
+
 	/**
-	 * Creates and stores a new material.
+	 * Creates and stores a new material with new recycling guidance text.
 	 *
 	 * @param name material name
 	 * @param recycleRate recycle rate of the material
 	 * @param emissionFactor emission factor of the material
 	 * @param recyclingCategory index of the RecyclingCategory enum
 	 * @param recyclingGuidance recycling guidance text
-	 * @return id of the created material
+	 * @return ID of the created material
 	 */
 	public static int addMaterial(
 			String name,
@@ -82,6 +71,50 @@ public final class ApplicationService {
 		RecyclingGuidance guidance = new RecyclingGuidance(recyclingGuidance);
 
 		storagePool.addRecyclingGuidance(guidance);
+
+		Material material = new Material(
+				name,
+				recycleRate,
+				emissionFactor,
+				category,
+				guidance
+		);
+
+		storagePool.addMaterial(material);
+
+		return material.getId();
+	}
+
+	/**
+	 * Creates and stores a new material using an existing recycling guidance.
+	 *
+	 * This method allows the presentation layer to reuse a recycling guidance
+	 * that was already created and stored in the application storage.
+	 *
+	 * If the provided recycling guidance ID does not exist, an empty recycling
+	 * guidance is created and used as a fallback.
+	 *
+	 * @param name material name
+	 * @param recycleRate recycle rate of the material
+	 * @param emissionFactor emission factor of the material
+	 * @param recyclingCategory index of the RecyclingCategory enum
+	 * @param recyclingGuidanceId existing recycling guidance ID
+	 * @return ID of the created material
+	 */
+	public static int addMaterial(
+			String name,
+			float recycleRate,
+			float emissionFactor,
+			int recyclingCategory,
+			int recyclingGuidanceId
+	) {
+		RecyclingCategory category = getRecyclingCategoryFromIndex(recyclingCategory);
+		RecyclingGuidance guidance = storagePool.getRecyclingGuidanceById(recyclingGuidanceId);
+
+		if (guidance == null) {
+			guidance = new RecyclingGuidance("");
+			storagePool.addRecyclingGuidance(guidance);
+		}
 
 		Material material = new Material(
 				name,
@@ -216,6 +249,115 @@ public final class ApplicationService {
 	}
 
 	/**
+	 * Returns text descriptions of all stored recycling guidances.
+	 *
+	 * This method gives the presentation layer access to recycling guidance
+	 * descriptions without exposing StoragePool directly.
+	 *
+	 * @return list of recycling guidance descriptions
+	 */
+	public static List<String> getAllRecyclingGuidanceDescriptions() {
+		List<String> descriptions = new ArrayList<>();
+
+		for (RecyclingGuidance guidance : storagePool.getAllRecyclingGuidance()) {
+			descriptions.add(guidance.toString());
+		}
+
+		return descriptions;
+	}
+
+
+	/**
+	 * Returns the IDs of all stored recycling guidances.
+	 *
+	 * This method allows the presentation layer to show or validate available
+	 * recycling guidance choices without accessing StoragePool directly.
+	 *
+	 * @return list of recycling guidance IDs
+	 */
+	public static List<Integer> getAllRecyclingGuidanceIds() {
+		List<Integer> ids = new ArrayList<>();
+
+		for (RecyclingGuidance guidance : storagePool.getAllRecyclingGuidance()) {
+			ids.add(guidance.getId());
+		}
+
+		return ids;
+	}
+
+	/**
+	 * Returns text descriptions of all available impact calculation strategies.
+	 *
+	 * This method allows the presentation layer to display the available strategy
+	 * choices to the user without knowing which concrete strategy classes exist.
+	 *
+	 * @return list of impact calculation strategy descriptions
+	 */
+	public static List<String> getAllImpactCalculationStrategiesDescriptions() {
+		List<String> descriptions = new ArrayList<>();
+
+		descriptions.add("1. Simple impact calculation");
+		descriptions.add("2. Weight plus lifespan impact calculation");
+
+		return descriptions;
+	}
+
+	/**
+	 * Returns the IDs of all available impact calculation strategies.
+	 *
+	 * This method allows the presentation layer to validate strategy choices
+	 * without depending on concrete strategy classes.
+	 *
+	 * @return list of impact calculation strategy IDs
+	 */
+	public static List<Integer> getAllImpactCalculationStrategyIds() {
+		List<Integer> ids = new ArrayList<>();
+
+		ids.add(1);
+		ids.add(2);
+
+		return ids;
+	}
+
+	/**
+	 * Recycles a material by ID and generates a text-based impact result.
+	 *
+	 * This method allows the presentation layer to recycle or inspect a single
+	 * material without accessing StoragePool directly. The strategy ID parameter
+	 * is accepted for API consistency with product recycling, but material
+	 * recycling currently uses the material emission factor directly through
+	 * RecyclingService.
+	 *
+	 * @param id material ID
+	 * @param impactCalculationStrategyId selected impact calculation strategy ID
+	 * @return list of text lines describing the recycling result
+	 */
+	public static List<String> recycleMaterialById(int id, int impactCalculationStrategyId) {
+		List<String> result = new ArrayList<>();
+		Material material = storagePool.getMaterialById(id);
+
+		if (material == null) {
+			result.add("Material not found.");
+			return result;
+		}
+
+		ImpactCalculationStrategyInterface strategy =
+				createImpactCalculationStrategy(impactCalculationStrategyId);
+
+		RecyclingService recyclingService = new RecyclingService(strategy);
+		float impactValue = recyclingService.recycle(material);
+
+		result.add("Material recycled: " + material.getName());
+		result.add("Impact value: " + impactValue);
+		result.add("Recycling guidance: " + material.getRecyclingGuidance());
+
+		return result;
+	}
+
+
+
+
+	/**
 	 * Returns the description of one product by its ID.
 	 *
 	 * @param id product ID
@@ -264,6 +406,54 @@ public final class ApplicationService {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Returns a product description by product ID.
+	 *
+	 * @param id product ID
+	 * @return product description, or an empty string if no product is found
+	 */
+	public static String getProductById(int id) {
+		Product product = storagePool.getProductById(id);
+
+		if (product == null) {
+			return "";
+		}
+
+		return product.toString();
+	}
+
+	/**
+	 * Returns a material description by material ID.
+	 *
+	 * @param id material ID
+	 * @return material description, or an empty string if no material is found
+	 */
+	public static String getMaterialById(int id) {
+		Material material = storagePool.getMaterialById(id);
+
+		if (material == null) {
+			return "";
+		}
+
+		return material.toString();
+	}
+
+	/**
+	 * Returns a recycling guidance description by recycling guidance ID.
+	 *
+	 * @param id recycling guidance ID
+	 * @return recycling guidance description, or an empty string if no guidance is found
+	 */
+	public static String getRecyclingGuidanceById(int id) {
+		RecyclingGuidance guidance = storagePool.getRecyclingGuidanceById(id);
+
+		if (guidance == null) {
+			return "";
+		}
+
+		return guidance.toString();
 	}
 
 	/**
@@ -330,10 +520,6 @@ public final class ApplicationService {
 	/**
 	 * Resolves material IDs from the presentation layer into Material domain objects.
 	 *
-	 * This allows Product to store real Material objects instead of only material IDs.
-	 * Because of this, impact calculation strategies can access full material data,
-	 * such as emission factor, recycle rate, recycling category, and guidance.
-	 *
 	 * @param materialRatios map where key = material ID and value = material ratio/amount
 	 * @return map where key = Material object and value = material ratio/amount
 	 */
@@ -351,4 +537,3 @@ public final class ApplicationService {
 		return materials;
 	}
 }
-
