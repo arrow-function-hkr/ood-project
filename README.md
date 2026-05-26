@@ -35,7 +35,7 @@ and optional patameters:
 or compile the source code from the `./src/` directory manually, excluding `./src/test/` directory, which contains tests. Entry point to the project is `./src/Main.java`
 
 
-### Tests 
+### Tests
 
 To run unit tests, either use the pre-configured build tool, Make:
 ```sh
@@ -44,7 +44,7 @@ make test
 with optional parameters:
   - `silent=<boolean>`: suppresses the logging of each testing step
   - `verbose=<boolean>`: shows extra information what make does under the hood
-  - `method=<1|powershell|2|bitsadmin|3|curl>`: method for downloading dependency files on Windows (default: `powershell`). If one method is slow or unavailable, try another one.
+  - `method=<1|powershell|2|bitsadmin|3|curl>`: method for downloading dependency files on Windows (default: `powershell`). If one method is slow or unavailable, try another one (doesn't affect Unix-like environment).
 
 or compile the source test code from the `./src/test/` directory manually, including the JUnit framework jar dependency, which can be obtained by running the:
 ```sh
@@ -63,4 +63,4 @@ This target ensures that the tests always have the latest bytecode of both, the 
 
 ## License
 
-This project is licensed under the 0BSD License - see the [LICENSE](LICENSE) file for details.  
+This project is licensed under the 0BSD License &mdash; see the [LICENSE](LICENSE) file for details.
