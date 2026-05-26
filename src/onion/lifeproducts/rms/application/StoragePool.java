@@ -13,7 +13,6 @@ import java.util.List;
  *
  * This class stores domain objects temporarily while
  * the application is running.
- *
  * StoragePool is responsible for:
  * <ul>
  *     <li>Storing products</li>

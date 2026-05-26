@@ -86,18 +86,39 @@ package onion.lifeproducts.rms.application {
 	class ApplicationService {
 		- StoragePool storagePool {static}
 
-		+ addProduct(String name, HashMap<Integer, Float> materials, LocalDateTime lifespan): int {static}
+		+ addProduct(String name, Map<Integer, Float> materialRatios, LocalDateTime lifespan): int {static}
 		+ addMaterial(String name, float recycleRate, float emissionFactor, int recyclingCategory, String recyclingGuidance): int {static}
+		+ addMaterial(String name, float recycleRate, float emissionFactor, int recyclingCategory, int recyclingGuidanceId): int {static}
 		+ addRecyclingGuidance(String type): boolean {static}
+
+		+ getAllProducts(): List<Product> {static}
 		+ getAllProductIds(): List<Integer> {static}
+		+ getAllMaterials(): List<Material> {static}
 		+ getAllMaterialIds(): List<Integer> {static}
 		+ getAllRecyclingCategories(): List<String> {static}
+
 		+ getAllProductDescriptions(): List<String> {static}
 		+ getAllMaterialDescriptions(): List<String> {static}
 		+ getAllRecyclingCategoryDescriptions(): List<String> {static}
+		+ getAllRecyclingGuidanceDescriptions(): List<String> {static}
+		+ getAllRecyclingGuidanceIds(): List<Integer> {static}
+
 		+ getAllImpactCalculationStrategiesDescriptions(): List<String> {static}
+		+ getAllImpactCalculationStrategyIds(): List<Integer> {static}
+
+		+ getProductDescriptionById(int id): List<String> {static}
+		+ getMaterialDescriptionById(int id): List<String> {static}
+		+ getRecyclingCategoryDescriptionById(int id): List<String> {static}
+		+ getProductById(int id): String {static}
+		+ getMaterialById(int id): String {static}
+		+ getRecyclingGuidanceById(int id): String {static}
+
 		+ recycleProductById(int id, int impactCalculationStrategyId): List<String> {static}
 		+ recycleMaterialById(int id, int impactCalculationStrategyId): List<String> {static}
+
+		- getRecyclingCategoryFromIndex(int index): RecyclingCategory {static}
+		- createImpactCalculationStrategy(int strategyId): ImpactCalculationStrategyInterface {static}
+		- resolveMaterials(Map<Integer, Float> materialRatios): Map<Material, Float> {static}
 	}
 
 	class StoragePool {

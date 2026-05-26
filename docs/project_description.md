@@ -55,7 +55,7 @@
     - Represents a service that recycles the materials. It must know the recycling instructions as well as the category of the material.
 - ImpactReport &mdash; `Value`
     - Represents a single value holding the total environmental impact of the product.
-- ImpactCalculationStrategy &mdash; `Service`
+- ImpactCalculationStrategyInterface &mdash; `Entity`
     - Represents a service that provides with an implementation on how to calculate the total environmental impact of one product. It must know the list of materials.
 - StoragePool &mdash; `Entity`
     - Represents a single unit of the storage for core components of the system and provides a safe access to the presentation layer. Holds all products and material with ability to manage them.
@@ -127,7 +127,7 @@ NOTE:
         <td>Determine it's computed environmental impact</td>
         <td>
             <a href="#entity-Material">Material</a> (uses)<br>
-            <a href="#service-ImpactCalculationStrategy">ImpactCalculationStrategy</a> (uses)
+            <a href="#entity-ImpactCalculationStrategyInterface">ImpactCalculationStrategyInterface</a> (uses)
         </td>
     </tr>
     <tr>
@@ -170,7 +170,7 @@ NOTE:
 </table>
 
 <table>
-    <tr><td colspan="2" id="service-ImpactCalculationStrategy">Service: ImpactCalculationStrategy</td></tr>
+    <tr><td colspan="2" id="entity-ImpactCalculationStrategyInterface">Service: ImpactCalculationStrategyInterface</td></tr>
     <tr><td>Responsibilities</td><td>Collaborators</td></tr>
     <tr>
         <td>Provide strategy how to calculate environmental impact based of materials</td>
@@ -207,7 +207,7 @@ NOTE:
         <td>Holds the recycling category of the material</td>
         <td>
             <a href="#entity-Material">Material</a> (referenced by)<br>
-            <a href="#service-ImpactCalculationStrategy">ImpactCalculationStrategy</a> (used by)
+            <a href="#entity-ImpactCalculationStrategyInterface">ImpactCalculationStrategyInterface</a> (used by)
         </td>
     </tr>
     <tr>
@@ -262,7 +262,7 @@ NOTE:
     </tr>
     <tr>
         <td>Provide a safe interface to use on the presentation layer</td>
-        <td><a href="#entity-ConsoleUI">ConsoleUI</a> (referenced by)</td>
+        <td><a href="#service-ApplicationService">ApplicationService</a> (referenced by)</td>
     </tr>
 </table>
 
@@ -271,7 +271,7 @@ NOTE:
     <tr><td>Responsibilities</td><td>Collaborators</td></tr>
     <tr>
         <td>I/O part of the system</td>
-        <td><a href="#entity-StoragePool">StoragePool</a> (provides data to show)</td>
+        <td><a href="#entity-StoragePool">StoragePool</a> (indirect trough ApplicationService, provides data to show)</td>
     </tr>
     <tr>
         <td>Communicate through a defined interface with the main application to send and retrieve results</td>
@@ -287,3 +287,22 @@ NOTE:
         <td><a href="#entity-ConsoleUI">ConsoleUI</a> (used by)</td>
     </tr>
 </table>
+
+## Funtionality
+
+The whole project is divided into 3 layers in the following order from top to bottom: presentation layer, application layer, domain layer. This approach allows for changes only in one layer and retain the overall structure of the project. This also implies that each layer could be completely swapped with layer implemented differently, and behavior should not change dramatically.
+
+The presentation layer holds all attributes that the entry point can use to configure the overall settings for the duration of the execution. It includes: ConsoleUI, Util, ANSI, and a few more attributes that makes it easier to configure the menu-driven application faster.
+
+The application layer holds all entities that makes a physical connection between presentation layer and domain layer. It includes: `ApplicationService`, `StoragePool`, `RecyclingService`. 3 classes that does the whole work, but only one is used as a centralized class that presetation layer relies on, `ApplicationService`. This design ensures that the behavior is always predictable, supported by the unit tests, reducing amount of unwanted (possibly breaking) changed if presentation layer would depend on more clases from application layer than only one. This approach ensures the stability of the application layer.
+
+The domain layer includes all core-logic components that are used in the application layer to actually power the whole application. The core components are: `Product`, `Material`, `ImpactCalculationStrategyInterface`, `RecyclingGuidance`; supported by other attributes that simplifies the development by separating the responsibilities from one attribute to multiple smaller ones.
+
+### Features
+
+<!--
+    describe the features that are not written in the initial design,
+    but are implemented, so users can see what they can use.
+-->
+
+The presentaion layer has abbility to change the behavior of the menu-driven system, allowing customize how the menu behaves, how it looks like, and which features are turned on. It also supports text highlighting with `<h>text</h>` tag that can be present in any string/text that it shown to the user with `Util.print()` / `Util.println()` methods, or by manually formatting the string with `Util.formatHighlightString()` method.
