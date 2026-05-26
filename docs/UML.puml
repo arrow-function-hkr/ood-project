@@ -95,13 +95,12 @@ package onion.lifeproducts.rms.application {
 		+ getAllProductIds(): List<Integer> {static}
 		+ getAllMaterials(): List<Material> {static}
 		+ getAllMaterialIds(): List<Integer> {static}
-		+ getAllRecyclingCategories(): List<RecyclingCategory> {static}
+		+ getAllRecyclingCategories(): List<String> {static}
 
 		+ getAllProductDescriptions(): List<String> {static}
 		+ getAllMaterialDescriptions(): List<String> {static}
 		+ getAllRecyclingCategoryDescriptions(): List<String> {static}
 		+ getAllRecyclingGuidanceDescriptions(): List<String> {static}
-		+ getAllRecyclingGuidanceDesciptions(): List<String> {static}
 		+ getAllRecyclingGuidanceIds(): List<Integer> {static}
 
 		+ getAllImpactCalculationStrategiesDescriptions(): List<String> {static}
