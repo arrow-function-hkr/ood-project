@@ -1,5 +1,7 @@
 # Sustainable Product and Recycling Management System ([SDG 12](https://globalgoals.org/goals/12-responsible-consumption-and-production/))
 
+[![Java CI](https://github.com/arrow-function-hkr/ood-project/actions/workflows/ci.yml/badge.svg)](https://github.com/arrow-function-hkr/ood-project/actions/workflows/ci.yml)
+
 This Java console application is a **menu-driven system for managing products and recyclable materials**, designed with **object-oriented principles** and **test-driven development** practices in mind. It allows users to:
 
 - Define and manage products and reusable material types
