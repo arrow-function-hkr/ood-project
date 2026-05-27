@@ -8,8 +8,8 @@ public final class ConsoleUIANSIOptions {
 	public String USER_INPUT = ANSI.FG_CYAN;
 	/** Holds the ANSI sequence to manipulate the menu options key graphics */
 	public String MENU_OPTION_KEY = ANSI.FG_CYAN;
-	/** Holds the ANSI sequence to manipulate the menu options description highlight graphics */
-	public String MENU_OPTION_HIGHLIGHT = ANSI.FG_YELLOW;
+	/** Holds the ANSI sequence to manipulate the string (arbitrary) highlight graphics */
+	public String TEXT_HIGHLIGHT = ANSI.FG_YELLOW;
 
 	/** Default empty constructor */
 	public ConsoleUIANSIOptions() {}
@@ -18,7 +18,7 @@ public final class ConsoleUIANSIOptions {
 	public ConsoleUIANSIOptions(String userInput, String menuOptionKey, String menuOptionHighlight) {
 		if (userInput != null) this.USER_INPUT = userInput;
 		if (menuOptionKey != null) this.MENU_OPTION_KEY = menuOptionKey;
-		if (menuOptionHighlight != null) this.MENU_OPTION_HIGHLIGHT = menuOptionHighlight;
+		if (menuOptionHighlight != null) this.TEXT_HIGHLIGHT = menuOptionHighlight;
 	}
 
 	/** Set only user input ANSI */

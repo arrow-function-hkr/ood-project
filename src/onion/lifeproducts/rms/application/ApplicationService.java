@@ -296,8 +296,8 @@ public final class ApplicationService {
 	public static List<String> getAllImpactCalculationStrategiesDescriptions() {
 		List<String> descriptions = new ArrayList<>();
 
-		descriptions.add("1. Simple impact calculation");
-		descriptions.add("2. Weight plus lifespan impact calculation");
+		descriptions.add("Simple impact calculation");
+		descriptions.add("Weight plus lifespan impact calculation");
 
 		return descriptions;
 	}
@@ -348,8 +348,8 @@ public final class ApplicationService {
 		float impactValue = recyclingService.recycle(material);
 
 		result.add("Material recycled: " + material.getName());
-		result.add("Impact value: " + impactValue);
-		result.add("Recycling guidance: " + material.getRecyclingGuidance());
+		result.add("\nImpact value: " + impactValue);
+		result.add("\nRecycling guidance: " + material.getRecyclingGuidance());
 
 		return result;
 	}
@@ -479,8 +479,8 @@ public final class ApplicationService {
 		ImpactReport report = recyclingService.generateReport(product);
 
 		result.add("Product recycled: " + product.getName());
-		result.add("Impact value: " + report.getImpactValue());
-		result.add("Generated at: " + report.getGeneratedAtDate());
+		result.add("\nImpact value: " + report.getImpactValue());
+		result.add("\nGenerated at: " + report.getGeneratedAtDate());
 
 		return result;
 	}
