@@ -68,30 +68,39 @@ public class StoragePool {
 	}
 
 	/**
-	 * Returns all stored products.
+	 * Returns a copy of all stored products.
 	 *
-	 * @return list of all products
+	 * <p>The returned list is a defensive copy - callers may modify it freely
+	 * without affecting the internal pool.</p>
+	 *
+	 * @return copy of the product list
 	 */
 	public List<Product> getAllProducts() {
-		return this.productsPool;
+		return new ArrayList<>(this.productsPool);
 	}
 
 	/**
-	 * Returns all stored materials.
+	 * Returns a copy of all stored materials.
 	 *
-	 * @return list of all materials
+	 * <p>The returned list is a defensive copy - callers may modify it freely
+	 * without affecting the internal pool.</p>
+	 *
+	 * @return copy of the material list
 	 */
 	public List<Material> getAllMaterials() {
-		return this.materialsPool;
+		return new ArrayList<>(this.materialsPool);
 	}
 
 	/**
-	 * Returns all stored recycling guidance objects.
+	 * Returns a copy of all stored recycling guidance objects.
 	 *
-	 * @return list of all recycling guidance objects
+	 * <p>The returned list is a defensive copy - callers may modify it freely
+	 * without affecting the internal pool.</p>
+	 *
+	 * @return copy of the recycling guidance list
 	 */
 	public List<RecyclingGuidance> getAllRecyclingGuidance() {
-		return this.recyclingGuidancePool;
+		return new ArrayList<>(this.recyclingGuidancePool);
 	}
 
 	/**

@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class StoragePoolTest {
@@ -180,6 +182,53 @@ class StoragePoolTest {
 
         // Assert
         assertNull(found);
+    }
+
+    // --- defensive copies ---
+
+    @Test
+    @DisplayName("getAllProducts should return a copy - callers cannot modify the pool's internal data")
+    void shouldReturnDefensiveCopyFromGetAllProducts() {
+        // Arrange
+        Material mat = newMaterial("Plastic");
+        pool.addProduct(newProduct("Bottle", mat));
+
+        // Act - mutate the returned list
+        List<Product> returned = pool.getAllProducts();
+        returned.clear();
+
+        // Assert - internal pool is unchanged
+        assertEquals(1, pool.getAllProducts().size());
+    }
+
+    @Test
+    @DisplayName("getAllMaterials should return a copy - callers cannot modify the pool's internal data")
+    void shouldReturnDefensiveCopyFromGetAllMaterials() {
+        // Arrange
+        Material material = newMaterial("Steel");
+        pool.addMaterial(material);
+
+        // Act - mutate the returned list
+        List<Material> returned = pool.getAllMaterials();
+        returned.clear();
+
+        // Assert - internal pool is unchanged
+        assertEquals(1, pool.getAllMaterials().size());
+    }
+
+    @Test
+    @DisplayName("getAllRecyclingGuidance should return a copy - callers cannot modify the pool's internal data")
+    void shouldReturnDefensiveCopyFromGetAllRecyclingGuidance() {
+        // Arrange
+        RecyclingGuidance rg = new RecyclingGuidance("Rinse before recycling");
+        pool.addRecyclingGuidance(rg);
+
+        // Act - mutate the returned list
+        List<RecyclingGuidance> returned = pool.getAllRecyclingGuidance();
+        returned.clear();
+
+        // Assert - internal pool is unchanged
+        assertEquals(1, pool.getAllRecyclingGuidance().size());
     }
 
 }
