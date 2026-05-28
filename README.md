@@ -9,7 +9,8 @@ This Java console application is a **menu-driven system for managing products an
 - Provide recycling guidance for single- and mixed-material products
 - Maintain a clean separation between business logic and user interaction
 
-The application follows the defined [UML class diagram](docs/UML.puml) that defines the relations between classes.
+The application follows the defined [UML class diagram](docs/UML-class-diagram.puml) that defines the relations between classes.  
+The sequence diagram for the "Add Product" use case is shown in the [UML sequence diagram](docs/UML-sequence-diagram.puml).
 
 The application emphasizes **maintainable, testable, and well-structured code**, demonstrating clear responsibility distribution and professional development practices.
 

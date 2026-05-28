@@ -10,11 +10,13 @@ skinparam responseMessageBelowArrow true
 skinparam ActorStyle awesome
 skinparam NoteBackgroundColor #FFFDE7
 skinparam NoteBorderColor #F9A825
+skinparam backgroundColor #FFFFFE
 autonumber "<b>[00]"
 
 actor "User" as user
 
 box "Presentation Layer" #EBF5FB
+	participant "console : ConsoleUI" as consoleUi
     participant "data : Data" as data
 end box
 
@@ -27,7 +29,8 @@ box "Domain Layer" #FEFBD8
     participant "product : Product" as product
 end box
 
-user -> data : selects "Add product"
+user -> consoleUi : selects "Add product"
+consoleUi -> data : invoke callback
 activate data #AED6F1
 
 data -> appService : addProduct(name, materialRatios, lifespan)
@@ -57,7 +60,7 @@ deactivate appService
 == Create & Store Product ==
 
 create product
-appService -> product : <<create>> new Product(name, materials, now(), lifespan)
+appService -> product : <<create>> new Product(name, materials, LocalDateTime.now(), lifespan)
 
 appService -> pool : addProduct(product)
 activate pool #A9DFBF
@@ -69,7 +72,7 @@ deactivate pool
 appService --> data : int productId
 deactivate appService
 
-data --> user : displays product ID
+data --> user : displays product info with new product ID
 deactivate data
 
 @enduml
