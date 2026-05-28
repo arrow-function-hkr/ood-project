@@ -1,0 +1,78 @@
+@startuml
+
+title Sequence Diagram: addProduct
+
+skinparam roundcorner 5
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+skinparam sequenceMessageAlign left
+skinparam responseMessageBelowArrow true
+skinparam ActorStyle awesome
+skinparam NoteBackgroundColor #FFFDE7
+skinparam NoteBorderColor #F9A825
+skinparam backgroundColor #FFFFFE
+autonumber "<b>[00]"
+
+actor "User" as user
+
+box "Presentation Layer" #EBF5FB
+	participant "console : ConsoleUI" as consoleUi
+    participant "data : Data" as data
+end box
+
+box "Application Layer" #E8F8EE
+    participant "ApplicationService" as appService
+    participant "storagePool : StoragePool" as pool
+end box
+
+box "Domain Layer" #FEFBD8
+    participant "product : Product" as product
+end box
+
+user -> consoleUi : selects "Add product"
+consoleUi -> data : invoke callback
+activate data #AED6F1
+
+data -> appService : addProduct(name, materialRatios, lifespan)
+activate appService #A9DFBF
+
+== Resolve Materials ==
+
+rnote right of appService
+    materialRatios: Map<Integer, Float>
+    Each material ID is looked up in StoragePool.
+    Materials are reused - not re-created.
+end rnote
+
+appService -> appService : resolveMaterials(materialRatios)
+activate appService #A9DFBF
+
+loop [for each materialId in materialRatios]
+    appService -> pool : getMaterialById(materialId)
+    activate pool #A9DFBF
+    pool --> appService : Material
+    deactivate pool
+end
+
+appService --> appService : Map<Material, Float>
+deactivate appService
+
+== Create & Store Product ==
+
+create product
+appService -> product : <<create>> new Product(name, materials, LocalDateTime.now(), lifespan)
+
+appService -> pool : addProduct(product)
+activate pool #A9DFBF
+pool --> appService
+deactivate pool
+
+== Return Result ==
+
+appService --> data : int productId
+deactivate appService
+
+data --> user : displays product info with new product ID
+deactivate data
+
+@enduml
