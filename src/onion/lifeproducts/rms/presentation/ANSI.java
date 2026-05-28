@@ -69,4 +69,22 @@ public final class ANSI {
 	static public final String formatString(final String str, final String format) {
 		return format + str + ANSI.CA;
 	}
+
+	static public final String fgFromRGB(int r, int g, int b) {
+		return String.format("[38;2;%d;%d;%dm", r, g, b);
+	}
+
+	/** Create an RGB foreground color from RGB value provided as a single integer in form of: 0xRRGGBB */
+	static public final String fgFromRGB(int rgb) {
+		return ANSI.fgFromRGB(rgb >> 16, (rgb >> 8) & 255, rgb & 255);
+	}
+
+	static public final String bgFromRGB(int r, int g, int b) {
+		return String.format("[48;2;%d;%d;%dm", r, g, b);
+	}
+
+	/** Create an RGB background color from RGB value provided as a single integer in form of: 0xRRGGBB */
+	static public final String bgFromRGB(int rgb) {
+		return ANSI.fgFromRGB(rgb >> 16, (rgb >> 8) & 255, rgb & 255);
+	}
 }
