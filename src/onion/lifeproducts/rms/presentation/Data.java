@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -24,12 +25,15 @@ public final class Data {
 	static Util defaultSubmenuUtil = new Util(defaultSubmenuConsoleUIAnsiOptions);
 	static final String defaultSubmenuPromptFormat = "(%s)> ";
 	static final String defaultValuePrompt = ">> ";
+	static final String defaultTopLevelCategoryPrefix = "Category: ";
 
 	// graphics of the value from user input
 	static final String defaultValueAnsi = ANSI.FG_CYAN + ANSI.BOLD;
 
 	// graphics of the parent key from which the user came in
 	static public String defaultSubmenuParentKeyAnsi = ANSI.FG_CYAN;
+	// graphics of the submenu category
+	static public String defaultSubmenuCategoryAnsi = ANSI.FG_MAGENTA;
 
 	// graphics of the key of parent menus
 	static public String defaultSubmenuKeyAnsi = ANSI.FG_CYAN;
@@ -38,7 +42,7 @@ public final class Data {
 	};
 
 	static final public String regexNumber = "[-+]?[0-9]*(\\.[0-9]*)?";
-	static final public String regexDigits = "[0-9]*";
+	static final public String regexDigits = "[0-9]+";
 	static final public String regexDigitsFloat = "[0-9]*(\\.[0-9]*)?";
 	static final public String regexInt = "[-+]?[0-9]*";
 	static final public String regexQuitOpt = "q|quit";
@@ -83,7 +87,7 @@ public final class Data {
 	 */
 	static public final ConsoleUIEntry[] mainMenuEntries = {
 
-		new ConsoleUIEntry("1", "Category: materials", option -> {
+		createTopLevelEntry("1", "Materials", option -> {
 
 			// menu options
 			ConsoleUIEntry[] categoryMaterialsEntries = new ConsoleUIEntry[]{
@@ -271,13 +275,20 @@ public final class Data {
 				new ConsoleUIEntry("list", "List existing materials", showListOfMaterials),
 			};
 
-			createSubmenu(categoryMaterialsEntries, defaultSubmenuUtil, option).runMenu();
+			createSubmenu(categoryMaterialsEntries, defaultSubmenuUtil, option, "Materials")
+				.runMenu();
 		}),
 
-		new ConsoleUIEntry("2", "Category: products", option -> {
+		createTopLevelEntry("2", "Products", option -> {
 
 			ConsoleUIEntry[] categoryProductEntries = new ConsoleUIEntry[]{
+
 				new ConsoleUIEntry("create", "Create a new product", () -> {
+
+					if (ApplicationService.getAllMaterialIds().size() == 0) {
+						System.out.println("No material are yet added. Add materials first to proceed.");
+						return;
+					}
 					
 					// String name
 					System.out.println("Product name:");
@@ -461,11 +472,13 @@ public final class Data {
 
 			};
 
-			createSubmenu(categoryProductEntries, defaultSubmenuUtil, option).runMenu();
+			createSubmenu(categoryProductEntries, defaultSubmenuUtil, option, "Products")
+				.runMenu();
 		}),
 
-		new ConsoleUIEntry("3", "Category: recycling guidances", option -> {
-			ConsoleUIEntry[] categoryrecyclingGuidancesEntries = new ConsoleUIEntry[]{
+		createTopLevelEntry("3", "Recycling Guidances", option -> {
+
+			ConsoleUIEntry[] categoryRecyclingGuidancesEntries = new ConsoleUIEntry[]{
 
 				new ConsoleUIEntry("create", "Create a recycling guidance", () -> {
 					System.out.println("Enter recycling guidance description:");
@@ -500,10 +513,11 @@ public final class Data {
 
 			};
 
-			createSubmenu(categoryrecyclingGuidancesEntries, defaultSubmenuUtil, option).runMenu();
+			createSubmenu(categoryRecyclingGuidancesEntries, defaultSubmenuUtil, option, "Recycling Guidances")
+				.runMenu();
 		}),
 
-		new ConsoleUIEntry("4", "Category: recycling", option -> {
+		createTopLevelEntry("4", "Recycling", option -> {
 			List<String>
 				impactCalculationStrategiesList =
 				ApplicationService.getAllImpactCalculationStrategiesDescriptions()
@@ -528,7 +542,13 @@ public final class Data {
 			;
 
 			ConsoleUIEntry[] recyclinSectionEntries = new ConsoleUIEntry[]{
+
 				new ConsoleUIEntry("materials", "Recycle materials", () -> {
+					if (validMaterialIDs.size() == 0) {
+						System.out.println("No material are yet added. Add materials first to proceed.");
+						return;
+					}
+
 					System.out.println("Enter a list of material IDs to recycle (separated with spaces):");
 
 					showListOfMaterials.run();
@@ -651,6 +671,12 @@ public final class Data {
 				}),
 
 				new ConsoleUIEntry("products", "Recycle products", () -> {
+
+					if (validProductIDs.size() == 0) {
+						System.out.println("No products are yet added. Add materials first to proceed.");
+						return;
+					}
+
 					System.out.println("Enter a list of product IDs to recycle (separated with spaces):");
 
 					showListOfProducts.run();
@@ -772,7 +798,8 @@ public final class Data {
 				}),
 			};
 
-			createSubmenu(recyclinSectionEntries, defaultSubmenuUtil, option).runMenu();
+			createSubmenu(recyclinSectionEntries, defaultSubmenuUtil, option, "Recycling")
+				.runMenu();
 		}),
 	};
 
@@ -785,6 +812,7 @@ public final class Data {
 		ConsoleUIEntry[] consoleUIEntries,
 		Util util,
 		String option,
+		String category,
 		String promptFormat,
 		Object ...promptValues
 	) {
@@ -792,6 +820,12 @@ public final class Data {
 		return new ConsoleUI(allEntries, util)
 			.setDefaultInputPrompt(
 				String.format(promptFormat, promptValues)
+			)
+			.setInitMessage(
+				String.format(
+					ANSI.formatString("Category: %s\n\n", ANSI.BOLD),
+					ANSI.formatString(category, defaultSubmenuCategoryAnsi)
+				)
 			);
 	}
 
@@ -803,15 +837,37 @@ public final class Data {
 	static public ConsoleUI createSubmenu(
 		ConsoleUIEntry[] consoleUIEntries,
 		Util util,
-		String option
+		String option,
+		String category
 	) {
 		return createSubmenu(
 			consoleUIEntries,
 			util,
 			option,
+			category,
 			Data.defaultSubmenuPromptFormat,
 			new Object[]{ANSI.formatString(option, Data.defaultSubmenuParentKeyAnsi)}
 		);
+	}
+
+	static public ConsoleUIEntry createTopLevelEntry(String option, String category, Lambda<String> callback) {
+		return new ConsoleUIEntry(
+			option,
+			String.format(
+				"%s%s",
+				defaultTopLevelCategoryPrefix,
+				ANSI.formatString(category, defaultSubmenuCategoryAnsi + ANSI.BOLD)
+			),
+			callback
+		);
+	}
+
+	static public ConsoleUIEntry createTopLevelEntry(String option, String category, Runnable callback) {
+		return createTopLevelEntry(option, category, new Lambda<>(callback));
+	}
+
+	static public ConsoleUIEntry createTopLevelEntry(String option, String category, Consumer<String> callback) {
+		return createTopLevelEntry(option, category, new Lambda<>(callback));
 	}
 
 }
