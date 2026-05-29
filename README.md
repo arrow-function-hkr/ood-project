@@ -12,6 +12,8 @@ This Java console application is a **menu-driven system for managing products an
 The application follows the defined [UML class diagram](docs/UML-class-diagram.puml) that defines the relations between classes.  
 The sequence diagram for the "Add Product" use case is shown in the [UML sequence diagram](docs/UML-sequence-diagram.puml).
 
+The project architechture and design decisions can be found in the [docs/architechture.md](docs/architechture.md) file.
+
 The application emphasizes **maintainable, testable, and well-structured code**, demonstrating clear responsibility distribution and professional development practices.
 
 The description of the project can be found in [docs/project_description.md](docs/project_description.md) file.
